@@ -42,7 +42,7 @@ npm start
 ## 目录说明
 
 ```
-csu-padk-逆向工作/
+csu-padk/
 ├── 01-文档/
 │   ├── 智慧学工-API文档.md       600 个端点 / 15 个模块的完整接口文档
 │   ├── csu-padk-逆向报告.md      门禁、加密、围栏模型的完整分析
@@ -79,13 +79,16 @@ csu-padk-逆向工作/
     │   │   ├── store.ts          本地配置与历史
     │   │   └── map/              Leaflet 封装、瓦片源、地图组件
     │   ├── panel/                悬浮面板（书签注入用）
-    │   ├── padk/                 独立打卡页
-    │   ├── landing/              引导页 + 演示地图
+    │   ├── padk/                 独立打卡页（登录 + 身份页眉 + 面板）
+    │   ├── landing/              引导页 + 原版界面 + 演示地图
     │   └── inject.tsx            注入入口
     ├── public/                   静态资源（host.html、inject.js）
     ├── dist/                     已构建产物，可直接部署
-    ├── e2e-*.mjs                 Puppeteer 端到端测试
-    └── vite.casAuth.ts           CAS 协议登录中间件
+    ├── server.mjs                单机一体服务（静态 + CAS 登录 + 同源代理）
+    ├── vite.casAuth.ts           dev server 的登录中间件
+    ├── e2e-audit.mjs             设计规范审计（真实渲染上校验）
+    ├── e2e-visual.mjs            视觉快照，产出 shots/
+    └── e2e-fixtures.mjs          上面两者共用的接口桩
 ```
 
 ---
@@ -157,7 +160,7 @@ postDes(url, data) {
 
 | 内容 | 体积 | 如何补全 |
 |---|---|---|
-| `node_modules` | 92 MB | 在 `05-padk-web` 下执行 `npm install` |
+| `node_modules` | 96 MB | 在 `05-padk-web` 下执行 `npm install` |
 | 原始前端 chunk | 70 MB | 见下方抓取方法 |
 
 ### 重新抓取前端产物
@@ -182,7 +185,8 @@ curl https://zhxg.csu.edu.cn/znzhxgpt_h5/
 - **token 有效期约 24 小时**，且会被其它端的登录踢下线
 - 打卡窗口 **20:00 – 23:30**，窗口外服务端返回「未到打卡时间」，探测圆心也依赖窗口内的 `pcMi`
 - 围栏半径 **300 米**，圆心为本人所住楼栋
-- 本项目为纯前端，无服务端、无数据上报；凭据只存浏览器 `localStorage`
+- 没有任何远程后端与数据上报。`server.mjs` 是可选的**本地**进程（静态 + 登录 + 代理），
+  不落盘、不记录凭据；凭据只存浏览器 `localStorage`
 - 请遵守学校相关管理规定
 
 ---
