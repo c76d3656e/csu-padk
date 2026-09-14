@@ -29,18 +29,39 @@
   "use strict";
 
   var SCRIPT_ID = "csu-padk-inject";
-  var INJECT_URL = "https://c76d3656e.github.io/csu-padk/inject.js";
+
+  // 主用 GitHub Pages（更新即时）；它被网络分流打不通时回退到 jsDelivr。
+  // jsDelivr 对分支引用有 12 小时缓存，回退拿到的最多是半天前的版本，
+  // 但总好过整个面板加载不出来。
+  var SOURCES = [
+    "https://c76d3656e.github.io/csu-padk/inject.js",
+    "https://cdn.jsdelivr.net/gh/c76d3656e/csu-padk@gh-pages/inject.js",
+  ];
 
   // 官方是单页应用，路由切换会重复触发，避免叠出多块面板
   if (document.getElementById(SCRIPT_ID)) return;
 
-  var s = document.createElement("script");
-  s.id = SCRIPT_ID;
-  s.src = INJECT_URL + "?t=" + Date.now();
-  s.onerror = function () {
-    console.warn("[平安打卡] 注入包加载失败，检查网络或地址：", INJECT_URL);
-  };
-  (document.head || document.documentElement).appendChild(s);
+  var i = 0;
+  (function tryNext() {
+    if (i >= SOURCES.length) {
+      console.warn(
+        "%c[平安打卡] 注入包全部加载失败，多半是网络把两个域名都挡住了：",
+        "color:#ff453a;font-weight:700",
+        SOURCES
+      );
+      return;
+    }
+    var url = SOURCES[i++];
+    var s = document.createElement("script");
+    s.id = SCRIPT_ID;
+    s.src = url + "?t=" + Date.now();
+    s.onerror = function () {
+      console.warn("[平安打卡] 加载失败，换下一个源：", url);
+      s.remove();
+      tryNext();
+    };
+    (document.head || document.documentElement).appendChild(s);
+  })();
 
   console.log(
     "%c[平安打卡] 油猴脚本已生效，面板正在挂载…",
