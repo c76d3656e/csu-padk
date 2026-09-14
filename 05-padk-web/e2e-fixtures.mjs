@@ -106,6 +106,11 @@ export async function enterReady(page) {
   await page.evaluate(() => {
     localStorage.setItem("token", "e".repeat(64));
     localStorage.setItem("casual", "abcdefgh12345678");
+    // 页眉要展示身份信息，这里补上登录时才会写入的档案
+    localStorage.setItem(
+      "csu-padk:profile",
+      JSON.stringify({ xh: "8200000000", xm: "同学", bmmc: "计算机学院" })
+    );
   });
   await page.reload({ waitUntil: "networkidle2" });
   await sleep(2000);

@@ -211,24 +211,45 @@ body:has(.padk-shell) {
   border-radius: 4px;
 }
 
-/* ── 顶部信息条 ── */
+/* ── 页眉：身份信息占左上角，与居中面板分开 ── */
 .padk-bar {
+  /* shell 是 align-items:center，这里自己靠左拉满，
+     让姓名落在真正的左上角，而不是跟着面板居中 */
   width: 100%;
-  max-width: 720px;
+  max-width: 1180px;
+  align-self: flex-start;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 14px;
-  padding: 0 2px 12px;
-  margin-bottom: 18px;
+  padding: 0 0 13px;
+  margin-bottom: 22px;
   border-bottom: 1px solid var(--pg-line);
   animation: rise 0.5s cubic-bezier(0.2, 0.75, 0.3, 1) both;
 }
-.pb-id {
+.pb-who {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.pb-name {
+  font-family: var(--pg-serif);
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  line-height: 1.25;
+  color: var(--pg-t1);
+}
+.pb-meta {
   font-family: var(--pg-mono);
   font-size: 11px;
   letter-spacing: 0.04em;
-  color: var(--pg-t2);
+  color: var(--pg-t3);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .pb-out {
   padding: 5px 13px;

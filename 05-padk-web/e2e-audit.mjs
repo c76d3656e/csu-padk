@@ -172,7 +172,8 @@ const AUDIT = () => {
     ["hint", ".hint"],
     ["pl-lede", ".pl-lede"],
     ["pl-foot", ".pl-foot"],
-    ["pb-id", ".pb-id"],
+    ["pb-name", ".pb-name"],
+    ["pb-meta", ".pb-meta"],
   ]) {
     const el = document.querySelector(sel);
     if (!el) continue;
@@ -253,6 +254,25 @@ const AUDIT = () => {
         tileCount: box.querySelectorAll(".leaflet-tile").length,
         height: Math.round(box.getBoundingClientRect().height),
         legend: !!document.querySelector(".map-legend"),
+      };
+    })(),
+    // 页眉断言：身份信息是否真的落在左上角，而不是跟着面板居中
+    header: (() => {
+      const bar = document.querySelector(".padk-bar");
+      if (!bar) return null;
+      const b = bar.getBoundingClientRect();
+      const nameEl = document.querySelector(".pb-name");
+      const metaEl = document.querySelector(".pb-meta");
+      return {
+        x: Math.round(b.x),
+        width: Math.round(b.width),
+        viewportW: window.innerWidth,
+        atTopLeft: b.x < 60,
+        name: nameEl ? nameEl.textContent.trim() : null,
+        nameFont: nameEl
+          ? getComputedStyle(nameEl).fontFamily.split(",")[0].replace(/["']/g, "")
+          : null,
+        meta: metaEl ? metaEl.textContent.trim() : null,
       };
     })(),
     page: {
@@ -365,6 +385,7 @@ const report = async (page, label) => {
   if (rows.length) console.log("  对比度: " + rows.join(" | "));
   console.log("  状态: " + JSON.stringify(r.state));
   if (r.map) console.log("  地图: " + JSON.stringify(r.map));
+  if (r.header) console.log("  页眉: " + JSON.stringify(r.header));
 };
 
 const browser = await puppeteer.launch({

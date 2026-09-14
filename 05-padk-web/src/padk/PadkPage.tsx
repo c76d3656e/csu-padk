@@ -5,7 +5,11 @@ import { store } from "../core/store";
 // （书签注入时则是把同一份 CSS 内联进 Shadow DOM）
 import "../panel/panel.css";
 
+/** 只存学号，用于回填登录表单 */
 const LS_USER = "csu-padk:savedUser";
+/** 完整用户档案（姓名 / 学号 / 院系）。刷新后 token 还在，
+ *  但 user 是内存态、会丢，页眉就只剩「已登录」——单独存一份 */
+const LS_PROFILE = "csu-padk:profile";
 
 export default function PadkPage() {
   const [phase, setPhase] = useState<"check" | "login" | "ready">("check");
@@ -22,6 +26,15 @@ export default function PadkPage() {
     const c = localStorage.getItem("casual") || localStorage.getItem("caasual") || "";
     const saved = localStorage.getItem(LS_USER);
     if (saved) setUsername(saved);
+
+    const profile = localStorage.getItem(LS_PROFILE);
+    if (profile) {
+      try {
+        setUser(JSON.parse(profile));
+      } catch {
+        localStorage.removeItem(LS_PROFILE);
+      }
+    }
 
     if (t.length >= 32 && c.length >= 8) {
       setPhase("ready");
@@ -54,6 +67,7 @@ export default function PadkPage() {
 
       localStorage.setItem("token", j.token);
       localStorage.setItem("casual", j.casual);
+      localStorage.setItem(LS_PROFILE, JSON.stringify(j.user));
       if (remember) localStorage.setItem(LS_USER, j.user.xh);
       else localStorage.removeItem(LS_USER);
 
@@ -73,6 +87,7 @@ export default function PadkPage() {
     localStorage.removeItem("token");
     localStorage.removeItem("casual");
     localStorage.removeItem("caasual");
+    localStorage.removeItem(LS_PROFILE);
     store.clearHistory();
     setPhase("login");
     setUser(null);
@@ -83,6 +98,7 @@ export default function PadkPage() {
     localStorage.removeItem("token");
     localStorage.removeItem("casual");
     localStorage.removeItem("caasual");
+    localStorage.removeItem(LS_PROFILE);
     setUser(null);
     setErr(`${msg}　请重新登录。`);
     setPhase("login");
@@ -160,10 +176,12 @@ export default function PadkPage() {
   return (
     <div className="padk-shell">
       <div className="padk-bar">
-        <span className="pb-id">
-          {user ? `${user.xm} · ${user.xh}` : "已登录"}
-          {user?.bmmc ? ` · ${user.bmmc}` : ""}
-        </span>
+        <div className="pb-who">
+          <span className="pb-name">{user?.xm || "已登录"}</span>
+          <span className="pb-meta">
+            {user ? [user.xh, user.bmmc].filter(Boolean).join(" · ") : "—"}
+          </span>
+        </div>
         <button className="pb-out" onClick={logout}>
           退出登录
         </button>

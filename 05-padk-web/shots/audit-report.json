@@ -73,6 +73,7 @@
       "hasPickBuildingBtn": false
     },
     "map": null,
+    "header": null,
     "page": {
       "scrollW": 960,
       "innerW": 960,
@@ -81,7 +82,7 @@
   },
   {
     "label": "打卡页 · 初始（实时定位）",
-    "elementCount": 42,
+    "elementCount": 44,
     "violations": {
       "gradient": [],
       "radiusOver12": [],
@@ -265,9 +266,14 @@
         "ratio": 4.76,
         "aa": "pass"
       },
-      "pb-id": {
+      "pb-name": {
+        "size": "17px",
+        "ratio": 13.11,
+        "aa": "pass"
+      },
+      "pb-meta": {
         "size": "11px",
-        "ratio": 7.82,
+        "ratio": 4.76,
         "aa": "pass"
       }
     },
@@ -286,6 +292,15 @@
       "hasPickBuildingBtn": false
     },
     "map": null,
+    "header": {
+      "x": 20,
+      "width": 940,
+      "viewportW": 980,
+      "atTopLeft": true,
+      "name": "同学",
+      "nameFont": "Songti SC",
+      "meta": "8200000000 · 计算机学院"
+    },
     "page": {
       "scrollW": 980,
       "innerW": 980,
@@ -294,7 +309,7 @@
   },
   {
     "label": "打卡页 · 设置展开",
-    "elementCount": 81,
+    "elementCount": 83,
     "violations": {
       "gradient": [],
       "radiusOver12": [],
@@ -490,9 +505,14 @@
         "ratio": 4.76,
         "aa": "pass"
       },
-      "pb-id": {
+      "pb-name": {
+        "size": "17px",
+        "ratio": 13.11,
+        "aa": "pass"
+      },
+      "pb-meta": {
         "size": "11px",
-        "ratio": 7.82,
+        "ratio": 4.76,
         "aa": "pass"
       }
     },
@@ -511,6 +531,15 @@
       "hasPickBuildingBtn": false
     },
     "map": null,
+    "header": {
+      "x": 20,
+      "width": 940,
+      "viewportW": 980,
+      "atTopLeft": true,
+      "name": "同学",
+      "nameFont": "Songti SC",
+      "meta": "8200000000 · 计算机学院"
+    },
     "page": {
       "scrollW": 980,
       "innerW": 980,
@@ -519,7 +548,7 @@
   },
   {
     "label": "虚拟落点 · 圆心未定",
-    "elementCount": 45,
+    "elementCount": 47,
     "violations": {
       "gradient": [],
       "radiusOver12": [],
@@ -703,9 +732,14 @@
         "ratio": 4.76,
         "aa": "pass"
       },
-      "pb-id": {
+      "pb-name": {
+        "size": "17px",
+        "ratio": 13.11,
+        "aa": "pass"
+      },
+      "pb-meta": {
         "size": "11px",
-        "ratio": 7.82,
+        "ratio": 4.76,
         "aa": "pass"
       }
     },
@@ -724,6 +758,15 @@
       "hasPickBuildingBtn": true
     },
     "map": null,
+    "header": {
+      "x": 20,
+      "width": 940,
+      "viewportW": 980,
+      "atTopLeft": true,
+      "name": "同学",
+      "nameFont": "Songti SC",
+      "meta": "8200000000 · 计算机学院"
+    },
     "page": {
       "scrollW": 980,
       "innerW": 980,
@@ -732,7 +775,7 @@
   },
   {
     "label": "打卡页 · 已生成落点",
-    "elementCount": 58,
+    "elementCount": 60,
     "violations": {
       "gradient": [],
       "radiusOver12": [],
@@ -933,16 +976,21 @@
         "ratio": 4.76,
         "aa": "pass"
       },
-      "pb-id": {
+      "pb-name": {
+        "size": "17px",
+        "ratio": 13.11,
+        "aa": "pass"
+      },
+      "pb-meta": {
         "size": "11px",
-        "ratio": 7.82,
+        "ratio": 4.76,
         "aa": "pass"
       }
     },
     "state": {
       "hasMask": false,
       "hasCoord": true,
-      "landingText": "◉ 南校区·升华公寓 12 栋 偏移 90m 距圆心 89.9m 方位 203.9° 围栏 300m 112.991729, 28.1420",
+      "landingText": "◉ 南校区·升华公寓 12 栋 偏移 33.8m 距圆心 33.7m 方位 333.7° 围栏 300m 112.991947, 28.14",
       "primaryBtn": "提交虚拟落点",
       "firstSelectValue": null,
       "logs": [
@@ -950,11 +998,20 @@
         "班次「校内住宿打卡」 时间窗 20:00-23:30 可打卡=true",
         "楼栋数据 6 栋",
         "定位被拒绝 —— 在地址栏左侧的图标里把「位置」改为允许并刷新；或直接在设置里选宿舍楼当圆心",
-        "自动落点 → 南校区·升华公寓 12 栋 偏移 90m 距圆心 89.9m 方位 203.9°"
+        "自动落点 → 南校区·升华公寓 12 栋 偏移 33.8m 距圆心 33.7m 方位 333.7°"
       ],
       "hasPickBuildingBtn": false
     },
     "map": null,
+    "header": {
+      "x": 20,
+      "width": 940,
+      "viewportW": 980,
+      "atTopLeft": true,
+      "name": "同学",
+      "nameFont": "Songti SC",
+      "meta": "8200000000 · 计算机学院"
+    },
     "page": {
       "scrollW": 980,
       "innerW": 980,
@@ -963,7 +1020,7 @@
   },
   {
     "label": "打卡页 · 成功遮罩",
-    "elementCount": 72,
+    "elementCount": 74,
     "violations": {
       "gradient": [],
       "radiusOver12": [],
@@ -1176,28 +1233,42 @@
         "ratio": 4.76,
         "aa": "pass"
       },
-      "pb-id": {
+      "pb-name": {
+        "size": "17px",
+        "ratio": 13.11,
+        "aa": "pass"
+      },
+      "pb-meta": {
         "size": "11px",
-        "ratio": 7.82,
+        "ratio": 4.76,
         "aa": "pass"
       }
     },
     "state": {
       "hasMask": true,
       "hasCoord": true,
-      "landingText": "◉ 南校区·升华公寓 12 栋 偏移 90m 距圆心 89.9m 方位 203.9° 围栏 300m 112.991729, 28.1420",
+      "landingText": "◉ 南校区·升华公寓 12 栋 偏移 33.8m 距圆心 33.7m 方位 333.7° 围栏 300m 112.991947, 28.14",
       "primaryBtn": "提交虚拟落点",
       "firstSelectValue": null,
       "logs": [
         "楼栋数据 6 栋",
         "定位被拒绝 —— 在地址栏左侧的图标里把「位置」改为允许并刷新；或直接在设置里选宿舍楼当圆心",
-        "自动落点 → 南校区·升华公寓 12 栋 偏移 90m 距圆心 89.9m 方位 203.9°",
+        "自动落点 → 南校区·升华公寓 12 栋 偏移 33.8m 距圆心 33.7m 方位 333.7°",
         "预检通过 canDk=true 偏差118m/围栏300m",
         "打卡成功：打卡成功"
       ],
       "hasPickBuildingBtn": false
     },
     "map": null,
+    "header": {
+      "x": 20,
+      "width": 940,
+      "viewportW": 980,
+      "atTopLeft": true,
+      "name": "同学",
+      "nameFont": "Songti SC",
+      "meta": "8200000000 · 计算机学院"
+    },
     "page": {
       "scrollW": 980,
       "innerW": 980,
@@ -1206,7 +1277,7 @@
   },
   {
     "label": "打卡页 · 地图展开",
-    "elementCount": 135,
+    "elementCount": 137,
     "violations": {
       "gradient": [],
       "radiusOver12": [],
@@ -1407,22 +1478,27 @@
         "ratio": 4.76,
         "aa": "pass"
       },
-      "pb-id": {
+      "pb-name": {
+        "size": "17px",
+        "ratio": 13.11,
+        "aa": "pass"
+      },
+      "pb-meta": {
         "size": "11px",
-        "ratio": 7.82,
+        "ratio": 4.76,
         "aa": "pass"
       }
     },
     "state": {
       "hasMask": false,
       "hasCoord": true,
-      "landingText": "◉ 南校区·升华公寓 12 栋 偏移 90m 距圆心 89.9m 方位 203.9° 围栏 300m 112.991729, 28.1420",
+      "landingText": "◉ 南校区·升华公寓 12 栋 偏移 33.8m 距圆心 33.7m 方位 333.7° 围栏 300m 112.991947, 28.14",
       "primaryBtn": "提交虚拟落点",
       "firstSelectValue": "amap-vector",
       "logs": [
         "楼栋数据 6 栋",
         "定位被拒绝 —— 在地址栏左侧的图标里把「位置」改为允许并刷新；或直接在设置里选宿舍楼当圆心",
-        "自动落点 → 南校区·升华公寓 12 栋 偏移 90m 距圆心 89.9m 方位 203.9°",
+        "自动落点 → 南校区·升华公寓 12 栋 偏移 33.8m 距圆心 33.7m 方位 333.7°",
         "预检通过 canDk=true 偏差118m/围栏300m",
         "打卡成功：打卡成功"
       ],
@@ -1435,6 +1511,15 @@
       "height": 340,
       "legend": true
     },
+    "header": {
+      "x": 20,
+      "width": 940,
+      "viewportW": 980,
+      "atTopLeft": true,
+      "name": "同学",
+      "nameFont": "Songti SC",
+      "meta": "8200000000 · 计算机学院"
+    },
     "page": {
       "scrollW": 980,
       "innerW": 980,
@@ -1443,7 +1528,7 @@
   },
   {
     "label": "窄屏 390×844",
-    "elementCount": 42,
+    "elementCount": 44,
     "violations": {
       "gradient": [],
       "radiusOver12": [],
@@ -1627,9 +1712,14 @@
         "ratio": 4.76,
         "aa": "pass"
       },
-      "pb-id": {
+      "pb-name": {
+        "size": "17px",
+        "ratio": 13.11,
+        "aa": "pass"
+      },
+      "pb-meta": {
         "size": "11px",
-        "ratio": 7.82,
+        "ratio": 4.76,
         "aa": "pass"
       }
     },
@@ -1648,6 +1738,15 @@
       "hasPickBuildingBtn": false
     },
     "map": null,
+    "header": {
+      "x": 12,
+      "width": 366,
+      "viewportW": 390,
+      "atTopLeft": true,
+      "name": "同学",
+      "nameFont": "Songti SC",
+      "meta": "8200000000 · 计算机学院"
+    },
     "page": {
       "scrollW": 390,
       "innerW": 390,
