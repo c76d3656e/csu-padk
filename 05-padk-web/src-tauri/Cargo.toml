@@ -1,0 +1,42 @@
+[package]
+name = "csu-padk"
+version = "1.0.0"
+description = "CSU 智慧学工 平安打卡"
+edition = "2021"
+rust-version = "1.70"
+
+[lib]
+# Tauri 2 的惯例：逻辑放 lib，main.rs 只做入口
+name = "csu_padk_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# HTTP：cookie_store 用来跟随 CAS 的 302 跳转并保持 JSESSIONID
+reqwest = { version = "0.12", default-features = false, features = [
+  "cookies",
+  "rustls-tls",
+  "json",
+  "gzip",
+] }
+tokio = { version = "1", features = ["rt-multi-thread", "macros"] }
+
+# 金智 CAS 的密码加密：AES-128-CBC + Pkcs7
+aes = "0.8"
+cbc = { version = "0.1", features = ["alloc"] }
+cipher = { version = "0.4", features = ["alloc"] }
+base64 = "0.22"
+rand = "0.8"
+
+[profile.release]
+codegen-units = 1   # 让 LLVM 做更充分的优化
+lto = true          # 链接期优化，体积与性能都受益
+opt-level = "s"     # 偏向体积；想更快就换成 "3"
+panic = "abort"     # 去掉 panic 展开
+strip = true        # 去掉调试符号

@@ -12,6 +12,8 @@
     "build:inject": "vite build --config vite.inject.config.ts",
     "build:exe": "node scripts/build-exe.mjs",
     "deploy": "node scripts/deploy-pages.mjs",
+    "app": "tauri dev",
+    "app:build": "tauri build",
     "preview": "vite preview --port 4173"
   },
   "dependencies": {
@@ -21,6 +23,8 @@
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "@tauri-apps/api": "^2.11.1",
+    "@tauri-apps/cli": "^2.11.4",
     "@types/crypto-js": "^4.2.2",
     "@types/leaflet": "^1.9.22",
     "@types/react": "^18.3.12",

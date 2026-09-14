@@ -6,6 +6,18 @@
  *   nginx 剥离 /znzhxgpt 后按模块路由到对应微服务
  */
 import { encryptPayload } from "./crypto";
+import { invoke } from "@tauri-apps/api/core";
+
+/**
+ * 是否跑在 Tauri 桌面壳里。
+ *
+ * 两种形态的差别只在「谁来发请求」：
+ *   桌面 —— Rust 侧发，没有同源策略这回事
+ *   浏览器 —— 由本地服务同源代理转发
+ * 业务逻辑与响应解析完全共用。
+ */
+export const IS_TAURI =
+  typeof window !== "undefined" && !!(window as any).__TAURI_INTERNALS__;
 
 /**
  * 请求基址（运行时求值，不能做成模块级常量）
@@ -140,23 +152,41 @@ export async function postDes<T = any>(
   ctx: RequestCtx
 ): Promise<ApiResult<T>> {
   const body = encryptPayload(payload, ctx.casual);
-  const res = await fetch(getOrigin() + path, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json; charset=utf-8",
-      deviceType: "4",
-      AppCode: "znzhxgpt",
-      Authorization: ctx.token,
-      token: ctx.token,
-      agentId: ctx.agentId ?? "",
-    },
-    body,
-  });
 
-  if (res.status === 400) throw new ApiError("请求被拒绝（加密密钥 casual 不匹配，请重新登录）", "400");
-  if (!res.ok && res.status !== 200) throw new ApiError(`HTTP ${res.status}`, String(res.status));
+  let text: string;
 
-  const text = await res.text();
+  if (IS_TAURI) {
+    // 桌面形态：请求由 Rust 侧发出。
+    // 进程内的 HTTP 客户端不受同源策略约束 —— 跨域、预检、代理都不存在了。
+    try {
+      text = await invoke<string>("api_post", {
+        args: { path, token: ctx.token, body, agentId: ctx.agentId ?? "" },
+      });
+    } catch (e) {
+      throw new ApiError(String(e));
+    }
+  } else {
+    const res = await fetch(getOrigin() + path, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        deviceType: "4",
+        AppCode: "znzhxgpt",
+        Authorization: ctx.token,
+        token: ctx.token,
+        agentId: ctx.agentId ?? "",
+      },
+      body,
+    });
+
+    if (res.status === 400)
+      throw new ApiError("请求被拒绝（加密密钥 casual 不匹配，请重新登录）", "400");
+    if (!res.ok && res.status !== 200)
+      throw new ApiError(`HTTP ${res.status}`, String(res.status));
+
+    text = await res.text();
+  }
+
   let json: ApiResult<T>;
   try {
     json = JSON.parse(text);

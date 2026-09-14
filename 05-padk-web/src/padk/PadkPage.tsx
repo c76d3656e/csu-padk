@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
+import { invoke } from "@tauri-apps/api/core";
 import Panel from "../panel/Panel";
 import { store } from "../core/store";
+import { IS_TAURI } from "../core/api";
 // 整页形态下 Panel 直接渲染在 document 中，需显式引入面板样式
 // （书签注入时则是把同一份 CSS 内联进 Shadow DOM）
 import "../panel/panel.css";
@@ -52,12 +54,35 @@ export default function PadkPage() {
     setBusy(true);
     setErr("");
     try {
-      const res = await fetch("/__auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username: username.trim(), password }),
-      });
-      const j = await res.json();
+      let j: {
+        ok: boolean;
+        token?: string;
+        casual?: string;
+        user?: { xh: string; xm: string; bmmc?: string };
+        error?: string;
+      };
+
+      if (IS_TAURI) {
+        // 桌面形态：Rust 侧直接完成 CAS 协议登录，
+        // 不需要本地服务、不需要打开官方页面、也没有跨域问题
+        try {
+          const out = await invoke<any>("cas_login", {
+            username: username.trim(),
+            password,
+          });
+          j = { ok: true, ...out };
+        } catch (e: any) {
+          // invoke 在 Rust 返回 Err 时是 reject，这里统一成同样的结构
+          j = { ok: false, error: String(e) };
+        }
+      } else {
+        const res = await fetch("/__auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username: username.trim(), password }),
+        });
+        j = await res.json();
+      }
 
       if (!j.ok) {
         setErr(j.error || "登录失败");
@@ -65,18 +90,20 @@ export default function PadkPage() {
         return;
       }
 
-      localStorage.setItem("token", j.token);
-      localStorage.setItem("casual", j.casual);
+      localStorage.setItem("token", j.token!);
+      localStorage.setItem("casual", j.casual!);
       localStorage.setItem(LS_PROFILE, JSON.stringify(j.user));
-      if (remember) localStorage.setItem(LS_USER, j.user.xh);
+      if (remember) localStorage.setItem(LS_USER, j.user!.xh);
       else localStorage.removeItem(LS_USER);
 
-      setUser(j.user);
+      setUser(j.user as any);
       setPassword("");
       setPhase("ready");
     } catch (e: any) {
       setErr(
-        "登录服务不可用（仅本地开发服务器提供）。请改用官方页面登录后使用书签注入。"
+        IS_TAURI
+          ? `登录失败：${e?.message ?? e}`
+          : "登录服务不可用（仅本地开发服务器提供）。请改用官方页面登录后使用书签注入。"
       );
     } finally {
       setBusy(false);

@@ -8,6 +8,8 @@ node_modules/
 05-padk-web/server.sea.cjs
 05-padk-web/sea-config.json
 05-padk-web/sea-prep.blob
+05-padk-web/src-tauri/target/
+05-padk-web/src-tauri/gen/
 .tmp-core/
 
 # TypeScript 增量构建缓存
