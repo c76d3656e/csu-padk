@@ -179,7 +179,9 @@ export default function PadkPage() {
         <div className="pb-who">
           <span className="pb-name">{user?.xm || "已登录"}</span>
           <span className="pb-meta">
-            {user ? [user.xh, user.bmmc].filter(Boolean).join(" · ") : "—"}
+            {user
+              ? [user.xh, user.bmmc].filter(Boolean).join(" · ")
+              : username || "—"}
           </span>
         </div>
         <button className="pb-out" onClick={logout}>
