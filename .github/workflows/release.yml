@@ -77,6 +77,20 @@ jobs:
           releaseDraft: true
           prerelease: false
 
+      # tauri-action 只上传打包好的安装器（nsis / msi），
+      # 但裸 exe 才是真正的免安装版：双击即跑，不写注册表、不进开始菜单。
+      # 它一直在 target/release 里躺着，只是没人往上放。
+      - name: 追加 Windows 便携版
+        if: matrix.os == 'windows-latest' && github.ref_name != ''
+        shell: bash
+        working-directory: 05-padk-web
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cp src-tauri/target/release/csu-padk.exe padk-portable-x64.exe
+          gh release upload "${{ github.ref_name }}" padk-portable-x64.exe --clobber
+          echo "已上传 padk-portable-x64.exe"
+
   # ══════════════════════════════════════════════════════════
   # Android APK
   #
