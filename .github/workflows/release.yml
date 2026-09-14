@@ -26,10 +26,12 @@ jobs:
           - os: windows-latest
             target: x86_64-pc-windows-msvc
             label: windows-x64
+          # 按官方示例：两个 macOS target 都跑在 macos-latest（Apple Silicon）上，
+          # x64 靠交叉编译产出，不再用 macos-13 那种 Intel runner
           - os: macos-latest
             target: aarch64-apple-darwin
             label: macos-arm64
-          - os: macos-13
+          - os: macos-latest
             target: x86_64-apple-darwin
             label: macos-x64
 
@@ -47,7 +49,8 @@ jobs:
 
       - uses: dtolnay/rust-toolchain@stable
         with:
-          targets: ${{ matrix.target }}
+          # macOS 要同时装两个 target 才能交叉编译出 x64
+          targets: ${{ startsWith(matrix.os, 'macos') && 'aarch64-apple-darwin,x86_64-apple-darwin' || matrix.target }}
 
       # Rust 依赖编译很慢，缓存能省掉大半时间
       - uses: swatinem/rust-cache@v2
