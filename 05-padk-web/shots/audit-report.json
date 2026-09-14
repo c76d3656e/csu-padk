@@ -1,0 +1,1435 @@
+[
+  {
+    "label": "登录页 960×900",
+    "elementCount": 17,
+    "violations": {
+      "gradient": [],
+      "radiusOver12": [],
+      "borderOver1px": [],
+      "shadowNotAllowed": [],
+      "transitionNonColor": []
+    },
+    "key": {
+      "root": null,
+      "head": null,
+      "title": null,
+      "btn": null,
+      "btnGhost": null,
+      "label": null,
+      "badge": null,
+      "landing": null,
+      "coord": null,
+      "tabs": null,
+      "tabOn": null,
+      "log": null,
+      "mask": null,
+      "card": null,
+      "padkLogin": {
+        "font": "-apple-system",
+        "size": "16px",
+        "color": "rgba(255, 255, 255, 0.95)",
+        "bg": "rgba(44, 44, 46, 0.86)",
+        "radius": "12px",
+        "border": "1px rgba(255, 255, 255, 0.12)",
+        "backdrop": "blur(30px) saturate(1.8)",
+        "box": [
+          400,
+          553
+        ]
+      },
+      "padkLoginH1": {
+        "font": "Songti SC",
+        "size": "32px",
+        "color": "rgba(255, 255, 255, 0.95)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "radius": "0px",
+        "border": "0px rgba(255, 255, 255, 0.95)",
+        "backdrop": null,
+        "box": [
+          330,
+          38
+        ]
+      }
+    },
+    "contrast": {
+      "pl-lede": {
+        "size": "12.5px",
+        "ratio": 7.82,
+        "aa": "pass"
+      },
+      "pl-foot": {
+        "size": "11px",
+        "ratio": 4.76,
+        "aa": "pass"
+      }
+    },
+    "state": {
+      "hasMask": false,
+      "hasCoord": false,
+      "landingText": "",
+      "primaryBtn": null,
+      "firstSelectValue": null
+    },
+    "map": null,
+    "page": {
+      "scrollW": 960,
+      "innerW": 960,
+      "overflowX": false
+    }
+  },
+  {
+    "label": "打卡页 · 初始（实时定位）",
+    "elementCount": 38,
+    "violations": {
+      "gradient": [],
+      "radiusOver12": [],
+      "borderOver1px": [],
+      "shadowNotAllowed": [],
+      "transitionNonColor": []
+    },
+    "key": {
+      "root": {
+        "font": "-apple-system",
+        "size": "13px",
+        "color": "rgba(255, 255, 255, 0.95)",
+        "bg": "rgba(44, 44, 46, 0.86)",
+        "radius": "12px",
+        "border": "1px rgba(255, 255, 255, 0.12)",
+        "backdrop": "blur(30px) saturate(1.8)",
+        "box": [
+          720,
+          548
+        ]
+      },
+      "head": {
+        "font": "-apple-system",
+        "size": "13px",
+        "color": "rgba(255, 255, 255, 0.95)",
+        "bg": "rgba(255, 255, 255, 0.04)",
+        "radius": "0px",
+        "border": "0px rgba(255, 255, 255, 0.95)",
+        "backdrop": null,
+        "box": [
+          718,
+          52
+        ]
+      },
+      "title": {
+        "font": "Songti SC",
+        "size": "15px",
+        "color": "rgba(255, 255, 255, 0.95)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "radius": "0px",
+        "border": "0px rgba(255, 255, 255, 0.95)",
+        "backdrop": null,
+        "box": [
+          667,
+          23
+        ]
+      },
+      "btn": {
+        "font": "-apple-system",
+        "size": "15px",
+        "color": "rgb(255, 255, 255)",
+        "bg": "rgb(10, 132, 255)",
+        "radius": "10px",
+        "border": "0px rgb(255, 255, 255)",
+        "backdrop": null,
+        "box": [
+          682,
+          48
+        ]
+      },
+      "btnGhost": {
+        "font": "-apple-system",
+        "size": "15px",
+        "color": "rgba(255, 255, 255, 0.7)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "radius": "10px",
+        "border": "1px rgba(255, 255, 255, 0.12)",
+        "backdrop": null,
+        "box": [
+          337,
+          50
+        ]
+      },
+      "label": {
+        "font": "-apple-system",
+        "size": "10px",
+        "color": "rgba(255, 255, 255, 0.5)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "radius": "0px",
+        "border": "0px rgba(255, 255, 255, 0.5)",
+        "backdrop": null,
+        "box": [
+          23,
+          16
+        ]
+      },
+      "badge": {
+        "font": "-apple-system",
+        "size": "12px",
+        "color": "rgb(48, 209, 88)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "radius": "0px",
+        "border": "0px rgb(48, 209, 88)",
+        "backdrop": null,
+        "box": [
+          47,
+          19
+        ]
+      },
+      "landing": {
+        "font": "-apple-system",
+        "size": "12px",
+        "color": "rgba(255, 255, 255, 0.5)",
+        "bg": "rgb(28, 28, 30)",
+        "radius": "10px",
+        "border": "1px rgba(255, 255, 255, 0.08)",
+        "backdrop": null,
+        "box": [
+          682,
+          46
+        ]
+      },
+      "coord": null,
+      "tabs": {
+        "font": "-apple-system",
+        "size": "13px",
+        "color": "rgba(255, 255, 255, 0.95)",
+        "bg": "rgba(255, 255, 255, 0.06)",
+        "radius": "8px",
+        "border": "0px rgba(255, 255, 255, 0.95)",
+        "backdrop": null,
+        "box": [
+          682,
+          34
+        ]
+      },
+      "tabOn": {
+        "font": "-apple-system",
+        "size": "12px",
+        "color": "rgba(255, 255, 255, 0.95)",
+        "bg": "rgba(255, 255, 255, 0.12)",
+        "radius": "6px",
+        "border": "0px rgba(255, 255, 255, 0.95)",
+        "backdrop": null,
+        "box": [
+          338,
+          30
+        ]
+      },
+      "log": {
+        "font": "SF Mono",
+        "size": "10.5px",
+        "color": "rgba(255, 255, 255, 0.7)",
+        "bg": "rgb(28, 28, 30)",
+        "radius": "8px",
+        "border": "1px rgba(255, 255, 255, 0.06)",
+        "backdrop": null,
+        "box": [
+          682,
+          77
+        ]
+      },
+      "mask": null,
+      "card": null,
+      "padkLogin": null,
+      "padkLoginH1": null
+    },
+    "contrast": {
+      "title": {
+        "size": "15px",
+        "ratio": 13.11,
+        "aa": "pass"
+      },
+      "label": {
+        "size": "10px",
+        "ratio": 4.76,
+        "aa": "pass"
+      },
+      "value": {
+        "size": "13px",
+        "ratio": 13.11,
+        "aa": "pass"
+      },
+      "landing-empty": {
+        "size": "12px",
+        "ratio": 5.16,
+        "aa": "pass"
+      },
+      "hint": {
+        "size": "11px",
+        "ratio": 4.76,
+        "aa": "pass"
+      },
+      "pb-id": {
+        "size": "11px",
+        "ratio": 7.82,
+        "aa": "pass"
+      }
+    },
+    "state": {
+      "hasMask": false,
+      "hasCoord": false,
+      "landingText": "尚未取得定位，点下方「重新定位」",
+      "primaryBtn": "用当前位置打卡 (disabled)",
+      "firstSelectValue": null
+    },
+    "map": null,
+    "page": {
+      "scrollW": 980,
+      "innerW": 980,
+      "overflowX": false
+    }
+  },
+  {
+    "label": "打卡页 · 设置展开",
+    "elementCount": 77,
+    "violations": {
+      "gradient": [],
+      "radiusOver12": [],
+      "borderOver1px": [],
+      "shadowNotAllowed": [],
+      "transitionNonColor": []
+    },
+    "key": {
+      "root": {
+        "font": "-apple-system",
+        "size": "13px",
+        "color": "rgba(255, 255, 255, 0.95)",
+        "bg": "rgba(44, 44, 46, 0.86)",
+        "radius": "12px",
+        "border": "1px rgba(255, 255, 255, 0.12)",
+        "backdrop": "blur(30px) saturate(1.8)",
+        "box": [
+          720,
+          1079
+        ]
+      },
+      "head": {
+        "font": "-apple-system",
+        "size": "13px",
+        "color": "rgba(255, 255, 255, 0.95)",
+        "bg": "rgba(255, 255, 255, 0.04)",
+        "radius": "0px",
+        "border": "0px rgba(255, 255, 255, 0.95)",
+        "backdrop": null,
+        "box": [
+          718,
+          52
+        ]
+      },
+      "title": {
+        "font": "Songti SC",
+        "size": "15px",
+        "color": "rgba(255, 255, 255, 0.95)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "radius": "0px",
+        "border": "0px rgba(255, 255, 255, 0.95)",
+        "backdrop": null,
+        "box": [
+          667,
+          23
+        ]
+      },
+      "btn": {
+        "font": "-apple-system",
+        "size": "15px",
+        "color": "rgb(255, 255, 255)",
+        "bg": "rgb(10, 132, 255)",
+        "radius": "10px",
+        "border": "0px rgb(255, 255, 255)",
+        "backdrop": null,
+        "box": [
+          682,
+          48
+        ]
+      },
+      "btnGhost": {
+        "font": "-apple-system",
+        "size": "15px",
+        "color": "rgba(255, 255, 255, 0.7)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "radius": "10px",
+        "border": "1px rgba(255, 255, 255, 0.12)",
+        "backdrop": null,
+        "box": [
+          337,
+          50
+        ]
+      },
+      "label": {
+        "font": "-apple-system",
+        "size": "10px",
+        "color": "rgba(255, 255, 255, 0.5)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "radius": "0px",
+        "border": "0px rgba(255, 255, 255, 0.5)",
+        "backdrop": null,
+        "box": [
+          23,
+          16
+        ]
+      },
+      "badge": {
+        "font": "-apple-system",
+        "size": "12px",
+        "color": "rgb(48, 209, 88)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "radius": "0px",
+        "border": "0px rgb(48, 209, 88)",
+        "backdrop": null,
+        "box": [
+          47,
+          19
+        ]
+      },
+      "landing": {
+        "font": "-apple-system",
+        "size": "12px",
+        "color": "rgba(255, 255, 255, 0.5)",
+        "bg": "rgb(28, 28, 30)",
+        "radius": "10px",
+        "border": "1px rgba(255, 255, 255, 0.08)",
+        "backdrop": null,
+        "box": [
+          682,
+          46
+        ]
+      },
+      "coord": null,
+      "tabs": {
+        "font": "-apple-system",
+        "size": "13px",
+        "color": "rgba(255, 255, 255, 0.95)",
+        "bg": "rgba(255, 255, 255, 0.06)",
+        "radius": "8px",
+        "border": "0px rgba(255, 255, 255, 0.95)",
+        "backdrop": null,
+        "box": [
+          682,
+          34
+        ]
+      },
+      "tabOn": {
+        "font": "-apple-system",
+        "size": "12px",
+        "color": "rgba(255, 255, 255, 0.95)",
+        "bg": "rgba(255, 255, 255, 0.12)",
+        "radius": "6px",
+        "border": "0px rgba(255, 255, 255, 0.95)",
+        "backdrop": null,
+        "box": [
+          338,
+          30
+        ]
+      },
+      "log": {
+        "font": "SF Mono",
+        "size": "10.5px",
+        "color": "rgba(255, 255, 255, 0.7)",
+        "bg": "rgb(28, 28, 30)",
+        "radius": "8px",
+        "border": "1px rgba(255, 255, 255, 0.06)",
+        "backdrop": null,
+        "box": [
+          682,
+          77
+        ]
+      },
+      "mask": null,
+      "card": {
+        "font": "-apple-system",
+        "size": "13px",
+        "color": "rgba(255, 255, 255, 0.95)",
+        "bg": "rgb(28, 28, 30)",
+        "radius": "10px",
+        "border": "1px rgba(255, 255, 255, 0.08)",
+        "backdrop": null,
+        "box": [
+          682,
+          519
+        ]
+      },
+      "padkLogin": null,
+      "padkLoginH1": null
+    },
+    "contrast": {
+      "title": {
+        "size": "15px",
+        "ratio": 13.11,
+        "aa": "pass"
+      },
+      "label": {
+        "size": "10px",
+        "ratio": 4.76,
+        "aa": "pass"
+      },
+      "value": {
+        "size": "13px",
+        "ratio": 13.11,
+        "aa": "pass"
+      },
+      "landing-empty": {
+        "size": "12px",
+        "ratio": 5.16,
+        "aa": "pass"
+      },
+      "hint": {
+        "size": "11px",
+        "ratio": 4.76,
+        "aa": "pass"
+      },
+      "pb-id": {
+        "size": "11px",
+        "ratio": 7.82,
+        "aa": "pass"
+      }
+    },
+    "state": {
+      "hasMask": false,
+      "hasCoord": false,
+      "landingText": "尚未取得定位，点下方「重新定位」",
+      "primaryBtn": "用当前位置打卡 (disabled)",
+      "firstSelectValue": ""
+    },
+    "map": null,
+    "page": {
+      "scrollW": 980,
+      "innerW": 980,
+      "overflowX": false
+    }
+  },
+  {
+    "label": "打卡页 · 已生成落点",
+    "elementCount": 55,
+    "violations": {
+      "gradient": [],
+      "radiusOver12": [],
+      "borderOver1px": [],
+      "shadowNotAllowed": [],
+      "transitionNonColor": []
+    },
+    "key": {
+      "root": {
+        "font": "-apple-system",
+        "size": "13px",
+        "color": "rgba(255, 255, 255, 0.95)",
+        "bg": "rgba(44, 44, 46, 0.86)",
+        "radius": "12px",
+        "border": "1px rgba(255, 255, 255, 0.12)",
+        "backdrop": "blur(30px) saturate(1.8)",
+        "box": [
+          720,
+          693
+        ]
+      },
+      "head": {
+        "font": "-apple-system",
+        "size": "13px",
+        "color": "rgba(255, 255, 255, 0.95)",
+        "bg": "rgba(255, 255, 255, 0.04)",
+        "radius": "0px",
+        "border": "0px rgba(255, 255, 255, 0.95)",
+        "backdrop": null,
+        "box": [
+          718,
+          52
+        ]
+      },
+      "title": {
+        "font": "Songti SC",
+        "size": "15px",
+        "color": "rgba(255, 255, 255, 0.95)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "radius": "0px",
+        "border": "0px rgba(255, 255, 255, 0.95)",
+        "backdrop": null,
+        "box": [
+          667,
+          23
+        ]
+      },
+      "btn": {
+        "font": "-apple-system",
+        "size": "15px",
+        "color": "rgba(255, 255, 255, 0.7)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "radius": "10px",
+        "border": "1px rgba(255, 255, 255, 0.12)",
+        "backdrop": null,
+        "box": [
+          682,
+          50
+        ]
+      },
+      "btnGhost": {
+        "font": "-apple-system",
+        "size": "15px",
+        "color": "rgba(255, 255, 255, 0.7)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "radius": "10px",
+        "border": "1px rgba(255, 255, 255, 0.12)",
+        "backdrop": null,
+        "box": [
+          682,
+          50
+        ]
+      },
+      "label": {
+        "font": "-apple-system",
+        "size": "10px",
+        "color": "rgba(255, 255, 255, 0.5)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "radius": "0px",
+        "border": "0px rgba(255, 255, 255, 0.5)",
+        "backdrop": null,
+        "box": [
+          23,
+          16
+        ]
+      },
+      "badge": {
+        "font": "-apple-system",
+        "size": "12px",
+        "color": "rgb(48, 209, 88)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "radius": "0px",
+        "border": "0px rgb(48, 209, 88)",
+        "backdrop": null,
+        "box": [
+          47,
+          19
+        ]
+      },
+      "landing": {
+        "font": "-apple-system",
+        "size": "13px",
+        "color": "rgba(255, 255, 255, 0.95)",
+        "bg": "rgb(28, 28, 30)",
+        "radius": "10px",
+        "border": "1px rgba(255, 255, 255, 0.08)",
+        "backdrop": null,
+        "box": [
+          682,
+          111
+        ]
+      },
+      "coord": {
+        "font": "SF Mono",
+        "size": "11px",
+        "color": "rgba(255, 255, 255, 0.7)",
+        "bg": "rgba(255, 255, 255, 0.04)",
+        "radius": "6px",
+        "border": "1px rgba(255, 255, 255, 0.06)",
+        "backdrop": null,
+        "box": [
+          656,
+          32
+        ]
+      },
+      "tabs": {
+        "font": "-apple-system",
+        "size": "13px",
+        "color": "rgba(255, 255, 255, 0.95)",
+        "bg": "rgba(255, 255, 255, 0.06)",
+        "radius": "8px",
+        "border": "0px rgba(255, 255, 255, 0.95)",
+        "backdrop": null,
+        "box": [
+          682,
+          34
+        ]
+      },
+      "tabOn": {
+        "font": "-apple-system",
+        "size": "12px",
+        "color": "rgba(255, 255, 255, 0.95)",
+        "bg": "rgba(255, 255, 255, 0.12)",
+        "radius": "6px",
+        "border": "0px rgba(255, 255, 255, 0.95)",
+        "backdrop": null,
+        "box": [
+          338,
+          30
+        ]
+      },
+      "log": {
+        "font": "SF Mono",
+        "size": "10.5px",
+        "color": "rgba(255, 255, 255, 0.7)",
+        "bg": "rgb(28, 28, 30)",
+        "radius": "8px",
+        "border": "1px rgba(255, 255, 255, 0.06)",
+        "backdrop": null,
+        "box": [
+          682,
+          96
+        ]
+      },
+      "mask": null,
+      "card": null,
+      "padkLogin": null,
+      "padkLoginH1": null
+    },
+    "contrast": {
+      "title": {
+        "size": "15px",
+        "ratio": 13.11,
+        "aa": "pass"
+      },
+      "label": {
+        "size": "10px",
+        "ratio": 4.76,
+        "aa": "pass"
+      },
+      "value": {
+        "size": "13px",
+        "ratio": 13.11,
+        "aa": "pass"
+      },
+      "landing-meta": {
+        "size": "11px",
+        "ratio": 4.76,
+        "aa": "pass"
+      },
+      "coord": {
+        "size": "11px",
+        "ratio": 7.82,
+        "aa": "pass"
+      },
+      "hint": {
+        "size": "11px",
+        "ratio": 4.76,
+        "aa": "pass"
+      },
+      "pb-id": {
+        "size": "11px",
+        "ratio": 7.82,
+        "aa": "pass"
+      }
+    },
+    "state": {
+      "hasMask": false,
+      "hasCoord": true,
+      "landingText": "◉ 南校区·升华公寓 13 栋 偏移 31.5m 距圆心 147.5m 方位 141.1° 围栏 300m 112.993601, 28.1",
+      "primaryBtn": "提交虚拟落点",
+      "firstSelectValue": null
+    },
+    "map": null,
+    "page": {
+      "scrollW": 980,
+      "innerW": 980,
+      "overflowX": false
+    }
+  },
+  {
+    "label": "打卡页 · 成功遮罩",
+    "elementCount": 69,
+    "violations": {
+      "gradient": [],
+      "radiusOver12": [],
+      "borderOver1px": [],
+      "shadowNotAllowed": [],
+      "transitionNonColor": []
+    },
+    "key": {
+      "root": {
+        "font": "-apple-system",
+        "size": "13px",
+        "color": "rgba(255, 255, 255, 0.95)",
+        "bg": "rgba(44, 44, 46, 0.86)",
+        "radius": "12px",
+        "border": "1px rgba(255, 255, 255, 0.12)",
+        "backdrop": "blur(30px) saturate(1.8)",
+        "box": [
+          720,
+          731
+        ]
+      },
+      "head": {
+        "font": "-apple-system",
+        "size": "13px",
+        "color": "rgba(255, 255, 255, 0.95)",
+        "bg": "rgba(255, 255, 255, 0.04)",
+        "radius": "0px",
+        "border": "0px rgba(255, 255, 255, 0.95)",
+        "backdrop": null,
+        "box": [
+          718,
+          52
+        ]
+      },
+      "title": {
+        "font": "Songti SC",
+        "size": "15px",
+        "color": "rgba(255, 255, 255, 0.95)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "radius": "0px",
+        "border": "0px rgba(255, 255, 255, 0.95)",
+        "backdrop": null,
+        "box": [
+          667,
+          23
+        ]
+      },
+      "btn": {
+        "font": "-apple-system",
+        "size": "15px",
+        "color": "rgb(255, 255, 255)",
+        "bg": "rgb(10, 132, 255)",
+        "radius": "10px",
+        "border": "0px rgb(255, 255, 255)",
+        "backdrop": null,
+        "box": [
+          150,
+          48
+        ]
+      },
+      "btnGhost": {
+        "font": "-apple-system",
+        "size": "15px",
+        "color": "rgba(255, 255, 255, 0.7)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "radius": "10px",
+        "border": "1px rgba(255, 255, 255, 0.12)",
+        "backdrop": null,
+        "box": [
+          682,
+          50
+        ]
+      },
+      "label": {
+        "font": "-apple-system",
+        "size": "10px",
+        "color": "rgba(255, 255, 255, 0.5)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "radius": "0px",
+        "border": "0px rgba(255, 255, 255, 0.5)",
+        "backdrop": null,
+        "box": [
+          23,
+          16
+        ]
+      },
+      "badge": {
+        "font": "-apple-system",
+        "size": "12px",
+        "color": "rgb(48, 209, 88)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "radius": "0px",
+        "border": "0px rgb(48, 209, 88)",
+        "backdrop": null,
+        "box": [
+          47,
+          19
+        ]
+      },
+      "landing": {
+        "font": "-apple-system",
+        "size": "13px",
+        "color": "rgba(255, 255, 255, 0.95)",
+        "bg": "rgb(28, 28, 30)",
+        "radius": "10px",
+        "border": "1px rgba(255, 255, 255, 0.08)",
+        "backdrop": null,
+        "box": [
+          682,
+          111
+        ]
+      },
+      "coord": {
+        "font": "SF Mono",
+        "size": "11px",
+        "color": "rgba(255, 255, 255, 0.7)",
+        "bg": "rgba(255, 255, 255, 0.04)",
+        "radius": "6px",
+        "border": "1px rgba(255, 255, 255, 0.06)",
+        "backdrop": null,
+        "box": [
+          135,
+          32
+        ]
+      },
+      "tabs": {
+        "font": "-apple-system",
+        "size": "13px",
+        "color": "rgba(255, 255, 255, 0.95)",
+        "bg": "rgba(255, 255, 255, 0.06)",
+        "radius": "8px",
+        "border": "0px rgba(255, 255, 255, 0.95)",
+        "backdrop": null,
+        "box": [
+          682,
+          34
+        ]
+      },
+      "tabOn": {
+        "font": "-apple-system",
+        "size": "12px",
+        "color": "rgba(255, 255, 255, 0.95)",
+        "bg": "rgba(255, 255, 255, 0.12)",
+        "radius": "6px",
+        "border": "0px rgba(255, 255, 255, 0.95)",
+        "backdrop": null,
+        "box": [
+          338,
+          30
+        ]
+      },
+      "log": {
+        "font": "SF Mono",
+        "size": "10.5px",
+        "color": "rgba(255, 255, 255, 0.7)",
+        "bg": "rgb(28, 28, 30)",
+        "radius": "8px",
+        "border": "1px rgba(255, 255, 255, 0.06)",
+        "backdrop": null,
+        "box": [
+          682,
+          133
+        ]
+      },
+      "mask": {
+        "font": "-apple-system",
+        "size": "13px",
+        "color": "rgba(255, 255, 255, 0.95)",
+        "bg": "rgba(28, 28, 30, 0.94)",
+        "radius": "12px",
+        "border": "0px rgba(255, 255, 255, 0.95)",
+        "backdrop": "blur(20px)",
+        "box": [
+          718,
+          729
+        ]
+      },
+      "card": null,
+      "padkLogin": null,
+      "padkLoginH1": null
+    },
+    "contrast": {
+      "title": {
+        "size": "15px",
+        "ratio": 13.11,
+        "aa": "pass"
+      },
+      "label": {
+        "size": "10px",
+        "ratio": 4.76,
+        "aa": "pass"
+      },
+      "value": {
+        "size": "13px",
+        "ratio": 13.11,
+        "aa": "pass"
+      },
+      "landing-meta": {
+        "size": "11px",
+        "ratio": 4.76,
+        "aa": "pass"
+      },
+      "coord": {
+        "size": "11px",
+        "ratio": 7.82,
+        "aa": "pass"
+      },
+      "hint": {
+        "size": "11px",
+        "ratio": 4.76,
+        "aa": "pass"
+      },
+      "pb-id": {
+        "size": "11px",
+        "ratio": 7.82,
+        "aa": "pass"
+      }
+    },
+    "state": {
+      "hasMask": true,
+      "hasCoord": true,
+      "landingText": "◉ 南校区·升华公寓 13 栋 偏移 31.5m 距圆心 147.5m 方位 141.1° 围栏 300m 112.993601, 28.1",
+      "primaryBtn": "提交虚拟落点",
+      "firstSelectValue": null
+    },
+    "map": null,
+    "page": {
+      "scrollW": 980,
+      "innerW": 980,
+      "overflowX": false
+    }
+  },
+  {
+    "label": "打卡页 · 地图展开",
+    "elementCount": 132,
+    "violations": {
+      "gradient": [],
+      "radiusOver12": [],
+      "borderOver1px": [],
+      "shadowNotAllowed": [],
+      "transitionNonColor": []
+    },
+    "key": {
+      "root": {
+        "font": "-apple-system",
+        "size": "13px",
+        "color": "rgba(255, 255, 255, 0.95)",
+        "bg": "rgba(44, 44, 46, 0.86)",
+        "radius": "12px",
+        "border": "1px rgba(255, 255, 255, 0.12)",
+        "backdrop": "blur(30px) saturate(1.8)",
+        "box": [
+          720,
+          1115
+        ]
+      },
+      "head": {
+        "font": "-apple-system",
+        "size": "13px",
+        "color": "rgba(255, 255, 255, 0.95)",
+        "bg": "rgba(255, 255, 255, 0.04)",
+        "radius": "0px",
+        "border": "0px rgba(255, 255, 255, 0.95)",
+        "backdrop": null,
+        "box": [
+          718,
+          52
+        ]
+      },
+      "title": {
+        "font": "Songti SC",
+        "size": "15px",
+        "color": "rgba(255, 255, 255, 0.95)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "radius": "0px",
+        "border": "0px rgba(255, 255, 255, 0.95)",
+        "backdrop": null,
+        "box": [
+          667,
+          23
+        ]
+      },
+      "btn": {
+        "font": "-apple-system",
+        "size": "15px",
+        "color": "rgba(255, 255, 255, 0.7)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "radius": "10px",
+        "border": "1px rgba(255, 255, 255, 0.12)",
+        "backdrop": null,
+        "box": [
+          652,
+          50
+        ]
+      },
+      "btnGhost": {
+        "font": "-apple-system",
+        "size": "15px",
+        "color": "rgba(255, 255, 255, 0.7)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "radius": "10px",
+        "border": "1px rgba(255, 255, 255, 0.12)",
+        "backdrop": null,
+        "box": [
+          652,
+          50
+        ]
+      },
+      "label": {
+        "font": "-apple-system",
+        "size": "10px",
+        "color": "rgba(255, 255, 255, 0.5)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "radius": "0px",
+        "border": "0px rgba(255, 255, 255, 0.5)",
+        "backdrop": null,
+        "box": [
+          23,
+          16
+        ]
+      },
+      "badge": {
+        "font": "-apple-system",
+        "size": "12px",
+        "color": "rgb(48, 209, 88)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "radius": "0px",
+        "border": "0px rgb(48, 209, 88)",
+        "backdrop": null,
+        "box": [
+          47,
+          19
+        ]
+      },
+      "landing": {
+        "font": "-apple-system",
+        "size": "13px",
+        "color": "rgba(255, 255, 255, 0.95)",
+        "bg": "rgb(28, 28, 30)",
+        "radius": "10px",
+        "border": "1px rgba(255, 255, 255, 0.08)",
+        "backdrop": null,
+        "box": [
+          682,
+          111
+        ]
+      },
+      "coord": {
+        "font": "SF Mono",
+        "size": "11px",
+        "color": "rgba(255, 255, 255, 0.7)",
+        "bg": "rgba(255, 255, 255, 0.04)",
+        "radius": "6px",
+        "border": "1px rgba(255, 255, 255, 0.06)",
+        "backdrop": null,
+        "box": [
+          656,
+          32
+        ]
+      },
+      "tabs": {
+        "font": "-apple-system",
+        "size": "13px",
+        "color": "rgba(255, 255, 255, 0.95)",
+        "bg": "rgba(255, 255, 255, 0.06)",
+        "radius": "8px",
+        "border": "0px rgba(255, 255, 255, 0.95)",
+        "backdrop": null,
+        "box": [
+          682,
+          34
+        ]
+      },
+      "tabOn": {
+        "font": "-apple-system",
+        "size": "12px",
+        "color": "rgba(255, 255, 255, 0.95)",
+        "bg": "rgba(255, 255, 255, 0.12)",
+        "radius": "6px",
+        "border": "0px rgba(255, 255, 255, 0.95)",
+        "backdrop": null,
+        "box": [
+          338,
+          30
+        ]
+      },
+      "log": {
+        "font": "SF Mono",
+        "size": "10.5px",
+        "color": "rgba(255, 255, 255, 0.7)",
+        "bg": "rgb(28, 28, 30)",
+        "radius": "8px",
+        "border": "1px rgba(255, 255, 255, 0.06)",
+        "backdrop": null,
+        "box": [
+          682,
+          133
+        ]
+      },
+      "mask": null,
+      "card": null,
+      "padkLogin": null,
+      "padkLoginH1": null
+    },
+    "contrast": {
+      "title": {
+        "size": "15px",
+        "ratio": 13.11,
+        "aa": "pass"
+      },
+      "label": {
+        "size": "10px",
+        "ratio": 4.76,
+        "aa": "pass"
+      },
+      "value": {
+        "size": "13px",
+        "ratio": 13.11,
+        "aa": "pass"
+      },
+      "landing-meta": {
+        "size": "11px",
+        "ratio": 4.76,
+        "aa": "pass"
+      },
+      "coord": {
+        "size": "11px",
+        "ratio": 7.82,
+        "aa": "pass"
+      },
+      "hint": {
+        "size": "11px",
+        "ratio": 4.76,
+        "aa": "pass"
+      },
+      "pb-id": {
+        "size": "11px",
+        "ratio": 7.82,
+        "aa": "pass"
+      }
+    },
+    "state": {
+      "hasMask": false,
+      "hasCoord": true,
+      "landingText": "◉ 南校区·升华公寓 13 栋 偏移 31.5m 距圆心 147.5m 方位 141.1° 围栏 300m 112.993601, 28.1",
+      "primaryBtn": "提交虚拟落点",
+      "firstSelectValue": "amap-vector"
+    },
+    "map": {
+      "dataTile": "amap-vector",
+      "tilePaneFilter": "invert(1) hue-rotate(180deg) brightness(0.9) contrast(0.92) saturate(0.6)",
+      "tileCount": 9,
+      "height": 340,
+      "legend": true
+    },
+    "page": {
+      "scrollW": 980,
+      "innerW": 980,
+      "overflowX": false
+    }
+  },
+  {
+    "label": "窄屏 390×844",
+    "elementCount": 38,
+    "violations": {
+      "gradient": [],
+      "radiusOver12": [],
+      "borderOver1px": [],
+      "shadowNotAllowed": [],
+      "transitionNonColor": []
+    },
+    "key": {
+      "root": {
+        "font": "-apple-system",
+        "size": "13px",
+        "color": "rgba(255, 255, 255, 0.95)",
+        "bg": "rgba(44, 44, 46, 0.86)",
+        "radius": "12px",
+        "border": "1px rgba(255, 255, 255, 0.12)",
+        "backdrop": "blur(30px) saturate(1.8)",
+        "box": [
+          366,
+          605
+        ]
+      },
+      "head": {
+        "font": "-apple-system",
+        "size": "13px",
+        "color": "rgba(255, 255, 255, 0.95)",
+        "bg": "rgba(255, 255, 255, 0.04)",
+        "radius": "0px",
+        "border": "0px rgba(255, 255, 255, 0.95)",
+        "backdrop": null,
+        "box": [
+          364,
+          52
+        ]
+      },
+      "title": {
+        "font": "Songti SC",
+        "size": "15px",
+        "color": "rgba(255, 255, 255, 0.95)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "radius": "0px",
+        "border": "0px rgba(255, 255, 255, 0.95)",
+        "backdrop": null,
+        "box": [
+          313,
+          23
+        ]
+      },
+      "btn": {
+        "font": "-apple-system",
+        "size": "15px",
+        "color": "rgb(255, 255, 255)",
+        "bg": "rgb(10, 132, 255)",
+        "radius": "10px",
+        "border": "0px rgb(255, 255, 255)",
+        "backdrop": null,
+        "box": [
+          328,
+          48
+        ]
+      },
+      "btnGhost": {
+        "font": "-apple-system",
+        "size": "15px",
+        "color": "rgba(255, 255, 255, 0.7)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "radius": "10px",
+        "border": "1px rgba(255, 255, 255, 0.12)",
+        "backdrop": null,
+        "box": [
+          160,
+          50
+        ]
+      },
+      "label": {
+        "font": "-apple-system",
+        "size": "10px",
+        "color": "rgba(255, 255, 255, 0.5)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "radius": "0px",
+        "border": "0px rgba(255, 255, 255, 0.5)",
+        "backdrop": null,
+        "box": [
+          23,
+          16
+        ]
+      },
+      "badge": {
+        "font": "-apple-system",
+        "size": "12px",
+        "color": "rgb(48, 209, 88)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "radius": "0px",
+        "border": "0px rgb(48, 209, 88)",
+        "backdrop": null,
+        "box": [
+          47,
+          19
+        ]
+      },
+      "landing": {
+        "font": "-apple-system",
+        "size": "12px",
+        "color": "rgba(255, 255, 255, 0.5)",
+        "bg": "rgb(28, 28, 30)",
+        "radius": "10px",
+        "border": "1px rgba(255, 255, 255, 0.08)",
+        "backdrop": null,
+        "box": [
+          328,
+          46
+        ]
+      },
+      "coord": null,
+      "tabs": {
+        "font": "-apple-system",
+        "size": "13px",
+        "color": "rgba(255, 255, 255, 0.95)",
+        "bg": "rgba(255, 255, 255, 0.06)",
+        "radius": "8px",
+        "border": "0px rgba(255, 255, 255, 0.95)",
+        "backdrop": null,
+        "box": [
+          328,
+          34
+        ]
+      },
+      "tabOn": {
+        "font": "-apple-system",
+        "size": "12px",
+        "color": "rgba(255, 255, 255, 0.95)",
+        "bg": "rgba(255, 255, 255, 0.12)",
+        "radius": "6px",
+        "border": "0px rgba(255, 255, 255, 0.95)",
+        "backdrop": null,
+        "box": [
+          161,
+          30
+        ]
+      },
+      "log": {
+        "font": "SF Mono",
+        "size": "10.5px",
+        "color": "rgba(255, 255, 255, 0.7)",
+        "bg": "rgb(28, 28, 30)",
+        "radius": "8px",
+        "border": "1px rgba(255, 255, 255, 0.06)",
+        "backdrop": null,
+        "box": [
+          328,
+          114
+        ]
+      },
+      "mask": null,
+      "card": null,
+      "padkLogin": null,
+      "padkLoginH1": null
+    },
+    "contrast": {
+      "title": {
+        "size": "15px",
+        "ratio": 13.11,
+        "aa": "pass"
+      },
+      "label": {
+        "size": "10px",
+        "ratio": 4.76,
+        "aa": "pass"
+      },
+      "value": {
+        "size": "13px",
+        "ratio": 13.11,
+        "aa": "pass"
+      },
+      "landing-empty": {
+        "size": "12px",
+        "ratio": 5.16,
+        "aa": "pass"
+      },
+      "hint": {
+        "size": "11px",
+        "ratio": 4.76,
+        "aa": "pass"
+      },
+      "pb-id": {
+        "size": "11px",
+        "ratio": 7.82,
+        "aa": "pass"
+      }
+    },
+    "state": {
+      "hasMask": false,
+      "hasCoord": false,
+      "landingText": "尚未取得定位，点下方「重新定位」",
+      "primaryBtn": "用当前位置打卡 (disabled)",
+      "firstSelectValue": null
+    },
+    "map": null,
+    "page": {
+      "scrollW": 390,
+      "innerW": 390,
+      "overflowX": false
+    }
+  },
+  {
+    "label": "注入模式 · Shadow DOM",
+    "styleTagsInShadow": 1,
+    "root": {
+      "position": "fixed",
+      "box": [
+        336,
+        588
+      ],
+      "bg": "rgba(44, 44, 46, 0.86)",
+      "backdrop": "blur(30px) saturate(1.8)",
+      "radius": "12px",
+      "border": "1px rgba(255, 255, 255, 0.12)",
+      "shadow": "rgba(0, 0, 0, 0.66) 0px 16px 40px -16px"
+    },
+    "title": {
+      "font": "Songti SC",
+      "size": "14px",
+      "bg": "rgba(0, 0, 0, 0)",
+      "radius": "0px"
+    },
+    "btn": {
+      "font": "-apple-system",
+      "size": "14px",
+      "bg": "rgb(10, 132, 255)",
+      "radius": "10px"
+    },
+    "violations": {
+      "gradient": [],
+      "radiusOver12": [],
+      "borderOver1px": [],
+      "shadowNotAllowed": []
+    },
+    "hostPageUntouched": {
+      "bodyBg": "rgb(10, 19, 16)",
+      "bodyFont": "\"PingFang SC\", \"Microsoft YaHei\""
+    }
+  }
+]

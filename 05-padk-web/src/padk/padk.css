@@ -1,203 +1,262 @@
-/* 独立打卡页 —— 与勘测图纸版同一套视觉语言 */
+/* ══════════════════════════════════════════════════════════════
+   独立打卡页 · Precision Glass（整页形态）
+   ──────────────────────────────────────────────────────────────
+   与 panel.css 同一套材质与排版规则，token 在此重复声明一次：
+   panel.css 的变量挂在 .root 上，而登录卡不在 .root 内。
+   两处需保持同步（三级灰阶 / 1px 描边 / 无渐变 / .2s ease-out）。
+   ══════════════════════════════════════════════════════════════ */
+
+/* 覆盖 landing.css 的墨绿底：本条特异性更高，与引入顺序无关 */
+html:has(.padk-shell),
+body:has(.padk-shell) {
+  background: #1c1c1e;
+  color: rgba(255, 255, 255, 0.95);
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
+    "HarmonyOS Sans SC", "Microsoft YaHei", "Segoe UI", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
 
 .padk-shell {
+  --pg-deep: #1c1c1e;
+  --pg-mid: #2c2c2e;
+  --pg-surface: #3a3a3c;
+  --pg-line: rgba(255, 255, 255, 0.08);
+  --pg-line-2: rgba(255, 255, 255, 0.12);
+  --pg-line-3: rgba(255, 255, 255, 0.2);
+  --pg-t1: rgba(255, 255, 255, 0.95);
+  --pg-t2: rgba(255, 255, 255, 0.7);
+  --pg-t3: rgba(255, 255, 255, 0.5); /* 同 panel.css：兼顾小字号可读性 */
+  --pg-accent: #0a84ff;
+  --pg-ok: #30d158;
+  --pg-warn: #ff9f0a;
+  --pg-err: #ff453a;
+  --pg-serif: "Songti SC", "Source Han Serif SC", "Noto Serif SC", "STSong", Georgia, serif;
+  --pg-mono: "SF Mono", ui-monospace, Menlo, Consolas, "Courier New", monospace;
+
+  position: relative;
   min-height: 100vh;
-  padding: 28px 20px 48px;
+  padding: 30px 20px 56px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  background: var(--pg-deep);
+  overflow-x: hidden;
+}
+
+/* 台面纹理：给玻璃一点可透的内容，材质才有物理感 */
+.padk-shell::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.022) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: radial-gradient(ellipse 90% 70% at 50% 28%, #000 18%, transparent 78%);
+  -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 28%, #000 18%, transparent 78%);
+}
+
+.padk-shell > * {
+  position: relative;
+  z-index: 1;
 }
 
 .padk-loading {
-  margin-top: 30vh;
-  font-family: ui-monospace, monospace;
-  font-size: 13px;
-  letter-spacing: 1.4px;
-  color: #7f8a82;
+  margin-top: 34vh;
+  font-family: var(--pg-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--pg-t3);
 }
 
 /* ── 登录卡 ── */
 .padk-login {
   width: 100%;
-  max-width: 420px;
-  margin-top: 6vh;
-  background: rgba(255, 255, 255, 0.028);
-  border: 1px solid rgba(217, 164, 65, 0.18);
-  border-radius: 10px;
-  padding: 34px 32px 30px;
-  animation: rise 0.7s cubic-bezier(0.2, 0.75, 0.3, 1) both;
+  max-width: 400px;
+  margin-top: 8vh;
+  padding: 36px 34px 32px;
+  border-radius: 12px;
+  background: rgba(44, 44, 46, 0.86);
+  backdrop-filter: blur(30px) saturate(180%);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  border: 1px solid var(--pg-line-2);
+  box-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.7);
+  animation: rise 0.5s cubic-bezier(0.2, 0.75, 0.3, 1) both;
 }
 
 .pl-tag {
   display: inline-block;
-  font-family: ui-monospace, monospace;
-  font-size: 10px;
-  letter-spacing: 2.4px;
-  color: #d9a441;
-  border: 1px solid rgba(217, 164, 65, 0.3);
-  padding: 3px 11px;
-  border-radius: 20px;
-  margin-bottom: 18px;
+  font-family: var(--pg-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.2em;
+  color: var(--pg-t3);
+  border: 1px solid var(--pg-line-2);
+  border-radius: 5px;
+  padding: 3px 9px;
+  margin-bottom: 20px;
 }
 
 .padk-login h1 {
-  font-family: "Songti SC", "STSong", "Source Han Serif SC", serif;
-  font-size: 30px;
+  font-family: var(--pg-serif);
+  font-size: 32px;
   font-weight: 600;
-  letter-spacing: 0.08em;
-  color: #ece5d7;
+  letter-spacing: 0.12em;
+  line-height: 1.2;
+  color: var(--pg-t1);
   margin-bottom: 12px;
 }
 
 .pl-lede {
-  font-size: 13px;
-  line-height: 1.85;
-  color: #7f8a82;
-  margin-bottom: 26px;
+  font-size: 12.5px;
+  line-height: 1.8;
+  color: var(--pg-t2);
+  margin-bottom: 28px;
 }
 
 .pl-field {
   display: block;
-  margin-bottom: 15px;
+  margin-bottom: 16px;
 }
 .pl-field span {
   display: block;
-  font-family: ui-monospace, monospace;
-  font-size: 10.5px;
-  letter-spacing: 1.4px;
-  color: #7f8a82;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: var(--pg-t3);
   margin-bottom: 7px;
 }
 .pl-field input {
   width: 100%;
-  background: #060d0a;
-  border: 1px solid rgba(217, 164, 65, 0.18);
-  border-radius: 6px;
-  padding: 12px 13px;
-  color: #ece5d7;
+  padding: 11px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--pg-line-2);
+  background: var(--pg-deep);
+  color: var(--pg-t1);
+  font-family: inherit;
   font-size: 14px;
   outline: none;
-  transition: border-color 0.16s ease, box-shadow 0.16s ease;
+  transition: border-color 0.2s ease-out;
 }
 .pl-field input:focus {
-  border-color: #d9a441;
-  box-shadow: 0 0 0 3px rgba(217, 164, 65, 0.1);
+  border-color: var(--pg-accent);
 }
 .pl-field input::placeholder {
-  color: #4d5a53;
+  color: rgba(255, 255, 255, 0.25);
 }
 
 .pl-remember {
   display: flex;
   align-items: center;
   gap: 7px;
-  font-size: 12.5px;
-  color: #7f8a82;
-  margin: 4px 0 18px;
+  font-size: 12px;
+  color: var(--pg-t2);
+  margin: 4px 0 20px;
   cursor: pointer;
   user-select: none;
 }
 .pl-remember input {
-  accent-color: #d9a441;
+  accent-color: var(--pg-accent);
   width: auto;
 }
 
 .pl-err {
-  background: rgba(224, 122, 95, 0.1);
-  border: 1px solid rgba(224, 122, 95, 0.28);
-  color: #f0b49c;
-  font-size: 12.5px;
-  line-height: 1.7;
-  border-radius: 6px;
-  padding: 10px 13px;
+  padding: 10px 12px;
   margin-bottom: 16px;
+  border-radius: 8px;
+  background: rgba(255, 69, 58, 0.08);
+  border: 1px solid rgba(255, 69, 58, 0.28);
+  color: #ff8f86;
+  font-size: 12px;
+  line-height: 1.7;
 }
 
 .pl-btn {
   width: 100%;
   padding: 13px;
-  border: none;
-  border-radius: 6px;
-  background: linear-gradient(160deg, #f2c869, #d9a441 44%, #a87c26);
-  color: #1b1508;
+  border: 0;
+  border-radius: 10px;
+  background: var(--pg-accent);
+  color: #fff;
   font-family: inherit;
-  font-size: 15px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
+  font-size: 14.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
   cursor: pointer;
-  box-shadow: 0 10px 26px -12px rgba(217, 164, 65, 0.75),
-    inset 0 1px 0 rgba(255, 255, 255, 0.45);
-  transition: transform 0.14s ease, filter 0.18s ease;
+  transition: filter 0.2s ease-out, opacity 0.2s ease-out;
 }
 .pl-btn:hover:not(:disabled) {
-  filter: brightness(1.06);
-  transform: translateY(-1px);
+  filter: brightness(1.1);
 }
 .pl-btn:active:not(:disabled) {
-  transform: translateY(0);
+  filter: brightness(0.92);
 }
 .pl-btn:disabled {
-  opacity: 0.55;
+  opacity: 0.38;
   cursor: not-allowed;
 }
 
 .pl-foot {
-  margin-top: 18px;
-  font-size: 11.5px;
+  margin-top: 20px;
+  font-size: 11px;
   line-height: 1.85;
-  color: #5d6b64;
+  color: var(--pg-t3);
 }
 .pl-foot code {
-  font-family: ui-monospace, monospace;
-  color: #b99246;
-  background: rgba(217, 164, 65, 0.09);
+  font-family: var(--pg-mono);
+  font-size: 10.5px;
+  color: var(--pg-t2);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--pg-line);
   padding: 1px 5px;
-  border-radius: 3px;
+  border-radius: 4px;
 }
 
 /* ── 顶部信息条 ── */
 .padk-bar {
   width: 100%;
-  max-width: 780px;
+  max-width: 720px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 14px;
-  margin-bottom: 16px;
-  padding: 0 4px;
-  animation: rise 0.6s cubic-bezier(0.2, 0.75, 0.3, 1) both;
+  padding: 0 2px 12px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid var(--pg-line);
+  animation: rise 0.5s cubic-bezier(0.2, 0.75, 0.3, 1) both;
 }
 .pb-id {
-  font-family: ui-monospace, monospace;
-  font-size: 11.5px;
-  letter-spacing: 0.8px;
-  color: #7f8a82;
+  font-family: var(--pg-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--pg-t2);
 }
 .pb-out {
-  background: none;
-  border: 1px solid rgba(217, 164, 65, 0.2);
-  color: #7f8a82;
+  padding: 5px 13px;
+  border-radius: 6px;
+  border: 1px solid var(--pg-line-2);
+  background: transparent;
+  color: var(--pg-t2);
   font-family: inherit;
   font-size: 11.5px;
-  padding: 5px 13px;
-  border-radius: 5px;
   cursor: pointer;
-  transition: all 0.16s ease;
+  transition: background-color 0.2s ease-out, color 0.2s ease-out,
+    border-color 0.2s ease-out;
 }
 .pb-out:hover {
-  border-color: #d9a441;
-  color: #f2c869;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--pg-t1);
+  border-color: var(--pg-line-3);
 }
 
 /* 整页模式下，浮层卡片恢复常规布局 */
 .padk-shell .root.page-mode {
-  animation: rise 0.7s cubic-bezier(0.2, 0.75, 0.3, 1) 0.08s both;
+  animation: rise 0.5s cubic-bezier(0.2, 0.75, 0.3, 1) 0.06s both;
 }
 
 @keyframes rise {
   from {
     opacity: 0;
-    transform: translateY(18px);
+    transform: translateY(14px);
   }
   to {
     opacity: 1;
@@ -210,11 +269,23 @@
     padding: 18px 12px 32px;
   }
   .padk-login {
-    padding: 26px 22px 24px;
-    margin-top: 3vh;
+    padding: 28px 22px 26px;
+    margin-top: 4vh;
+  }
+  .padk-login h1 {
+    font-size: 27px;
   }
   .padk-shell .root.page-mode .mapwrap,
   .padk-shell .root.page-mode .mapbox {
     height: 260px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .padk-shell,
+  .padk-shell * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

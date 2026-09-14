@@ -27,10 +27,11 @@ export interface MapViewProps {
   onBuildingPick?: (b: Building) => void;
 }
 
-const PIN_CENTER = "#2278fd";
-const PIN_LANDING = "#e0a33e";
-const FENCE_COLOR = "#2278fd";
-const RANGE_COLOR = "#e0a33e";
+// 与面板同一套系统色：蓝 = 服务端围栏（约束），绿 = 本机落点（目标）
+const PIN_CENTER = "#0a84ff";
+const PIN_LANDING = "#30d158";
+const FENCE_COLOR = "#0a84ff";
+const RANGE_COLOR = "#30d158";
 
 function MapViewInner({
   buildings,
@@ -174,9 +175,9 @@ function MapViewInner({
         const inRange = d <= localRange;
         const dot = L.circleMarker([+b.wd, +b.jd], {
           radius: inRange ? 5 : inFence ? 4 : 3.5,
-          color: inRange ? "#b8801f" : inFence ? "#0b8f4f" : "#9aa7b5",
+          color: inRange ? "#1f8f45" : inFence ? "#b07a10" : "#6e6e73",
           weight: 1.4,
-          fillColor: inRange ? "#e0a33e" : inFence ? "#19be6b" : "#c3ccd6",
+          fillColor: inRange ? "#30d158" : inFence ? "#ff9f0a" : "#8e8e93",
           fillOpacity: inRange ? 0.9 : inFence ? 0.8 : 0.45,
         });
         dot.bindTooltip(`${b.ldmc} · ${d.toFixed(0)}m`, { direction: "top" });
@@ -253,9 +254,9 @@ function MapViewInner({
     for (const h of history.slice(0, 25)) {
       L.circleMarker([h.wd, h.jd], {
         radius: 3,
-        color: "#c9d2dc",
+        color: "#8e8e93",
         weight: 1,
-        fillColor: "#c9d2dc",
+        fillColor: "#8e8e93",
         fillOpacity: 0.6,
         interactive: false,
       }).addTo(layer);
@@ -320,7 +321,8 @@ function MapViewInner({
 
   return (
     <div className="mapwrap" style={{ height }}>
-      <div ref={boxRef} className="mapbox" style={{ height }} />
+      {/* data-tile 供 CSS 按瓦片源决定是否做暗色化，卫星图不适用 */}
+      <div ref={boxRef} className="mapbox" data-tile={tileId} style={{ height }} />
       {!ready && (
         <div className="map-skeleton" style={{ height }}>
           <span className="ms-grid" />

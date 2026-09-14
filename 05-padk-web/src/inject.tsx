@@ -29,7 +29,7 @@ function healGate(): boolean {
   const inError = location.hash.includes("/pages/public/error");
   const hasCred = /[?&]uid=/.test(location.search) && /[?&]lzc=/.test(location.search);
   if (inError && hasCred) {
-    console.log("%c[平安打卡] 检测到 UA 门禁拦截，正在绕过…", "color:#2278fd;font-weight:700");
+    console.log("%c[平安打卡] 检测到 UA 门禁拦截，正在绕过…", "color:#0a84ff;font-weight:700");
     location.hash = "#/pages/login/myindex";
     return true;
   }
@@ -74,8 +74,8 @@ function mount() {
   document.documentElement.appendChild(host);
   createRoot(mountPoint).render(<Panel />);
 
-  console.log("%c[平安打卡] 面板已注入", "color:#2278fd;font-weight:700;font-size:14px");
-  console.log("%c  数据全部保留在你本机，未向任何服务器上传", "color:#9096a2");
+  console.log("%c[平安打卡] 面板已注入", "color:#0a84ff;font-weight:700;font-size:14px");
+  console.log("%c  数据全部保留在你本机，未向任何服务器上传", "color:#8e8e93");
 }
 
 if (document.readyState === "loading") {

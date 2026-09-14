@@ -6,6 +6,9 @@ node_modules/
 05-padk-web/dist-inject/
 .tmp-core/
 
+# TypeScript 增量构建缓存
+*.tsbuildinfo
+
 # ── 本地凭据：绝不入库 ──
 zhxg-session.json
 cas-session.json

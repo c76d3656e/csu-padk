@@ -518,21 +518,22 @@ export default function Panel({ pageMode = false, onAuthError }: PanelProps) {
 
       <div className="body">
         {done && (
-          <div className="success" style={{ position: "absolute", inset: 0, background: "rgba(255,255,255,.98)", zIndex: 10, borderRadius: 16 }}>
-            <div className="tick">✓</div>
-            <div className="t1">打卡成功</div>
-            <div className="t2">
-              已于 {new Date(done.at).toLocaleTimeString("zh-CN", { hour12: false })} 完成打卡
-              <br />
-              {done.dz}
-              <br />
-              <span style={{ fontFamily: "ui-monospace,monospace" }}>
-                {done.jd.toFixed(5)}, {done.wd.toFixed(5)}
-              </span>
+          <div className="mask">
+            <div className="success">
+              <div className="tick">✓</div>
+              <div className="t1">打卡成功</div>
+              <div className="t2">
+                已于 {new Date(done.at).toLocaleTimeString("zh-CN", { hour12: false })} 完成打卡
+                <br />
+                {done.dz}
+                <div className="coord">
+                  {done.jd.toFixed(5)}, {done.wd.toFixed(5)}
+                </div>
+              </div>
+              <button className="btn" onClick={() => setDone(null)}>
+                确定
+              </button>
             </div>
-            <button className="btn" onClick={() => setDone(null)}>
-              确定
-            </button>
           </div>
         )}
 
@@ -622,7 +623,7 @@ export default function Panel({ pageMode = false, onAuthError }: PanelProps) {
               )}
             </div>
           ) : (
-            <div className="landing" style={{ textAlign: "center", color: "var(--sub)", fontSize: 12 }}>
+            <div className="landing landing-empty">
               {locating ? "正在定位…" : "尚未取得定位，点下方「重新定位」"}
             </div>
           )
@@ -643,13 +644,13 @@ export default function Panel({ pageMode = false, onAuthError }: PanelProps) {
               {landing.jd.toFixed(6)}, {landing.wd.toFixed(6)}
             </div>
             {landing.distFromCenter > fence && (
-              <div className="hint" style={{ color: "#a86400", marginTop: 6 }}>
+              <div className="hint warn">
                 ⚠ 该点已超出服务端围栏（{fence}m），提交可能被拒绝
               </div>
             )}
           </div>
         ) : (
-          <div className="landing" style={{ textAlign: "center", color: "var(--sub)", fontSize: 12 }}>
+          <div className="landing landing-empty">
             {center ? (
               "点击下方「生成落点」"
             ) : (
@@ -683,7 +684,7 @@ export default function Panel({ pageMode = false, onAuthError }: PanelProps) {
                 <select
                   value={tileId}
                   onChange={(e) => setTileId(e.target.value)}
-                  style={{ flex: 1, padding: "6px 8px", fontSize: 12 }}
+                  style={{ flex: 1 }}
                   title="切换底图"
                 >
                   {TILE_SOURCES.map((t) => (
@@ -781,7 +782,7 @@ export default function Panel({ pageMode = false, onAuthError }: PanelProps) {
           <div className="card">
             <div className="card-title">
               <span>围栏圆心（宿舍楼）</span>
-              <span style={{ color: "var(--primary)", cursor: "pointer" }} onClick={() => locate(false)}>
+              <span className="link" onClick={() => locate(false)}>
                 自动定位
               </span>
             </div>
