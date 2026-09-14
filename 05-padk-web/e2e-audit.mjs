@@ -233,6 +233,13 @@ const AUDIT = () => {
         return b ? `${b.textContent.trim()}${b.disabled ? " (disabled)" : ""}` : null;
       })(),
       firstSelectValue: document.querySelector("select")?.value ?? null,
+      // 面板日志尾部：用来确认失败路径给出的引导是否可操作
+      logs: [...document.querySelectorAll(".log div")]
+        .slice(-5)
+        .map((d) => d.textContent.replace(/^\d{2}:\d{2}:\d{2}/, "").trim()),
+      hasPickBuildingBtn: [...document.querySelectorAll(".landing button")].some(
+        (b) => b.textContent.trim() === "选宿舍楼"
+      ),
     },
     // 地图单独查：.mapbox 自带 leaflet-container，
     // 已被 skip() 排除在规范审计之外，这里按需断言
@@ -389,8 +396,16 @@ await clickByText(page, "设置");
 await sleep(400);
 await report(page, "打卡页 · 设置展开");
 
-/* 选宿舍楼：必须在设置面板还展开时做。
-   用 puppeteer 的 select()，它会正确驱动 React 的 onChange */
+/* 切到虚拟落点但不选楼 —— 圆心未定时的空态要有可操作入口 */
+await clickByText(page, "收起设置");
+await sleep(250);
+await clickByText(page, "虚拟落点");
+await sleep(300);
+await report(page, "虚拟落点 · 圆心未定");
+
+/* 走新加的「选宿舍楼」入口打开设置，顺带验证这个按钮真的能用 */
+await clickByText(page, "选宿舍楼");
+await sleep(400);
 const buildingValue = await page.$$eval("select", (els) => {
   for (const s of els) {
     const o = [...s.options].find((x) => x.value);
@@ -402,8 +417,6 @@ if (buildingValue) await page.select("select", buildingValue);
 await sleep(600);
 
 await clickByText(page, "收起设置");
-await sleep(250);
-await clickByText(page, "虚拟落点");
 await sleep(250);
 await clickByText(page, "生成落点");
 await sleep(700);

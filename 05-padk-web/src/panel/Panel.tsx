@@ -293,7 +293,18 @@ export default function Panel({ pageMode = false, onAuthError }: PanelProps) {
         },
         (err) => {
           setLocating(false);
-          if (!silent) log("w", "定位失败（" + err.message + "），可改用「虚拟落点」模式");
+          // PERMISSION_DENIED 是浏览器/系统层面拦下的，不会再弹窗，
+          // 提示必须给出「怎么恢复」和「不依赖定位的替代路径」；
+          // 笼统地推去「虚拟落点」没用 —— 那个模式同样需要圆心
+          const denied = err.code === err.PERMISSION_DENIED;
+          if (denied) {
+            log(
+              "w",
+              "定位被拒绝 —— 在地址栏左侧的图标里把「位置」改为允许并刷新；或直接在设置里选宿舍楼当圆心"
+            );
+          } else if (!silent) {
+            log("w", `定位失败（${err.message}），可改用「虚拟落点」模式`);
+          }
         },
         { enableHighAccuracy: true, timeout: 10000, maximumAge: 30000 }
       );
@@ -624,7 +635,23 @@ export default function Panel({ pageMode = false, onAuthError }: PanelProps) {
             </div>
           ) : (
             <div className="landing landing-empty">
-              {locating ? "正在定位…" : "尚未取得定位，点下方「重新定位」"}
+              {locating ? (
+                "正在定位…"
+              ) : (
+                <>
+                  尚未取得定位，点下方「重新定位」
+                  <button
+                    className="btn ghost"
+                    style={{ marginTop: 10 }}
+                    onClick={() => {
+                      setMode("virtual");
+                      setBlocked(null);
+                    }}
+                  >
+                    改用虚拟落点
+                  </button>
+                </>
+              )}
             </div>
           )
         ) : landing ? (
@@ -655,15 +682,19 @@ export default function Panel({ pageMode = false, onAuthError }: PanelProps) {
               "点击下方「生成落点」"
             ) : (
               <>
-                圆心未确定。可自动探测，或在设置里选宿舍楼
-                <button
-                  className="btn ghost"
-                  style={{ marginTop: 10 }}
-                  disabled={probing || !ctx}
-                  onClick={probeCenter}
-                >
-                  {probing ? "探测中…" : "自动探测圆心"}
-                </button>
+                圆心未确定。定位成功会自动确认，也可以手动指定
+                <div className="btn-row" style={{ marginTop: 10 }}>
+                  <button
+                    className="btn ghost"
+                    disabled={probing || !ctx}
+                    onClick={probeCenter}
+                  >
+                    {probing ? "探测中…" : "自动探测圆心"}
+                  </button>
+                  <button className="btn ghost" onClick={() => setShowSettings(true)}>
+                    选宿舍楼
+                  </button>
+                </div>
                 <div className="hint" style={{ marginTop: 8, textAlign: "left" }}>
                   原理：围栏校验接口会返回「你提交的点距圆心多少米」，用三次测量即可反解出圆心
                   —— 也就是服务端替你保存的那栋宿舍楼坐标。仅在打卡时间窗内可用。

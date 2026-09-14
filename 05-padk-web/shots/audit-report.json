@@ -68,7 +68,9 @@
       "hasCoord": false,
       "landingText": "",
       "primaryBtn": null,
-      "firstSelectValue": null
+      "firstSelectValue": null,
+      "logs": [],
+      "hasPickBuildingBtn": false
     },
     "map": null,
     "page": {
@@ -79,7 +81,7 @@
   },
   {
     "label": "打卡页 · 初始（实时定位）",
-    "elementCount": 38,
+    "elementCount": 42,
     "violations": {
       "gradient": [],
       "radiusOver12": [],
@@ -98,7 +100,7 @@
         "backdrop": "blur(30px) saturate(1.8)",
         "box": [
           720,
-          548
+          627
         ]
       },
       "head": {
@@ -130,14 +132,14 @@
       "btn": {
         "font": "-apple-system",
         "size": "15px",
-        "color": "rgb(255, 255, 255)",
-        "bg": "rgb(10, 132, 255)",
+        "color": "rgba(255, 255, 255, 0.7)",
+        "bg": "rgba(0, 0, 0, 0)",
         "radius": "10px",
-        "border": "0px rgb(255, 255, 255)",
+        "border": "1px rgba(255, 255, 255, 0.12)",
         "backdrop": null,
         "box": [
-          682,
-          48
+          656,
+          50
         ]
       },
       "btnGhost": {
@@ -149,7 +151,7 @@
         "border": "1px rgba(255, 255, 255, 0.12)",
         "backdrop": null,
         "box": [
-          337,
+          656,
           50
         ]
       },
@@ -189,7 +191,7 @@
         "backdrop": null,
         "box": [
           682,
-          46
+          106
         ]
       },
       "coord": null,
@@ -229,7 +231,7 @@
         "backdrop": null,
         "box": [
           682,
-          77
+          96
         ]
       },
       "mask": null,
@@ -272,9 +274,16 @@
     "state": {
       "hasMask": false,
       "hasCoord": false,
-      "landingText": "尚未取得定位，点下方「重新定位」",
+      "landingText": "尚未取得定位，点下方「重新定位」改用虚拟落点",
       "primaryBtn": "用当前位置打卡 (disabled)",
-      "firstSelectValue": null
+      "firstSelectValue": null,
+      "logs": [
+        "凭据就绪 token=eeeeeeeeeeeeeeee… casual=abcdefgh12345678",
+        "班次「校内住宿打卡」 时间窗 20:00-23:30 可打卡=true",
+        "楼栋数据 6 栋",
+        "定位被拒绝 —— 在地址栏左侧的图标里把「位置」改为允许并刷新；或直接在设置里选宿舍楼当圆心"
+      ],
+      "hasPickBuildingBtn": false
     },
     "map": null,
     "page": {
@@ -285,7 +294,7 @@
   },
   {
     "label": "打卡页 · 设置展开",
-    "elementCount": 77,
+    "elementCount": 81,
     "violations": {
       "gradient": [],
       "radiusOver12": [],
@@ -304,7 +313,7 @@
         "backdrop": "blur(30px) saturate(1.8)",
         "box": [
           720,
-          1079
+          1158
         ]
       },
       "head": {
@@ -336,14 +345,14 @@
       "btn": {
         "font": "-apple-system",
         "size": "15px",
-        "color": "rgb(255, 255, 255)",
-        "bg": "rgb(10, 132, 255)",
+        "color": "rgba(255, 255, 255, 0.7)",
+        "bg": "rgba(0, 0, 0, 0)",
         "radius": "10px",
-        "border": "0px rgb(255, 255, 255)",
+        "border": "1px rgba(255, 255, 255, 0.12)",
         "backdrop": null,
         "box": [
-          682,
-          48
+          656,
+          50
         ]
       },
       "btnGhost": {
@@ -355,7 +364,7 @@
         "border": "1px rgba(255, 255, 255, 0.12)",
         "backdrop": null,
         "box": [
-          337,
+          656,
           50
         ]
       },
@@ -395,7 +404,7 @@
         "backdrop": null,
         "box": [
           682,
-          46
+          106
         ]
       },
       "coord": null,
@@ -435,7 +444,7 @@
         "backdrop": null,
         "box": [
           682,
-          77
+          96
         ]
       },
       "mask": null,
@@ -490,9 +499,16 @@
     "state": {
       "hasMask": false,
       "hasCoord": false,
-      "landingText": "尚未取得定位，点下方「重新定位」",
+      "landingText": "尚未取得定位，点下方「重新定位」改用虚拟落点",
       "primaryBtn": "用当前位置打卡 (disabled)",
-      "firstSelectValue": ""
+      "firstSelectValue": "",
+      "logs": [
+        "凭据就绪 token=eeeeeeeeeeeeeeee… casual=abcdefgh12345678",
+        "班次「校内住宿打卡」 时间窗 20:00-23:30 可打卡=true",
+        "楼栋数据 6 栋",
+        "定位被拒绝 —— 在地址栏左侧的图标里把「位置」改为允许并刷新；或直接在设置里选宿舍楼当圆心"
+      ],
+      "hasPickBuildingBtn": false
     },
     "map": null,
     "page": {
@@ -502,8 +518,8 @@
     }
   },
   {
-    "label": "打卡页 · 已生成落点",
-    "elementCount": 55,
+    "label": "虚拟落点 · 圆心未定",
+    "elementCount": 45,
     "violations": {
       "gradient": [],
       "radiusOver12": [],
@@ -522,7 +538,220 @@
         "backdrop": "blur(30px) saturate(1.8)",
         "box": [
           720,
-          693
+          674
+        ]
+      },
+      "head": {
+        "font": "-apple-system",
+        "size": "13px",
+        "color": "rgba(255, 255, 255, 0.95)",
+        "bg": "rgba(255, 255, 255, 0.04)",
+        "radius": "0px",
+        "border": "0px rgba(255, 255, 255, 0.95)",
+        "backdrop": null,
+        "box": [
+          718,
+          52
+        ]
+      },
+      "title": {
+        "font": "Songti SC",
+        "size": "15px",
+        "color": "rgba(255, 255, 255, 0.95)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "radius": "0px",
+        "border": "0px rgba(255, 255, 255, 0.95)",
+        "backdrop": null,
+        "box": [
+          667,
+          23
+        ]
+      },
+      "btn": {
+        "font": "-apple-system",
+        "size": "15px",
+        "color": "rgba(255, 255, 255, 0.7)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "radius": "10px",
+        "border": "1px rgba(255, 255, 255, 0.12)",
+        "backdrop": null,
+        "box": [
+          324,
+          50
+        ]
+      },
+      "btnGhost": {
+        "font": "-apple-system",
+        "size": "15px",
+        "color": "rgba(255, 255, 255, 0.7)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "radius": "10px",
+        "border": "1px rgba(255, 255, 255, 0.12)",
+        "backdrop": null,
+        "box": [
+          324,
+          50
+        ]
+      },
+      "label": {
+        "font": "-apple-system",
+        "size": "10px",
+        "color": "rgba(255, 255, 255, 0.5)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "radius": "0px",
+        "border": "0px rgba(255, 255, 255, 0.5)",
+        "backdrop": null,
+        "box": [
+          23,
+          16
+        ]
+      },
+      "badge": {
+        "font": "-apple-system",
+        "size": "12px",
+        "color": "rgb(48, 209, 88)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "radius": "0px",
+        "border": "0px rgb(48, 209, 88)",
+        "backdrop": null,
+        "box": [
+          47,
+          19
+        ]
+      },
+      "landing": {
+        "font": "-apple-system",
+        "size": "12px",
+        "color": "rgba(255, 255, 255, 0.5)",
+        "bg": "rgb(28, 28, 30)",
+        "radius": "10px",
+        "border": "1px rgba(255, 255, 255, 0.08)",
+        "backdrop": null,
+        "box": [
+          682,
+          152
+        ]
+      },
+      "coord": null,
+      "tabs": {
+        "font": "-apple-system",
+        "size": "13px",
+        "color": "rgba(255, 255, 255, 0.95)",
+        "bg": "rgba(255, 255, 255, 0.06)",
+        "radius": "8px",
+        "border": "0px rgba(255, 255, 255, 0.95)",
+        "backdrop": null,
+        "box": [
+          682,
+          34
+        ]
+      },
+      "tabOn": {
+        "font": "-apple-system",
+        "size": "12px",
+        "color": "rgba(255, 255, 255, 0.95)",
+        "bg": "rgba(255, 255, 255, 0.12)",
+        "radius": "6px",
+        "border": "0px rgba(255, 255, 255, 0.95)",
+        "backdrop": null,
+        "box": [
+          338,
+          30
+        ]
+      },
+      "log": {
+        "font": "SF Mono",
+        "size": "10.5px",
+        "color": "rgba(255, 255, 255, 0.7)",
+        "bg": "rgb(28, 28, 30)",
+        "radius": "8px",
+        "border": "1px rgba(255, 255, 255, 0.06)",
+        "backdrop": null,
+        "box": [
+          682,
+          96
+        ]
+      },
+      "mask": null,
+      "card": null,
+      "padkLogin": null,
+      "padkLoginH1": null
+    },
+    "contrast": {
+      "title": {
+        "size": "15px",
+        "ratio": 13.11,
+        "aa": "pass"
+      },
+      "label": {
+        "size": "10px",
+        "ratio": 4.76,
+        "aa": "pass"
+      },
+      "value": {
+        "size": "13px",
+        "ratio": 13.11,
+        "aa": "pass"
+      },
+      "landing-empty": {
+        "size": "12px",
+        "ratio": 5.16,
+        "aa": "pass"
+      },
+      "hint": {
+        "size": "11px",
+        "ratio": 4.76,
+        "aa": "pass"
+      },
+      "pb-id": {
+        "size": "11px",
+        "ratio": 7.82,
+        "aa": "pass"
+      }
+    },
+    "state": {
+      "hasMask": false,
+      "hasCoord": false,
+      "landingText": "圆心未确定。定位成功会自动确认，也可以手动指定 自动探测圆心 选宿舍楼 原理：围栏校验接口会返回「你提交的点距圆心多少米」，用三次测量即可反",
+      "primaryBtn": "提交虚拟落点 (disabled)",
+      "firstSelectValue": null,
+      "logs": [
+        "凭据就绪 token=eeeeeeeeeeeeeeee… casual=abcdefgh12345678",
+        "班次「校内住宿打卡」 时间窗 20:00-23:30 可打卡=true",
+        "楼栋数据 6 栋",
+        "定位被拒绝 —— 在地址栏左侧的图标里把「位置」改为允许并刷新；或直接在设置里选宿舍楼当圆心"
+      ],
+      "hasPickBuildingBtn": true
+    },
+    "map": null,
+    "page": {
+      "scrollW": 980,
+      "innerW": 980,
+      "overflowX": false
+    }
+  },
+  {
+    "label": "打卡页 · 已生成落点",
+    "elementCount": 58,
+    "violations": {
+      "gradient": [],
+      "radiusOver12": [],
+      "borderOver1px": [],
+      "shadowNotAllowed": [],
+      "transitionNonColor": []
+    },
+    "key": {
+      "root": {
+        "font": "-apple-system",
+        "size": "13px",
+        "color": "rgba(255, 255, 255, 0.95)",
+        "bg": "rgba(44, 44, 46, 0.86)",
+        "radius": "12px",
+        "border": "1px rgba(255, 255, 255, 0.12)",
+        "backdrop": "blur(30px) saturate(1.8)",
+        "box": [
+          720,
+          712
         ]
       },
       "head": {
@@ -665,7 +894,7 @@
         "backdrop": null,
         "box": [
           682,
-          96
+          114
         ]
       },
       "mask": null,
@@ -713,9 +942,17 @@
     "state": {
       "hasMask": false,
       "hasCoord": true,
-      "landingText": "◉ 南校区·升华公寓 13 栋 偏移 31.5m 距圆心 147.5m 方位 141.1° 围栏 300m 112.993601, 28.1",
+      "landingText": "◉ 南校区·升华公寓 12 栋 偏移 90m 距圆心 89.9m 方位 203.9° 围栏 300m 112.991729, 28.1420",
       "primaryBtn": "提交虚拟落点",
-      "firstSelectValue": null
+      "firstSelectValue": null,
+      "logs": [
+        "凭据就绪 token=eeeeeeeeeeeeeeee… casual=abcdefgh12345678",
+        "班次「校内住宿打卡」 时间窗 20:00-23:30 可打卡=true",
+        "楼栋数据 6 栋",
+        "定位被拒绝 —— 在地址栏左侧的图标里把「位置」改为允许并刷新；或直接在设置里选宿舍楼当圆心",
+        "自动落点 → 南校区·升华公寓 12 栋 偏移 90m 距圆心 89.9m 方位 203.9°"
+      ],
+      "hasPickBuildingBtn": false
     },
     "map": null,
     "page": {
@@ -726,7 +963,7 @@
   },
   {
     "label": "打卡页 · 成功遮罩",
-    "elementCount": 69,
+    "elementCount": 72,
     "violations": {
       "gradient": [],
       "radiusOver12": [],
@@ -745,7 +982,7 @@
         "backdrop": "blur(30px) saturate(1.8)",
         "box": [
           720,
-          731
+          748
         ]
       },
       "head": {
@@ -888,7 +1125,7 @@
         "backdrop": null,
         "box": [
           682,
-          133
+          150
         ]
       },
       "mask": {
@@ -901,7 +1138,7 @@
         "backdrop": "blur(20px)",
         "box": [
           718,
-          729
+          746
         ]
       },
       "card": null,
@@ -948,9 +1185,17 @@
     "state": {
       "hasMask": true,
       "hasCoord": true,
-      "landingText": "◉ 南校区·升华公寓 13 栋 偏移 31.5m 距圆心 147.5m 方位 141.1° 围栏 300m 112.993601, 28.1",
+      "landingText": "◉ 南校区·升华公寓 12 栋 偏移 90m 距圆心 89.9m 方位 203.9° 围栏 300m 112.991729, 28.1420",
       "primaryBtn": "提交虚拟落点",
-      "firstSelectValue": null
+      "firstSelectValue": null,
+      "logs": [
+        "楼栋数据 6 栋",
+        "定位被拒绝 —— 在地址栏左侧的图标里把「位置」改为允许并刷新；或直接在设置里选宿舍楼当圆心",
+        "自动落点 → 南校区·升华公寓 12 栋 偏移 90m 距圆心 89.9m 方位 203.9°",
+        "预检通过 canDk=true 偏差118m/围栏300m",
+        "打卡成功：打卡成功"
+      ],
+      "hasPickBuildingBtn": false
     },
     "map": null,
     "page": {
@@ -961,7 +1206,7 @@
   },
   {
     "label": "打卡页 · 地图展开",
-    "elementCount": 132,
+    "elementCount": 135,
     "violations": {
       "gradient": [],
       "radiusOver12": [],
@@ -980,7 +1225,7 @@
         "backdrop": "blur(30px) saturate(1.8)",
         "box": [
           720,
-          1115
+          1132
         ]
       },
       "head": {
@@ -1123,7 +1368,7 @@
         "backdrop": null,
         "box": [
           682,
-          133
+          150
         ]
       },
       "mask": null,
@@ -1171,9 +1416,17 @@
     "state": {
       "hasMask": false,
       "hasCoord": true,
-      "landingText": "◉ 南校区·升华公寓 13 栋 偏移 31.5m 距圆心 147.5m 方位 141.1° 围栏 300m 112.993601, 28.1",
+      "landingText": "◉ 南校区·升华公寓 12 栋 偏移 90m 距圆心 89.9m 方位 203.9° 围栏 300m 112.991729, 28.1420",
       "primaryBtn": "提交虚拟落点",
-      "firstSelectValue": "amap-vector"
+      "firstSelectValue": "amap-vector",
+      "logs": [
+        "楼栋数据 6 栋",
+        "定位被拒绝 —— 在地址栏左侧的图标里把「位置」改为允许并刷新；或直接在设置里选宿舍楼当圆心",
+        "自动落点 → 南校区·升华公寓 12 栋 偏移 90m 距圆心 89.9m 方位 203.9°",
+        "预检通过 canDk=true 偏差118m/围栏300m",
+        "打卡成功：打卡成功"
+      ],
+      "hasPickBuildingBtn": false
     },
     "map": {
       "dataTile": "amap-vector",
@@ -1190,7 +1443,7 @@
   },
   {
     "label": "窄屏 390×844",
-    "elementCount": 38,
+    "elementCount": 42,
     "violations": {
       "gradient": [],
       "radiusOver12": [],
@@ -1209,7 +1462,7 @@
         "backdrop": "blur(30px) saturate(1.8)",
         "box": [
           366,
-          605
+          701
         ]
       },
       "head": {
@@ -1241,14 +1494,14 @@
       "btn": {
         "font": "-apple-system",
         "size": "15px",
-        "color": "rgb(255, 255, 255)",
-        "bg": "rgb(10, 132, 255)",
+        "color": "rgba(255, 255, 255, 0.7)",
+        "bg": "rgba(0, 0, 0, 0)",
         "radius": "10px",
-        "border": "0px rgb(255, 255, 255)",
+        "border": "1px rgba(255, 255, 255, 0.12)",
         "backdrop": null,
         "box": [
-          328,
-          48
+          302,
+          50
         ]
       },
       "btnGhost": {
@@ -1260,7 +1513,7 @@
         "border": "1px rgba(255, 255, 255, 0.12)",
         "backdrop": null,
         "box": [
-          160,
+          302,
           50
         ]
       },
@@ -1300,7 +1553,7 @@
         "backdrop": null,
         "box": [
           328,
-          46
+          106
         ]
       },
       "coord": null,
@@ -1340,7 +1593,7 @@
         "backdrop": null,
         "box": [
           328,
-          114
+          150
         ]
       },
       "mask": null,
@@ -1383,9 +1636,16 @@
     "state": {
       "hasMask": false,
       "hasCoord": false,
-      "landingText": "尚未取得定位，点下方「重新定位」",
+      "landingText": "尚未取得定位，点下方「重新定位」改用虚拟落点",
       "primaryBtn": "用当前位置打卡 (disabled)",
-      "firstSelectValue": null
+      "firstSelectValue": null,
+      "logs": [
+        "凭据就绪 token=eeeeeeeeeeeeeeee… casual=abcdefgh12345678",
+        "班次「校内住宿打卡」 时间窗 20:00-23:30 可打卡=true",
+        "楼栋数据 6 栋",
+        "定位被拒绝 —— 在地址栏左侧的图标里把「位置」改为允许并刷新；或直接在设置里选宿舍楼当圆心"
+      ],
+      "hasPickBuildingBtn": false
     },
     "map": null,
     "page": {
