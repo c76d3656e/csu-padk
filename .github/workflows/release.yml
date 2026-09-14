@@ -26,14 +26,12 @@ jobs:
           - os: windows-latest
             target: x86_64-pc-windows-msvc
             label: windows-x64
-          # 按官方示例：两个 macOS target 都跑在 macos-latest（Apple Silicon）上，
-          # x64 靠交叉编译产出，不再用 macos-13 那种 Intel runner
+          # macOS 只占一个 runner，直接出 universal 二进制
+          # （同时含 arm64 与 x64）。之前分两个 job 各占一个 macOS runner，
+          # 在公共仓库里排队能排到天荒地老 —— macOS runner 本来就紧张。
           - os: macos-latest
-            target: aarch64-apple-darwin
-            label: macos-arm64
-          - os: macos-latest
-            target: x86_64-apple-darwin
-            label: macos-x64
+            target: universal-apple-darwin
+            label: macos-universal
 
     runs-on: ${{ matrix.os }}
     name: desktop / ${{ matrix.label }}
@@ -49,7 +47,7 @@ jobs:
 
       - uses: dtolnay/rust-toolchain@stable
         with:
-          # macOS 要同时装两个 target 才能交叉编译出 x64
+          # universal 需要两个架构的 target 都在
           targets: ${{ startsWith(matrix.os, 'macos') && 'aarch64-apple-darwin,x86_64-apple-darwin' || matrix.target }}
 
       # Rust 依赖编译很慢，缓存能省掉大半时间
