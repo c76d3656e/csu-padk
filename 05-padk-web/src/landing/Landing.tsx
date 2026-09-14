@@ -141,7 +141,10 @@ export default function Landing() {
             </dl>
 
             <div className="hero-actions">
-              <a className="mb mb--primary" href={CAS_LOGIN} target="_blank" rel="noreferrer">
+              <a className="mb mb--primary" href="./padk.user.js" target="_blank" rel="noreferrer">
+                安装油猴脚本
+              </a>
+              <a className="mb" href={CAS_LOGIN} target="_blank" rel="noreferrer">
                 前往官方登录
               </a>
               <a className="mb" href={H5_HOME} target="_blank" rel="noreferrer">
@@ -150,6 +153,18 @@ export default function Landing() {
             </div>
 
             <p className="caveat">
+              <b>推荐走油猴</b>：先装{" "}
+              <a href="https://www.tampermonkey.net/" target="_blank" rel="noreferrer">
+                Tampermonkey
+              </a>
+              （或 Violentmonkey），再点「安装油猴脚本」——扩展会自动弹出安装页，确认即可。
+              装好后打开智慧学工页面，面板<b>自动浮出</b>，之后不用再点任何东西。
+            </p>
+
+            <p className="caveat">
+              <b>不想装扩展</b>就用下面的书签。注意浏览器已禁止拖拽{" "}
+              <code>javascript:</code> 链接，必须点「复制书签代码」再手动新建书签。
+              <br />
               <b>桌面端</b>：先按 <kbd>F12</kbd> → <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>M</kbd>
               打开设备模拟，否则移动端页面会拦截。后端本身不校验 UA。
             </p>
@@ -166,7 +181,7 @@ export default function Landing() {
                 登录回调页正是从那里读凭据。
                 <br />
                 所以只要在提示页<strong>改一下 hash、不刷新</strong>，就能直接进系统。
-                把下面这块牌子拖到书签栏，卡住时点一下即可。
+                点下面的「复制修复代码」，再到书签栏右键「添加网页」把代码粘进网址栏。
               </p>
               <div className="gate-row">
                 <a
@@ -177,7 +192,7 @@ export default function Landing() {
                     e.preventDefault();
                     copy(healBookmarklet, "heal");
                   }}
-                  title="拖我到书签栏"
+                  title="点一下即复制代码"
                 >
                   ⤳ 门禁修复
                 </a>
@@ -223,7 +238,13 @@ export default function Landing() {
               <span className="fl-idx">02</span>
               <div>
                 <h3>装书签</h3>
-                <p>把下面这块黄铜牌拖进书签栏，或点一下复制代码手动新建书签。</p>
+                <p>
+                  点「<b>复制书签代码</b>」，再在书签栏右键「添加网页」，把代码粘进
+                  <b>网址</b>栏保存。
+                  <br />
+                  浏览器已禁止把 <code>javascript:</code> 链接拖进书签栏（拖了会变成
+                  <code>about:blank#blocked</code>），所以只能走「复制 → 手动新建」这条路。
+                </p>
               </div>
             </li>
             <li>
@@ -254,10 +275,10 @@ export default function Landing() {
               <span className="brass-rivet" />
             </a>
             <div className="brass-hint">
-              {flash("bm") ?? "← 拖住我，或点一下复制"}
               <button className="link" onClick={() => copy(bookmarklet, "code")}>
                 {flash("code") ?? "复制书签代码"}
               </button>
+              {flash("bm") ?? "← 复制后到书签栏右键「添加网页」，粘进网址栏"}
             </div>
           </div>
         </section>

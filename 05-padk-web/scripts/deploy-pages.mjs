@@ -36,6 +36,24 @@ const run = (cmd, allowFail = false) => {
   }
 };
 
+/** 推送对网络波动敏感，失败重试几次再放弃 */
+const pushWithRetry = (attempts = 4) => {
+  for (let i = 1; i <= attempts; i++) {
+    console.log(`  $ git push -f origin main:gh-pages   （第 ${i}/${attempts} 次）`);
+    try {
+      execSync("git push -f origin main:gh-pages", { cwd: DIST, stdio: "inherit" });
+      return true;
+    } catch {
+      if (i < attempts) {
+        const wait = i * 3;
+        console.log(`  推送失败（多为网络重置），${wait}s 后重试…`);
+        execSync(`ping -n ${wait + 1} 127.0.0.1 > nul`, { stdio: "ignore", shell: "cmd.exe" });
+      }
+    }
+  }
+  return false;
+};
+
 console.log("发布 dist/ 到 gh-pages\n");
 
 if (!fs.existsSync(path.join(DIST, ".git"))) {
@@ -48,7 +66,13 @@ if (!fs.existsSync(path.join(DIST, ".git"))) {
 run("git add -A");
 // 没有变更时 commit 会返回非零，属正常
 run(`git commit -m "deploy: ${new Date().toISOString().slice(0, 19).replace("T", " ")}"`, true);
-run("git push -f origin main:gh-pages");
+
+if (!pushWithRetry()) {
+  console.error("\n推送失败——通常是网络重置。可以稍后单独重试：");
+  console.error("  cd 05-padk-web/dist");
+  console.error("  git push -f origin main:gh-pages");
+  process.exit(1);
+}
 
 console.log(`\n已推送。Pages 通常 1 分钟内生效：`);
 console.log(`  引导页（含书签）  ${PAGES_URL}#/guide`);
