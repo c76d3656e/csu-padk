@@ -6,7 +6,14 @@
 
 ## 快速上手
 
-换到新环境后，只需要三步：
+### 方式一：桌面应用（推荐）
+
+下载 `padk.exe` 双击即可。**免安装 Node、免命令行、免浏览器**——
+Rust + Tauri 打包，主程序 4.6 MB，用系统自带的 WebView2 渲染。
+
+登录、请求全部由 Rust 侧完成，所以没有跨域、没有本地端口。
+
+### 方式二：npm 启动（自建 / 开发）
 
 ```bash
 cd 05-padk-web
@@ -20,22 +27,62 @@ npm start
 > `npm start` 跑的是 `server.mjs`，一个进程同时提供静态站、CAS 协议登录编排
 > 和 API 同源代理。浏览器侧全程同源，不碰官方页面的 UA 门禁，也不需要装任何插件。
 >
-> 之所以必须有个本地进程：独立打卡页要请求 `/znzhxgpt/**`，离开 localhost
-> 就是跨域，学校 nginx 不放行 OPTIONS 预检；而且登录要做的票据兑换是服务端逻辑。
+> 之所以浏览器形态必须有个本地进程：独立打卡页要请求 `/znzhxgpt/**`，离开 localhost
+> 就是跨域，学校 nginx 不放行 OPTIONS 预检。桌面形态没有这个问题（Rust 直接发请求）。
 > 想真正零服务端，只有书签注入形态 —— 详见 `05-padk-web/README.md`。
+
+### 方式三：改前端
+
+```bash
+cd 05-padk-web
+npm run dev        # 开发服务器，带 HMR
+```
 
 其它可用命令：
 
 | 命令 | 用途 |
 |---|---|
-| `npm start` | **日常使用**：单机一体服务（静态 + 登录 + 代理） |
-| `npm run dev` | 前端开发（HMR，含登录中间件与 API 代理），改 UI 时用 |
-| `npm run build` | 产出 `dist/`（可部署的静态站）+ `dist/inject.js`（书签注入包） |
-| `npm run build:inject` | 只重建注入包 |
+| `npm start` | **浏览器形态**：单机一体服务（静态 + 登录 + 代理） |
+| `npm run app` | **桌面形态**：Tauri 开发模式（热重载） |
+| `npm run app:build` | 打包桌面应用（Windows 出 exe / NSIS 安装包） |
+| `npm run dev` | 前端开发（HMR） |
+| `npm run build` | 产出 `dist/`（前端产物）+ `dist/inject.js`（书签注入包） |
+| `npm run build:exe` | 打包成单文件 exe（Node SEA，90 MB，无需 Node 运行时） |
 | `npm run preview` | 仅预览静态产物（无登录与代理） |
 
 > 不要在 `npm run dev` 运行时执行 `npm run build` —— 两者会争 `node_modules/.vite`，
 > 可能把 dev 进程打挂。先停 dev 再构建。
+
+---
+
+## 三端发布
+
+推 tag 即触发 `.github/workflows/release.yml`，也可以在 Actions 页面手动跑：
+
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+| 平台 | 产物 | 说明 |
+|---|---|---|
+| Windows | `padk_*_x64-setup.exe` | 直接安装 |
+| macOS (Apple Silicon) | `.dmg` | **未签名**，首次打开需右键「打开」 |
+| macOS (Intel) | `.dmg` | 同上 |
+| Android | `.apk` | 实验性，见下 |
+
+**macOS 未签名**是因为代码签名需要 Apple 开发者账号（$99/年）。绕过办法：
+
+```bash
+xattr -d com.apple.quarantine /Applications/padk.app
+```
+
+**iOS 不提供**：Tauri 2 技术上支持，但产物必须用开发者账号签名才能装进真机，
+未签名只能跑模拟器。零预算下做不出可用产物。
+
+**Android 仍是实验性**：Tauri CLI 生成的 Gradle 任务会在 `gen/android` 目录里执行
+`beforeBuildCommand`（`npm run build`），那里没有 `package.json`，CI 里必然失败。
+已设为 `continue-on-error`，不影响桌面端出包。
 
 ---
 
