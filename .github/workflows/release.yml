@@ -1,0 +1,144 @@
+name: Release
+
+# 打 tag 触发（v1.0.0 这种），也可以在 Actions 页面手动跑一次
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  # ══════════════════════════════════════════════════════════
+  # 桌面端：Windows + macOS（Intel / Apple Silicon）
+  #
+  # macOS 必须跑在 macOS runner 上 —— Apple 的工具链不跨平台。
+  # 产物未做代码签名（签名要 Apple 开发者账号，$99/年），
+  # 用户首次打开需要右键「打开」，或者执行：
+  #   xattr -d com.apple.quarantine /Applications/平安打卡.app
+  # ══════════════════════════════════════════════════════════
+  desktop:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            label: windows-x64
+          - os: macos-latest
+            target: aarch64-apple-darwin
+            label: macos-arm64
+          - os: macos-13
+            target: x86_64-apple-darwin
+            label: macos-x64
+
+    runs-on: ${{ matrix.os }}
+    name: desktop / ${{ matrix.label }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: 05-padk-web/package-lock.json
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      # Rust 依赖编译很慢，缓存能省掉大半时间
+      - uses: swatinem/rust-cache@v2
+        with:
+          workspaces: 05-padk-web/src-tauri
+
+      - name: 安装前端依赖
+        working-directory: 05-padk-web
+        run: npm ci
+
+      - name: 构建并发布
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          projectPath: 05-padk-web
+          args: --target ${{ matrix.target }}
+          tagName: ${{ github.ref_name }}
+          releaseName: 平安打卡 ${{ github.ref_name }}
+          releaseBody: |
+            自动构建产物。
+
+            - Windows：`平安打卡_*_x64-setup.exe`，直接安装
+            - macOS：`.dmg`，**未签名**，首次打开请右键「打开」
+              或执行 `xattr -d com.apple.quarantine /Applications/平安打卡.app`
+          releaseDraft: true
+          prerelease: false
+
+  # ══════════════════════════════════════════════════════════
+  # Android APK
+  #
+  # 不需要任何开发者账号，允许「未知来源」即可安装。
+  # Android 工程由 CI 现场初始化（tauri android init），
+  # 所以本地不需要装 Android SDK / NDK。
+  # ══════════════════════════════════════════════════════════
+  android:
+    runs-on: ubuntu-latest
+    name: android / apk
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: 05-padk-web/package-lock.json
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-linux-android,armv7-linux-androideabi,i686-linux-android,x86_64-linux-android
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: android-actions/setup-android@v3
+
+      - uses: swatinem/rust-cache@v2
+        with:
+          workspaces: 05-padk-web/src-tauri
+
+      - name: 安装前端依赖
+        working-directory: 05-padk-web
+        run: npm ci
+
+      - name: 初始化 Android 工程
+        working-directory: 05-padk-web
+        run: npx tauri android init
+
+      - name: 构建 APK
+        working-directory: 05-padk-web
+        run: npx tauri android build --apk
+
+      - name: 收集产物
+        run: |
+          mkdir -p out
+          find 05-padk-web/src-tauri/gen/android -name "*.apk" -exec cp {} out/ \;
+          ls -lh out/
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          files: out/*.apk
+          tag_name: ${{ github.ref_name }}
+
+# ══════════════════════════════════════════════════════════════
+# 关于 iOS
+#
+# Tauri 2 支持 iOS，但产物必须用 Apple 开发者账号签名才能装进真机
+# （$99/年，没有正当的绕过方式）。未签名的构建只能跑模拟器。
+# 所以这里不提供 iOS 产物 —— 零预算下它做不出可用的东西。
+# ══════════════════════════════════════════════════════════════

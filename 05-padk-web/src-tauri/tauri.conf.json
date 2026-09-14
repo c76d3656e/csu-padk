@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "平安打卡",
+  "productName": "padk",
   "version": "1.0.0",
   "identifier": "cn.edu.csu.padk",
   "build": {
