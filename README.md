@@ -11,22 +11,31 @@
 ```bash
 cd 05-padk-web
 npm install
-npm run dev
+npm run build
+npm start
 ```
 
 然后打开 **http://localhost:5173/** —— 输入学号密码，直接进入打卡页。
 
-> 本地开发服务器内置了 CAS 协议登录编排（`vite.casAuth.ts`）与反向代理，
-> 浏览器侧全程同源，不碰官方页面的 UA 门禁，也不需要装任何插件。
+> `npm start` 跑的是 `server.mjs`，一个进程同时提供静态站、CAS 协议登录编排
+> 和 API 同源代理。浏览器侧全程同源，不碰官方页面的 UA 门禁，也不需要装任何插件。
+>
+> 之所以必须有个本地进程：独立打卡页要请求 `/znzhxgpt/**`，离开 localhost
+> 就是跨域，学校 nginx 不放行 OPTIONS 预检；而且登录要做的票据兑换是服务端逻辑。
+> 想真正零服务端，只有书签注入形态 —— 详见 `05-padk-web/README.md`。
 
 其它可用命令：
 
 | 命令 | 用途 |
 |---|---|
-| `npm run dev` | 开发服务器（含登录中间件与 API 代理） |
+| `npm start` | **日常使用**：单机一体服务（静态 + 登录 + 代理） |
+| `npm run dev` | 前端开发（HMR，含登录中间件与 API 代理），改 UI 时用 |
 | `npm run build` | 产出 `dist/`（可部署的静态站）+ `dist/inject.js`（书签注入包） |
 | `npm run build:inject` | 只重建注入包 |
-| `npm run preview` | 预览构建产物 |
+| `npm run preview` | 仅预览静态产物（无登录与代理） |
+
+> 不要在 `npm run dev` 运行时执行 `npm run build` —— 两者会争 `node_modules/.vite`，
+> 可能把 dev 进程打挂。先停 dev 再构建。
 
 ---
 
