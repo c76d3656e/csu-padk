@@ -233,10 +233,26 @@ function sendFile(file, res, status = 200) {
   const ext = path.extname(file).toLowerCase();
   // 带内容 hash 的产物可以长缓存；inject.js 是固定路径，必须每次回源校验
   const hashed = /-[A-Za-z0-9_-]{8,}\.(js|css)$/.test(path.basename(file));
-  res.writeHead(status, {
+  const headers = {
     "Content-Type": MIME[ext] || "application/octet-stream",
     "Cache-Control": hashed ? "public, max-age=31536000, immutable" : "no-cache",
-  });
+  };
+
+  // index.html 要注入「自托管」标记：前端据此把接口请求打到本服务上（同源），
+  // 否则通过局域网 IP（手机连同一 WiFi）访问时会被误判成跨域直连。
+  // 标记必须排在页面自己的判断脚本之前，因此插在 <head> 的最前面。
+  if (path.basename(file) === "index.html") {
+    let html = fs.readFileSync(file, "utf8");
+    html = html.replace(
+      /<head>/i,
+      '<head>\n    <script>window.__PADK_SELF_HOSTED__=true</script>'
+    );
+    const buf = Buffer.from(html, "utf8");
+    res.writeHead(status, { ...headers, "Content-Length": buf.length });
+    return res.end(buf);
+  }
+
+  res.writeHead(status, headers);
   fs.createReadStream(file).pipe(res);
 }
 

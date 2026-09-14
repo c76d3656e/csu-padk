@@ -5,13 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>平安打卡 · 一键面板</title>
     <meta name="description" content="中南大学智慧学工平安打卡辅助面板。纯前端，零后端，所有数据留在你的浏览器。" />
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232278fd'/%3E%3Cpath d='M9 16.5l4.5 4.5L23 11.5' stroke='white' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230a84ff'/%3E%3Cpath d='M9 16.5l4.5 4.5L23 11.5' stroke='white' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
     <script>
-      // 必须在任何模块执行之前完成注入：
-      // 本地站点走 Vite 反向代理访问真实接口，浏览器侧保持同源，避开 OPTIONS 预检
+      // 必须在任何模块执行之前完成注入：让浏览器侧始终同源，避开 OPTIONS 预检
       (function () {
         var h = location.hostname;
-        if (h === "localhost" || h === "127.0.0.1" || h === "[::1]") {
+        var isLoopback = h === "localhost" || h === "127.0.0.1" || h === "[::1]";
+        // server.mjs 会在响应本文件时注入 __PADK_SELF_HOSTED__。
+        // 除了 loopback 还要认它：手机通过局域网 IP（192.168.x.x）访问
+        // 同一个服务时，接口同样得走同源代理，否则会被误判成跨域直连。
+        if (isLoopback || window.__PADK_SELF_HOSTED__ === true) {
           window.__PADK_ORIGIN__ = "";
           window.__PADK_LOCAL__ = true;
         }
