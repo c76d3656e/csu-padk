@@ -10,6 +10,7 @@
     "build": "tsc -b --noCheck && vite build && vite build --config vite.inject.config.ts && node scripts/merge.mjs",
     "build:web": "vite build",
     "build:inject": "vite build --config vite.inject.config.ts",
+    "build:exe": "node scripts/build-exe.mjs",
     "deploy": "node scripts/deploy-pages.mjs",
     "preview": "vite preview --port 4173"
   },
@@ -25,6 +26,7 @@
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.4",
+    "postject": "^1.0.0-alpha.6",
     "puppeteer-core": "^25.10.0",
     "typescript": "^5.6.3",
     "vite": "^5.4.11"

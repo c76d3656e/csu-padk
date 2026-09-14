@@ -4,6 +4,10 @@ node_modules/
 # ── 构建产物 ──
 05-padk-web/dist/
 05-padk-web/dist-inject/
+05-padk-web/padk.exe
+05-padk-web/server.sea.cjs
+05-padk-web/sea-config.json
+05-padk-web/sea-prep.blob
 .tmp-core/
 
 # TypeScript 增量构建缓存

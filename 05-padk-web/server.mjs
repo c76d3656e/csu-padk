@@ -27,10 +27,46 @@ import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
 import { fileURLToPath } from "node:url";
+import { isSea, getAsset } from "node:sea";
 
-const HERE = path.dirname(fileURLToPath(import.meta.url));
-const DIST = path.join(HERE, "dist");
+/**
+ * 是否跑在打包好的单文件 exe 里。
+ *
+ * 这个判断必须排在解析路径之前：SEA 下 import.meta.url 指向的
+ * 不是磁盘上任何真实位置，而且根本没有 dist/ —— 前端产物全在
+ * exe 的内嵌资源里，只能靠 getAsset 取。
+ */
+const IN_SEA = (() => {
+  try {
+    return isSea();
+  } catch {
+    return false;
+  }
+})();
+
+// 非 SEA 才去解析磁盘路径；三元短路保证 SEA 下不会碰到 import.meta.url
+const HERE = IN_SEA ? "" : path.dirname(fileURLToPath(import.meta.url));
+const DIST = IN_SEA ? "" : path.join(HERE, "dist");
 const PORT = Number(process.env.PORT || 5173);
+
+/** 读一份前端产物；SEA 走内嵌资源，否则走磁盘 */
+function readAsset(rel) {
+  const key = rel.replace(/\\/g, "/");
+  if (IN_SEA) {
+    try {
+      return Buffer.from(getAsset(key));
+    } catch {
+      return null;
+    }
+  }
+  try {
+    const full = path.join(DIST, key);
+    if (full !== DIST && !full.startsWith(DIST + path.sep)) return null;
+    return fs.statSync(full).isFile() ? fs.readFileSync(full) : null;
+  } catch {
+    return null;
+  }
+}
 
 const CAS = "https://ca.csu.edu.cn";
 const ZHXG = "https://zhxg.csu.edu.cn";
@@ -229,31 +265,16 @@ const MIME = {
   ".txt": "text/plain; charset=utf-8",
 };
 
-function sendFile(file, res, status = 200) {
-  const ext = path.extname(file).toLowerCase();
+function sendBuffer(buf, rel, res, status = 200) {
+  const ext = path.extname(rel).toLowerCase();
   // 带内容 hash 的产物可以长缓存；inject.js 是固定路径，必须每次回源校验
-  const hashed = /-[A-Za-z0-9_-]{8,}\.(js|css)$/.test(path.basename(file));
-  const headers = {
+  const hashed = /-[A-Za-z0-9_-]{8,}\.(js|css)$/.test(path.basename(rel));
+  res.writeHead(status, {
     "Content-Type": MIME[ext] || "application/octet-stream",
     "Cache-Control": hashed ? "public, max-age=31536000, immutable" : "no-cache",
-  };
-
-  // index.html 要注入「自托管」标记：前端据此把接口请求打到本服务上（同源），
-  // 否则通过局域网 IP（手机连同一 WiFi）访问时会被误判成跨域直连。
-  // 标记必须排在页面自己的判断脚本之前，因此插在 <head> 的最前面。
-  if (path.basename(file) === "index.html") {
-    let html = fs.readFileSync(file, "utf8");
-    html = html.replace(
-      /<head>/i,
-      '<head>\n    <script>window.__PADK_SELF_HOSTED__=true</script>'
-    );
-    const buf = Buffer.from(html, "utf8");
-    res.writeHead(status, { ...headers, "Content-Length": buf.length });
-    return res.end(buf);
-  }
-
-  res.writeHead(status, headers);
-  fs.createReadStream(file).pipe(res);
+    "Content-Length": buf.length,
+  });
+  res.end(buf);
 }
 
 function serveStatic(req, res) {
@@ -266,25 +287,39 @@ function serveStatic(req, res) {
   }
   if (pathname === "/") pathname = "/index.html";
 
-  const full = path.join(DIST, pathname);
-  // 目录穿越防护：解析后必须仍在 dist 内
-  if (full !== DIST && !full.startsWith(DIST + path.sep)) {
+  const rel = pathname.replace(/^\/+/, "");
+  // 目录穿越防护
+  if (rel.includes("..")) {
     res.writeHead(403);
     return res.end("Forbidden");
   }
 
-  fs.stat(full, (err, st) => {
-    if (!err && st.isFile()) return sendFile(full, res);
+  let buf = readAsset(rel);
+  let served = rel;
 
-    // 本项目用 hash 路由，正常不会走到这里；
-    // 给无扩展名的路径回落 index.html，避免手输地址时 404
-    if (!path.extname(pathname)) {
-      const idx = path.join(DIST, "index.html");
-      if (fs.existsSync(idx)) return sendFile(idx, res);
-    }
+  // 本项目用 hash 路由，正常不会走到这里；
+  // 给无扩展名的路径回落 index.html，避免手输地址时 404
+  if (!buf && !path.extname(rel)) {
+    buf = readAsset("index.html");
+    served = "index.html";
+  }
+
+  if (!buf) {
     res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });
-    res.end("404 Not Found");
-  });
+    return res.end("404 Not Found");
+  }
+
+  // index.html 要注入「自托管」标记：前端据此把接口请求打到本服务上（同源），
+  // 否则通过局域网 IP（手机连同一 WiFi）访问时会被误判成跨域直连。
+  // 标记必须排在页面自己的判断脚本之前，因此插在 <head> 的最前面。
+  if (path.basename(served) === "index.html") {
+    const html = buf
+      .toString("utf8")
+      .replace(/<head>/i, '<head>\n    <script>window.__PADK_SELF_HOSTED__=true</script>');
+    return sendBuffer(Buffer.from(html, "utf8"), served, res);
+  }
+
+  sendBuffer(buf, served, res);
 }
 
 /* ───────────── 登录接口 ───────────── */
@@ -385,7 +420,8 @@ server.on("error", (e) => {
 });
 
 server.listen(PORT, () => {
-  const ready = fs.existsSync(path.join(DIST, "index.html"));
+  // SEA 模式下前端产物在 exe 里，磁盘上没有 dist/
+  const ready = IN_SEA || fs.existsSync(path.join(DIST, "index.html"));
   console.log("");
   console.log("  平安打卡 · 单机服务");
   console.log(`  →  http://localhost:${PORT}/`);
@@ -394,7 +430,7 @@ server.listen(PORT, () => {
     console.log("  ⚠ 没找到 dist/index.html，先执行一次 npm run build");
     console.log("");
   }
-  console.log(`  静态  ${DIST}`);
+  console.log(`  静态  ${IN_SEA ? "（已内嵌进 exe）" : DIST}`);
   console.log("  登录  POST /__auth/login");
   console.log(`  代理  /znzhxgpt/**  →  ${ZHXG}`);
   console.log("");
