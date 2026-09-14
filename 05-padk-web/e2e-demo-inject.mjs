@@ -12,7 +12,13 @@ import puppeteer from "puppeteer-core";
 
 const EDGE = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe";
 const TARGET = process.env.PADK_TARGET || "https://zhxg.csu.edu.cn/znzhxgpt_h5/";
-const INJECT = fs.readFileSync("dist/inject.js", "utf8");
+
+// 两种模式：
+//   默认  读本地 dist/inject.js 后内联执行
+//   设了 PADK_INJECT_URL 则从该 URL 加载 —— 这才是书签真正做的事
+//   （<script src=...> 注入当前页面），可用来验证公网部署是否可用
+const INJECT_URL = process.env.PADK_INJECT_URL || "";
+const INJECT = INJECT_URL ? null : fs.readFileSync("dist/inject.js", "utf8");
 
 // 必须「iPhone 但不带 MicroMessenger」：带 MicroMessenger 会被判定成微信环境，
 // 跳去 open.weixin.qq.com 走 OAuth
@@ -53,9 +59,19 @@ console.log("  落地地址:", before.url);
 console.log("  页面标题:", before.title || "(空)");
 console.log("  可见文字:", before.text || "(空)");
 
-console.log("\n注入 inject.js —— 这一步等价于点一下书签");
-await page.evaluate(INJECT);
-await sleep(3500);
+console.log("\n注入面板 —— 这一步等价于点一下书签");
+if (INJECT_URL) {
+  console.log(`  从公网 URL 加载：${INJECT_URL}`);
+  await page.evaluate((url) => {
+    const s = document.createElement("script");
+    s.src = url + "?t=" + Date.now();
+    document.documentElement.appendChild(s);
+  }, INJECT_URL);
+} else {
+  console.log("  内联执行 dist/inject.js");
+  await page.evaluate(INJECT);
+}
+await sleep(4000);
 
 const after = await page.evaluate(() => {
   const host = document.getElementById("csu-padk-panel-host");

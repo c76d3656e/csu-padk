@@ -326,6 +326,7 @@ function proxy(req, res) {
   const isHttps = target.protocol === "https:";
   const mod = isHttps ? https : http;
   const headers = { ...req.headers, host: target.host };
+  const t0 = Date.now();
 
   const up = mod.request(
     {
@@ -338,12 +339,17 @@ function proxy(req, res) {
       rejectUnauthorized: false,
     },
     (upRes) => {
+      // 只记路径与状态码，不碰 body（里面是密文与凭据）
+      console.log(
+        `[proxy] ${req.method} ${target.pathname} → ${upRes.statusCode} (${Date.now() - t0}ms)`
+      );
       res.writeHead(upRes.statusCode || 502, upRes.headers);
       upRes.pipe(res);
     }
   );
 
   up.on("error", (e) => {
+    console.log(`[proxy] ${req.method} ${target.pathname} → 上游失败: ${e.message}`);
     if (!res.headersSent) {
       res.writeHead(502, { "Content-Type": "text/plain; charset=utf-8" });
     }

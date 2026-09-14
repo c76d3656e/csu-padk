@@ -120,6 +120,23 @@ PORT=5180 npm start   # 换端口
 在已登录的 `zhxg.csu.edu.cn` 页面里加载 `inject.js`。那里本来就同源，
 凭据直接从宿主 `localStorage` 读取、请求同源发出，不需要任何本地进程。
 
+这个形态**可以部署到公网**——书签需要的只是 `inject.js` 的一个固定 URL。
+本项目已配好 GitHub Pages 部署：
+
+```bash
+npm run build
+npm run deploy     # 推 dist/ 到 gh-pages 分支，约 1 分钟生效
+```
+
+发布后引导页在 `https://<user>.github.io/<repo>/#/guide`，书签地址由它自动生成。
+
+> 官方页面**没有 CSP**（只有 `X-Frame-Options: SAMEORIGIN`，不影响脚本注入），
+> 所以从外部域加载 `inject.js` 不会被拦。已在真实官方页面上实测：注入成功、
+> 面板渲染正常（宋体标题 + 玻璃材质）、宿主页样式不受污染。
+>
+> 注意：公网形态下 `/`（独立打卡页）**不可用**——它的接口请求会跨域，
+> 而学校 nginx 不放行 OPTIONS 预检。公网部署只服务书签分发。
+
 ---
 
 ## 使用
