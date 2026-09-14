@@ -1,0 +1,12 @@
+﻿import fs from "node:fs";
+const dir = process.argv[2] + "\\h5\\static\\js";
+const s = fs.readFileSync(dir + "\\index.js", "utf8");
+const i = s.indexOf('r.p+"static/js/"');
+console.log("idx=" + i);
+const tail = s.slice(i + 7000, i + 9000);
+console.log("--- tail after map ---");
+console.log(tail);
+console.log("--- count of -padk- occurrences ---");
+console.log((s.match(/-padk-/g) || []).length);
+const m = s.match(/static\/js\/"\+\(\{[\s\S]{0,80}/);
+console.log(m ? m[0] : "no");

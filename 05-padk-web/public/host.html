@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>本地宿主 · 平安打卡</title>
+    <style>
+      :root {
+        --ink: #0a1310;
+        --ink2: #0e1a16;
+        --brass: #d9a441;
+        --brass2: #f2c869;
+        --paper: #ece5d7;
+        --dim: #7f8a82;
+        --line: rgba(217, 164, 65, 0.18);
+      }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body {
+        min-height: 100vh;
+        background: var(--ink);
+        color: var(--paper);
+        font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+        display: grid;
+        place-items: center;
+        padding: 36px 20px;
+        background-image:
+          repeating-radial-gradient(circle at 18% 22%, transparent 0 118px, rgba(91,157,122,.05) 118px 119px),
+          radial-gradient(900px 600px at 14% -4%, rgba(91,157,122,.12), transparent 60%),
+          radial-gradient(760px 520px at 92% 104%, rgba(217,164,65,.09), transparent 60%);
+      }
+      .box { width: 100%; max-width: 620px; }
+      .tag {
+        display: inline-block;
+        font-family: ui-monospace, monospace;
+        font-size: 10.5px;
+        letter-spacing: 2.4px;
+        color: var(--brass);
+        border: 1px solid rgba(217,164,65,.3);
+        padding: 4px 12px;
+        border-radius: 20px;
+        margin-bottom: 18px;
+      }
+      h1 {
+        font-family: "Songti SC", "STSong", serif;
+        font-size: 32px;
+        font-weight: 600;
+        letter-spacing: .06em;
+        margin-bottom: 10px;
+      }
+      .lede { color: var(--dim); font-size: 13.5px; line-height: 1.85; margin-bottom: 26px; }
+      .lede b { color: var(--paper); }
+      .lede code {
+        font-family: ui-monospace, monospace;
+        background: rgba(217,164,65,.1);
+        color: var(--brass2);
+        padding: 1px 5px;
+        border-radius: 3px;
+      }
+      .field { margin-bottom: 14px; }
+      .field label {
+        display: block;
+        font-family: ui-monospace, monospace;
+        font-size: 10.5px;
+        letter-spacing: 1.4px;
+        color: var(--dim);
+        margin-bottom: 6px;
+        text-transform: uppercase;
+      }
+      .field textarea {
+        width: 100%;
+        min-height: 62px;
+        background: #060d0a;
+        border: 1px solid var(--line);
+        border-radius: 5px;
+        padding: 10px 12px;
+        color: var(--paper);
+        font-family: ui-monospace, monospace;
+        font-size: 11.5px;
+        line-height: 1.7;
+        resize: vertical;
+        outline: none;
+        word-break: break-all;
+      }
+      .field textarea:focus { border-color: var(--brass); }
+      .row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+      button {
+        font-family: inherit;
+        font-size: 13.5px;
+        font-weight: 600;
+        padding: 10px 22px;
+        border-radius: 5px;
+        border: 1px solid var(--line);
+        background: transparent;
+        color: var(--paper);
+        cursor: pointer;
+        transition: all .16s ease;
+      }
+      button:hover { border-color: var(--brass); color: var(--brass2); }
+      button.primary {
+        background: var(--brass);
+        border-color: var(--brass);
+        color: #1b1508;
+      }
+      button.primary:hover { background: var(--brass2); border-color: var(--brass2); color: #1b1508; }
+      button:disabled { opacity: .4; cursor: not-allowed; }
+      .note {
+        margin-top: 24px;
+        border: 1px dashed var(--line);
+        border-radius: 6px;
+        padding: 14px 16px;
+        font-size: 12.5px;
+        color: var(--dim);
+        line-height: 1.95;
+      }
+      .note b { color: var(--brass); }
+      .note ol { margin: 6px 0 0 18px; }
+      .status {
+        margin-top: 14px;
+        font-family: ui-monospace, monospace;
+        font-size: 11.5px;
+        min-height: 18px;
+      }
+      .status.ok { color: #7fc39c; }
+      .status.err { color: #e0705e; }
+      kbd {
+        background: rgba(236,229,215,.08);
+        border: 1px solid rgba(236,229,215,.16);
+        border-bottom-width: 2px;
+        border-radius: 4px;
+        padding: 0 4px;
+        font-family: ui-monospace, monospace;
+        font-size: .88em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="box">
+      <div class="tag">LOCAL HOST · REAL API</div>
+      <h1>平安打卡 · 本地宿主</h1>
+      <p class="lede">
+        这一页会加载<b>真正的面板本体</b>，并直连真实接口（经本地反向代理走同源）。
+        <br />
+        凭据只存在你浏览器的 <code>localStorage</code>，不会发往任何第三方。
+      </p>
+
+      <div class="field">
+        <label>token</label>
+        <textarea id="tok" placeholder="粘贴从官方页面取到的 token"></textarea>
+      </div>
+
+      <div class="field">
+        <label>casual（postDes 加密密钥，16 位）</label>
+        <textarea id="cas" placeholder="粘贴 casual"></textarea>
+      </div>
+
+      <div class="row">
+        <button class="primary" id="go" disabled>载入面板</button>
+        <button id="clear">清除本地凭据</button>
+      </div>
+
+      <div class="status" id="st"></div>
+
+      <div class="note">
+        <b>凭据怎么拿？</b>
+        <ol>
+          <li>用同一浏览器打开官方页面并登录：<br />
+            <code>https://zhxg.csu.edu.cn/znzhxgpt_h5/</code>（PC 需先 <kbd>F12</kbd> → <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>M</kbd> 开设备模拟）</li>
+          <li>在该页 <kbd>F12</kbd> → Console 执行：<br />
+            <code>copy(JSON.stringify({t:localStorage.getItem('token'),c:localStorage.getItem('casual')||localStorage.getItem('caasual')}))</code></li>
+          <li>把复制到的内容按字段粘到上面两个框里</li>
+        </ol>
+        <br />
+        <b>更省事的做法：</b>直接把这一行贴到官方页面 Console，面板立刻出现，不用来回复制凭据 ——<br />
+        <code id="snippet" style="display:block;margin-top:6px;white-space:pre-wrap"></code>
+      </div>
+    </div>
+
+    <script>
+      // 关键：请求走 Vite 反向代理，浏览器侧保持同源，绕开 CORS 预检
+      window.__PADK_ORIGIN__ = "";
+      window.__PADK_LOCAL__ = true;
+
+      const $ = (id) => document.getElementById(id);
+      const st = $("st");
+      const tokEl = $("tok");
+      const casEl = $("cas");
+      const goBtn = $("go");
+
+      function say(msg, cls) {
+        st.textContent = msg || "";
+        st.className = "status" + (cls ? " " + cls : "");
+      }
+
+      function refresh() {
+        const t = tokEl.value.trim();
+        const c = casEl.value.trim();
+        const ok = t.length >= 32 && c.length >= 8;
+        goBtn.disabled = !ok;
+        if (t || c) {
+          say(
+            ok ? "凭据格式正常，可以载入" : "token 需 ≥32 字符，casual 需 ≥8 字符",
+            ok ? "ok" : "err"
+          );
+        }
+      }
+
+      // ① URL hash 预填（#token=..&casual=..）：hash 不会发往服务器
+      (function fromHash() {
+        try {
+          const h = location.hash.slice(1);
+          if (!h) return;
+          const p = new URLSearchParams(h);
+          const t = p.get("token"), c = p.get("casual");
+          let filled = false;
+          if (t) { localStorage.setItem("token", t); tokEl.value = t; filled = true; }
+          if (c) { localStorage.setItem("casual", c); casEl.value = c; filled = true; }
+          if (filled) history.replaceState(null, "", location.pathname);
+        } catch (e) {}
+      })();
+
+      // ② 已存凭据回填
+      if (!tokEl.value) tokEl.value = localStorage.getItem("token") || "";
+      if (!casEl.value) casEl.value = localStorage.getItem("casual") || localStorage.getItem("caasual") || "";
+      refresh();
+      tokEl.addEventListener("input", refresh);
+      casEl.addEventListener("input", refresh);
+
+      $("clear").onclick = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("casual");
+        tokEl.value = "";
+        casEl.value = "";
+        refresh();
+        say("已清除", "ok");
+      };
+
+      goBtn.onclick = () => boot();
+
+      function boot() {
+        const t = tokEl.value.trim();
+        const c = casEl.value.trim();
+        if (t.length < 32 || c.length < 8) return;
+        localStorage.setItem("token", t);
+        localStorage.setItem("casual", c);
+        say("正在载入面板…", "ok");
+
+        const s = document.createElement("script");
+        s.src = "./inject.js?t=" + Date.now();
+        s.onerror = () => say("inject.js 未找到，请先执行 npm run build", "err");
+        s.onload = () => say("面板已注入 —— 看右下角", "ok");
+        document.head.appendChild(s);
+      }
+
+      // ③ 官方页面可用的 Console 片段（优先同源加载，失败则提示）
+      $("snippet").textContent =
+        "var s=document.createElement('script');s.src='http://' + location.host + '/inject.js';document.head.appendChild(s)";
+    </script>
+  </body>
+</html>

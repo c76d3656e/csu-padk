@@ -1,0 +1,446 @@
+/* ══════════════════════════════════════════════════════════
+   原版界面 —— 深色科技风
+   全部规则限定在 .classic-root 内，与勘测图纸版互不干扰
+   ══════════════════════════════════════════════════════════ */
+
+.classic-root {
+  --c-bg: #070b14;
+  --c-surface: rgba(255, 255, 255, 0.028);
+  --c-surface-2: rgba(255, 255, 255, 0.05);
+  --c-line: rgba(122, 162, 222, 0.16);
+  --c-line-strong: rgba(122, 162, 222, 0.3);
+  --c-text: #e9eff9;
+  --c-muted: #8698b1;
+  --c-dim: #5d6f88;
+  --c-primary: #2f7dfa;
+  --c-primary-2: #1a63d8;
+  --c-accent: #34d3eb;
+
+  position: relative;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: var(--c-bg);
+  color: var(--c-text);
+  font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI",
+    system-ui, -apple-system, sans-serif;
+  line-height: 1.65;
+}
+
+.classic-root code {
+  background: rgba(47, 125, 250, 0.12);
+  color: #9dc2ff;
+  padding: 1px 6px;
+  border-radius: 5px;
+  font-size: 0.88em;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+.classic-root a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.classic-root .glow {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+  z-index: 0;
+}
+.classic-root .g1 {
+  width: 620px;
+  height: 620px;
+  background: rgba(47, 125, 250, 0.2);
+  top: -220px;
+  left: -160px;
+  animation: cFloat1 16s ease-in-out infinite alternate;
+}
+.classic-root .g2 {
+  width: 520px;
+  height: 520px;
+  background: rgba(52, 211, 235, 0.13);
+  bottom: -200px;
+  right: -140px;
+  animation: cFloat2 20s ease-in-out infinite alternate;
+}
+@keyframes cFloat1 {
+  to { transform: translate(70px, 50px) scale(1.12); }
+}
+@keyframes cFloat2 {
+  to { transform: translate(-60px, -40px) scale(1.08); }
+}
+
+.classic-root .grid {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: linear-gradient(rgba(122, 162, 222, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(122, 162, 222, 0.05) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+}
+
+.classic-root .hero {
+  position: relative;
+  z-index: 1;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 84px 26px 30px;
+  animation: cRise 0.7s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+}
+
+.classic-root .tag {
+  display: inline-block;
+  font-size: 12px;
+  letter-spacing: 2.4px;
+  color: var(--c-accent);
+  border: 1px solid rgba(52, 211, 235, 0.3);
+  background: rgba(52, 211, 235, 0.06);
+  padding: 4px 13px;
+  border-radius: 20px;
+  margin-bottom: 22px;
+  text-transform: uppercase;
+}
+
+.classic-root h1 {
+  font-size: clamp(38px, 6vw, 58px);
+  font-weight: 800;
+  letter-spacing: -1.2px;
+  line-height: 1.1;
+  margin-bottom: 20px;
+}
+.classic-root h1 .sub {
+  display: block;
+  font-size: 0.42em;
+  font-weight: 500;
+  letter-spacing: 6px;
+  color: var(--c-dim);
+  margin-top: 12px;
+}
+
+.classic-root .lead {
+  font-size: 16px;
+  color: var(--c-muted);
+  max-width: 640px;
+}
+.classic-root .lead b {
+  color: var(--c-text);
+  font-weight: 600;
+}
+
+.classic-root .facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(168px, 1fr));
+  gap: 12px;
+  margin-top: 38px;
+}
+.classic-root .fact {
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.classic-root .fact .k {
+  font-size: 11px;
+  color: var(--c-dim);
+  letter-spacing: 0.8px;
+}
+.classic-root .fact .v {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.classic-root .wrap {
+  position: relative;
+  z-index: 1;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 26px;
+}
+
+.classic-root .steps {
+  display: grid;
+  gap: 18px;
+}
+
+.classic-root .step {
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: 16px;
+  padding: 26px 26px 24px;
+  animation: cRise 0.7s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+  transition: border-color 0.25s ease, background 0.25s ease;
+}
+.classic-root .step:nth-child(1) { animation-delay: 0.06s; }
+.classic-root .step:nth-child(2) { animation-delay: 0.12s; }
+.classic-root .step:nth-child(3) { animation-delay: 0.18s; }
+.classic-root .step:hover {
+  border-color: var(--c-line-strong);
+  background: var(--c-surface-2);
+}
+
+.classic-root .step .num {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--c-primary);
+  margin-bottom: 10px;
+}
+.classic-root .step h3 {
+  font-size: 19px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.classic-root .step p {
+  color: var(--c-muted);
+  font-size: 14.5px;
+}
+
+.classic-root .tip {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: rgba(255, 153, 0, 0.07);
+  border: 1px solid rgba(255, 153, 0, 0.22);
+  color: #e8c88a;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.classic-root .tip b {
+  color: #ffc861;
+}
+
+.classic-root .bullets {
+  margin: 14px 0 0 18px;
+  color: var(--c-muted);
+  font-size: 14px;
+}
+.classic-root .bullets li {
+  margin-bottom: 6px;
+}
+
+.classic-root .row {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.classic-root .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 10px;
+  padding: 11px 22px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: transform 0.12s ease, filter 0.18s ease, border-color 0.2s ease;
+}
+.classic-root .btn.primary {
+  background: linear-gradient(135deg, var(--c-primary) 0%, var(--c-primary-2) 100%);
+  color: #fff;
+  box-shadow: 0 8px 24px -8px rgba(47, 125, 250, 0.6);
+}
+.classic-root .btn.primary:hover { filter: brightness(1.08); }
+.classic-root .btn.ghost {
+  background: transparent;
+  color: #9dc2ff;
+  border: 1px solid var(--c-line-strong);
+}
+.classic-root .btn.ghost:hover {
+  background: rgba(47, 125, 250, 0.1);
+  border-color: var(--c-primary);
+}
+.classic-root .btn:active { transform: scale(0.98); }
+
+.classic-root .drag-zone {
+  margin-top: 16px;
+  padding: 20px;
+  border: 1.5px dashed var(--c-line-strong);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  background: rgba(47, 125, 250, 0.035);
+}
+.classic-root .bookmarklet {
+  display: inline-block;
+  padding: 10px 24px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--c-primary) 0%, var(--c-primary-2) 100%);
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: grab;
+  box-shadow: 0 6px 20px -6px rgba(47, 125, 250, 0.7);
+  user-select: none;
+}
+.classic-root .drag-hint {
+  font-size: 12.5px;
+  color: var(--c-dim);
+}
+
+.classic-root .panel-block,
+.classic-root .privacy,
+.classic-root .tech {
+  margin-top: 26px;
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: 16px;
+  padding: 24px 26px;
+  animation: cRise 0.7s cubic-bezier(0.2, 0.7, 0.3, 1) 0.22s both;
+}
+.classic-root .panel-block h2,
+.classic-root .privacy h3 {
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.classic-root .muted {
+  color: var(--c-muted);
+  font-size: 14px;
+}
+
+.classic-root .field {
+  margin-top: 16px;
+}
+.classic-root .field label {
+  display: block;
+  font-size: 12px;
+  color: var(--c-dim);
+  margin-bottom: 7px;
+}
+.classic-root .field input {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--c-line);
+  border-radius: 9px;
+  padding: 11px 13px;
+  color: var(--c-text);
+  font-size: 13.5px;
+  outline: none;
+  font-family: ui-monospace, monospace;
+}
+.classic-root .field input:focus {
+  border-color: var(--c-primary);
+}
+
+.classic-root .privacy {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+  background: linear-gradient(135deg, rgba(47, 208, 127, 0.07), rgba(47, 125, 250, 0.05));
+  border-color: rgba(47, 208, 127, 0.24);
+}
+.classic-root .privacy .lock {
+  font-size: 26px;
+  line-height: 1;
+  flex: none;
+  margin-top: 2px;
+}
+.classic-root .privacy p {
+  color: #a9c4bd;
+  font-size: 14px;
+  margin-top: 6px;
+}
+.classic-root .privacy b {
+  color: #d6f5e6;
+}
+
+.classic-root .tech {
+  padding: 0;
+  overflow: hidden;
+}
+.classic-root .tech-toggle {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: var(--c-muted);
+  padding: 18px 26px;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+}
+.classic-root .tech-toggle:hover {
+  color: var(--c-text);
+  background: var(--c-surface-2);
+}
+.classic-root .tech-body {
+  padding: 4px 26px 24px;
+  border-top: 1px solid var(--c-line);
+}
+.classic-root .tech-body h4 {
+  font-size: 13px;
+  color: var(--c-accent);
+  letter-spacing: 0.6px;
+  margin: 20px 0 9px;
+  text-transform: uppercase;
+}
+.classic-root .tech-body pre {
+  background: rgba(0, 0, 0, 0.42);
+  border: 1px solid var(--c-line);
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-size: 12.5px;
+  line-height: 1.8;
+  color: #93d6c0;
+  overflow-x: auto;
+  white-space: pre;
+  font-family: ui-monospace, monospace;
+}
+
+.classic-root .foot {
+  position: relative;
+  z-index: 1;
+  max-width: 1000px;
+  margin: 34px auto 0;
+  padding: 26px;
+  border-top: 1px solid var(--c-line);
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  color: var(--c-dim);
+  font-size: 12.5px;
+}
+.classic-root .dot-sep {
+  color: var(--c-line-strong);
+}
+
+@keyframes cRise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.classic-root .back-link {
+  position: relative;
+  z-index: 2;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 22px 26px 0;
+}
+
+@media (max-width: 720px) {
+  .classic-root .hero { padding: 56px 20px 22px; }
+  .classic-root .wrap { padding: 20px; }
+  .classic-root .step,
+  .classic-root .panel-block,
+  .classic-root .privacy { padding: 20px; }
+  .classic-root .facts { grid-template-columns: 1fr 1fr; }
+  .classic-root .foot { padding: 20px; }
+}

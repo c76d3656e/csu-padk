@@ -1,0 +1,21 @@
+# ── 依赖 ──
+node_modules/
+
+# ── 构建产物 ──
+05-padk-web/dist/
+05-padk-web/dist-inject/
+.tmp-core/
+
+# ── 本地凭据：绝不入库 ──
+zhxg-session.json
+cas-session.json
+02-脚本/独立打卡/config.json
+*.local
+
+# ── 系统 / 编辑器 ──
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.log

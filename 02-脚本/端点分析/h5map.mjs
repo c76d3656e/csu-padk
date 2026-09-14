@@ -1,0 +1,14 @@
+﻿import fs from "node:fs";
+const dir = process.argv[2] + "\\h5\\static\\js";
+const s = fs.readFileSync(dir + "\\index.js", "utf8");
+const i = s.indexOf('r.p+"static/js/"');
+const seg = s.slice(i, i + 200000);
+const m = seg.match(/\{(.*?)\}\[e\]/s);
+const map = new Map();
+const body = m ? m[1] : seg.slice(0, 60000);
+for (const mm of body.matchAll(/"([^"]+)"\s*:\s*"([a-f0-9]{8})"/g)) map.set(mm[1], mm[2]);
+console.log("CHUNKS=" + map.size);
+const padk = [...map.entries()].filter(([k]) => /padk/i.test(k));
+console.log("PADK_CHUNKS=" + padk.length);
+for (const [k,v] of padk) console.log(`${k}\t${v}`);
+fs.writeFileSync(process.argv[2] + "\\h5_chunkmap.txt", [...map.entries()].map(([k,v])=>`${k}\t${v}`).join("\n"), "utf8");

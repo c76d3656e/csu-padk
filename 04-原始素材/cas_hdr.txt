@@ -1,0 +1,17 @@
+HTTP/1.1 200 
+Server: openresty
+Date: Sun, 13 Sep 2026 17:52:15 GMT
+Content-Type: text/html;charset=UTF-8
+Transfer-Encoding: chunked
+Connection: keep-alive
+Set-Cookie: route=5c06937fbe9d5336096bad9c4f0d73ac; Path=/authserver
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+X-XSS-Protection: 1; mode=block
+Set-Cookie: JSESSIONID=45A785BB17583D9BB3DDB54870AAAAC4; Path=/authserver; HttpOnly
+Content-Language: zh-CN
+X-Frame-Options: ALLOWALL
+

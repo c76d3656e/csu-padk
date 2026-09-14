@@ -1,0 +1,33 @@
+{
+  "pageNo": -1,
+  "pageSize": -1,
+  "allSize": -1,
+  "sortMap": null,
+  "paramsList": null,
+  "paramsDataList": null,
+  "params": {},
+  "paramsData": null,
+  "flzj": null,
+  "ywlx": null,
+  "code": "200",
+  "message": "成功",
+  "data": {
+    "dksjfw": "20:00-23:30",
+    "dksj": null,
+    "gz": "请每位学生在每晚10:30前到达宿舍用智慧学工系统打卡报平安；学院负责老师每晚11:00前确认本院学生平安并提交至学工部。",
+    "kdk": false,
+    "dkbc": "校内住宿打卡",
+    "bkyy": "未到打卡时间",
+    "kqfwxx": [
+      {
+        "mc": "校内住宿打卡范围（全校统一）",
+        "dkfw": 300,
+        "jd": null,
+        "wd": null,
+        "kqdz": "学生所住宿舍楼栋坐标（自动取）"
+      }
+    ],
+    "sfydk": 0,
+    "lx": 0
+  }
+}

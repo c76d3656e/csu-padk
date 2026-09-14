@@ -1,0 +1,324 @@
+
+### pages-service-index.35f81294.js :: studentDk @26056
+nction(t){return a.default.postDes(r.API_BASE_QXJ+"/qxj-dkcb/saveHt",t,!0)},e.saveLdzb=function(t){return a.default.postDes(r.API_BASE_SSGL+"/ss-ldxx/saveLdzbCj",t,!0)},e.sendDkcb=function(t){return a.default.postDes(r.API_BASE_QXJ+"/qxj-dkcb/sendCb",t,!0)},e.studentDk=function(t){return a.default.postDes(r.API_BASE_QXJ+"/qxj-padkglxx/xspadk",t,!0)},e.submitBpa=function(t){return a.default.postDes(r.API_BASE_QXJ+"/qxj-bpa/submitBpa",t,!0)},e.submitDqr=function(t){return a.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/sa
+
+### pages-service-index.35f81294.js :: checkDkLocation @22373
+API_BASE_QXJ+"/qxj-lxxsfxxx/save",t,!0)},e.addStudentLxsbInfo=function(t){return a.default.postDes(r.API_BASE_QXJ+"/qxj-lxxslxxx/saveOrUpdate",t,!0)},e.batchReportLxsbInfo=function(t){return a.default.postDes(r.API_BASE_QXJ+"/qxj-lfxrsbbxx/batchSave",t,!0)},e.checkDkLocation=function(t){return a.default.postDes(r.API_BASE_QXJ+"/qxj-padkglxx/jcqqwzsjsfndk",t,!0)},e.checkQxjTime=function(t){return a.default.postDes(r.API_BASE_QXJ+"/qxj-xsqjxx/checkQjsj",t,!0)},e.checkXjfw=function(t){return a.default.postDes(r.API_BA
+
+### pages-service-index.35f81294.js :: getDqrRkTj @24334
+n a.default.postDes(r.API_BASE_QXJ+"/qxj-dktz/queryMyTzPage",t,!0)},e.getDqrBjLs=function(t){return a.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/queryBjDkLs",t,!0)},e.getDqrBjMd=function(t){return a.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/queryBjDkMd",t,!0)},e.getDqrRkTj=function(t){return a.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/queryBjDkRkTj",t,!0)},e.getDqrXsXq=function(t){return a.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/queryXsDkXq",t,!0)},e.getLdzbList=function(t){return a.default.postDes(r.API_BASE_SSGL+"/s
+
+### views-workflow-handleFlowTask-index.498fe14a.js :: studentDk @980334
+nction(e){return l.default.postDes(r.API_BASE_QXJ+"/qxj-dkcb/saveHt",e,!0)},t.saveLdzb=function(e){return l.default.postDes(r.API_BASE_SSGL+"/ss-ldxx/saveLdzbCj",e,!0)},t.sendDkcb=function(e){return l.default.postDes(r.API_BASE_QXJ+"/qxj-dkcb/sendCb",e,!0)},t.studentDk=function(e){return l.default.postDes(r.API_BASE_QXJ+"/qxj-padkglxx/xspadk",e,!0)},t.submitBpa=function(e){return l.default.postDes(r.API_BASE_QXJ+"/qxj-bpa/submitBpa",e,!0)},t.submitDqr=function(e){return l.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/sa
+
+### views-workflow-handleFlowTask-index.498fe14a.js :: checkDkLocation @976651
+API_BASE_QXJ+"/qxj-lxxsfxxx/save",e,!0)},t.addStudentLxsbInfo=function(e){return l.default.postDes(r.API_BASE_QXJ+"/qxj-lxxslxxx/saveOrUpdate",e,!0)},t.batchReportLxsbInfo=function(e){return l.default.postDes(r.API_BASE_QXJ+"/qxj-lfxrsbbxx/batchSave",e,!0)},t.checkDkLocation=function(e){return l.default.postDes(r.API_BASE_QXJ+"/qxj-padkglxx/jcqqwzsjsfndk",e,!0)},t.checkQxjTime=function(e){return l.default.postDes(r.API_BASE_QXJ+"/qxj-xsqjxx/checkQjsj",e,!0)},t.checkXjfw=function(e){return l.default.postDes(r.API_BA
+
+### views-workflow-handleFlowTask-index.498fe14a.js :: getDqrRkTj @978612
+n l.default.postDes(r.API_BASE_QXJ+"/qxj-dktz/queryMyTzPage",e,!0)},t.getDqrBjLs=function(e){return l.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/queryBjDkLs",e,!0)},t.getDqrBjMd=function(e){return l.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/queryBjDkMd",e,!0)},t.getDqrRkTj=function(e){return l.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/queryBjDkRkTj",e,!0)},t.getDqrXsXq=function(e){return l.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/queryXsDkXq",e,!0)},t.getLdzbList=function(e){return l.default.postDes(r.API_BASE_SSGL+"/s
+
+### views-workflow-pages-qxj-xsqjsq-xsqjydgd.aaf295ed.js :: studentDk @50282
+nction(t){return a.default.postDes(i.API_BASE_QXJ+"/qxj-dkcb/saveHt",t,!0)},e.saveLdzb=function(t){return a.default.postDes(i.API_BASE_SSGL+"/ss-ldxx/saveLdzbCj",t,!0)},e.sendDkcb=function(t){return a.default.postDes(i.API_BASE_QXJ+"/qxj-dkcb/sendCb",t,!0)},e.studentDk=function(t){return a.default.postDes(i.API_BASE_QXJ+"/qxj-padkglxx/xspadk",t,!0)},e.submitBpa=function(t){return a.default.postDes(i.API_BASE_QXJ+"/qxj-bpa/submitBpa",t,!0)},e.submitDqr=function(t){return a.default.postDes(i.API_BASE_QXJ+"/qxj-dqr/sa
+
+### views-workflow-pages-qxj-xsqjsq-xsqjydgd.aaf295ed.js :: checkDkLocation @46599
+API_BASE_QXJ+"/qxj-lxxsfxxx/save",t,!0)},e.addStudentLxsbInfo=function(t){return a.default.postDes(i.API_BASE_QXJ+"/qxj-lxxslxxx/saveOrUpdate",t,!0)},e.batchReportLxsbInfo=function(t){return a.default.postDes(i.API_BASE_QXJ+"/qxj-lfxrsbbxx/batchSave",t,!0)},e.checkDkLocation=function(t){return a.default.postDes(i.API_BASE_QXJ+"/qxj-padkglxx/jcqqwzsjsfndk",t,!0)},e.checkQxjTime=function(t){return a.default.postDes(i.API_BASE_QXJ+"/qxj-xsqjxx/checkQjsj",t,!0)},e.checkXjfw=function(t){return a.default.postDes(i.API_BA
+
+### views-workflow-pages-qxj-xsqjsq-xsqjydgd.aaf295ed.js :: getDqrRkTj @48560
+n a.default.postDes(i.API_BASE_QXJ+"/qxj-dktz/queryMyTzPage",t,!0)},e.getDqrBjLs=function(t){return a.default.postDes(i.API_BASE_QXJ+"/qxj-dqr/queryBjDkLs",t,!0)},e.getDqrBjMd=function(t){return a.default.postDes(i.API_BASE_QXJ+"/qxj-dqr/queryBjDkMd",t,!0)},e.getDqrRkTj=function(t){return a.default.postDes(i.API_BASE_QXJ+"/qxj-dqr/queryBjDkRkTj",t,!0)},e.getDqrXsXq=function(t){return a.default.postDes(i.API_BASE_QXJ+"/qxj-dqr/queryXsDkXq",t,!0)},e.getLdzbList=function(t){return a.default.postDes(i.API_BASE_SSGL+"/s
+
+### views-workflow-pages-qxj-xsqjycjqsq-xsqjycydgd.52e1de0a.js :: studentDk @69240
+nction(t){return i.default.postDes(o.API_BASE_QXJ+"/qxj-dkcb/saveHt",t,!0)},e.saveLdzb=function(t){return i.default.postDes(o.API_BASE_SSGL+"/ss-ldxx/saveLdzbCj",t,!0)},e.sendDkcb=function(t){return i.default.postDes(o.API_BASE_QXJ+"/qxj-dkcb/sendCb",t,!0)},e.studentDk=function(t){return i.default.postDes(o.API_BASE_QXJ+"/qxj-padkglxx/xspadk",t,!0)},e.submitBpa=function(t){return i.default.postDes(o.API_BASE_QXJ+"/qxj-bpa/submitBpa",t,!0)},e.submitDqr=function(t){return i.default.postDes(o.API_BASE_QXJ+"/qxj-dqr/sa
+
+### views-workflow-pages-qxj-xsqjycjqsq-xsqjycydgd.52e1de0a.js :: checkDkLocation @65557
+API_BASE_QXJ+"/qxj-lxxsfxxx/save",t,!0)},e.addStudentLxsbInfo=function(t){return i.default.postDes(o.API_BASE_QXJ+"/qxj-lxxslxxx/saveOrUpdate",t,!0)},e.batchReportLxsbInfo=function(t){return i.default.postDes(o.API_BASE_QXJ+"/qxj-lfxrsbbxx/batchSave",t,!0)},e.checkDkLocation=function(t){return i.default.postDes(o.API_BASE_QXJ+"/qxj-padkglxx/jcqqwzsjsfndk",t,!0)},e.checkQxjTime=function(t){return i.default.postDes(o.API_BASE_QXJ+"/qxj-xsqjxx/checkQjsj",t,!0)},e.checkXjfw=function(t){return i.default.postDes(o.API_BA
+
+### views-workflow-pages-qxj-xsqjycjqsq-xsqjycydgd.52e1de0a.js :: getDqrRkTj @67518
+n i.default.postDes(o.API_BASE_QXJ+"/qxj-dktz/queryMyTzPage",t,!0)},e.getDqrBjLs=function(t){return i.default.postDes(o.API_BASE_QXJ+"/qxj-dqr/queryBjDkLs",t,!0)},e.getDqrBjMd=function(t){return i.default.postDes(o.API_BASE_QXJ+"/qxj-dqr/queryBjDkMd",t,!0)},e.getDqrRkTj=function(t){return i.default.postDes(o.API_BASE_QXJ+"/qxj-dqr/queryBjDkRkTj",t,!0)},e.getDqrXsXq=function(t){return i.default.postDes(o.API_BASE_QXJ+"/qxj-dqr/queryXsDkXq",t,!0)},e.getLdzbList=function(t){return i.default.postDes(o.API_BASE_SSGL+"/s
+
+### views-workflow-pages-qxj-xsxjsq-xsxjydgd.a76adcb2.js :: studentDk @63991
+nction(t){return i.default.postDes(o.API_BASE_QXJ+"/qxj-dkcb/saveHt",t,!0)},e.saveLdzb=function(t){return i.default.postDes(o.API_BASE_SSGL+"/ss-ldxx/saveLdzbCj",t,!0)},e.sendDkcb=function(t){return i.default.postDes(o.API_BASE_QXJ+"/qxj-dkcb/sendCb",t,!0)},e.studentDk=function(t){return i.default.postDes(o.API_BASE_QXJ+"/qxj-padkglxx/xspadk",t,!0)},e.submitBpa=function(t){return i.default.postDes(o.API_BASE_QXJ+"/qxj-bpa/submitBpa",t,!0)},e.submitDqr=function(t){return i.default.postDes(o.API_BASE_QXJ+"/qxj-dqr/sa
+
+### views-workflow-pages-qxj-xsxjsq-xsxjydgd.a76adcb2.js :: checkDkLocation @60308
+API_BASE_QXJ+"/qxj-lxxsfxxx/save",t,!0)},e.addStudentLxsbInfo=function(t){return i.default.postDes(o.API_BASE_QXJ+"/qxj-lxxslxxx/saveOrUpdate",t,!0)},e.batchReportLxsbInfo=function(t){return i.default.postDes(o.API_BASE_QXJ+"/qxj-lfxrsbbxx/batchSave",t,!0)},e.checkDkLocation=function(t){return i.default.postDes(o.API_BASE_QXJ+"/qxj-padkglxx/jcqqwzsjsfndk",t,!0)},e.checkQxjTime=function(t){return i.default.postDes(o.API_BASE_QXJ+"/qxj-xsqjxx/checkQjsj",t,!0)},e.checkXjfw=function(t){return i.default.postDes(o.API_BA
+
+### views-workflow-pages-qxj-xsxjsq-xsxjydgd.a76adcb2.js :: getDqrRkTj @62269
+n i.default.postDes(o.API_BASE_QXJ+"/qxj-dktz/queryMyTzPage",t,!0)},e.getDqrBjLs=function(t){return i.default.postDes(o.API_BASE_QXJ+"/qxj-dqr/queryBjDkLs",t,!0)},e.getDqrBjMd=function(t){return i.default.postDes(o.API_BASE_QXJ+"/qxj-dqr/queryBjDkMd",t,!0)},e.getDqrRkTj=function(t){return i.default.postDes(o.API_BASE_QXJ+"/qxj-dqr/queryBjDkRkTj",t,!0)},e.getDqrXsXq=function(t){return i.default.postDes(o.API_BASE_QXJ+"/qxj-dqr/queryXsDkXq",t,!0)},e.getLdzbList=function(t){return i.default.postDes(o.API_BASE_SSGL+"/s
+
+### views-workflow-pages-qxj-xszwzfsq-xszwzfydgd.c7c06d33.js :: studentDk @57825
+nction(t){return a.default.postDes(i.API_BASE_QXJ+"/qxj-dkcb/saveHt",t,!0)},e.saveLdzb=function(t){return a.default.postDes(i.API_BASE_SSGL+"/ss-ldxx/saveLdzbCj",t,!0)},e.sendDkcb=function(t){return a.default.postDes(i.API_BASE_QXJ+"/qxj-dkcb/sendCb",t,!0)},e.studentDk=function(t){return a.default.postDes(i.API_BASE_QXJ+"/qxj-padkglxx/xspadk",t,!0)},e.submitBpa=function(t){return a.default.postDes(i.API_BASE_QXJ+"/qxj-bpa/submitBpa",t,!0)},e.submitDqr=function(t){return a.default.postDes(i.API_BASE_QXJ+"/qxj-dqr/sa
+
+### views-workflow-pages-qxj-xszwzfsq-xszwzfydgd.c7c06d33.js :: checkDkLocation @54142
+API_BASE_QXJ+"/qxj-lxxsfxxx/save",t,!0)},e.addStudentLxsbInfo=function(t){return a.default.postDes(i.API_BASE_QXJ+"/qxj-lxxslxxx/saveOrUpdate",t,!0)},e.batchReportLxsbInfo=function(t){return a.default.postDes(i.API_BASE_QXJ+"/qxj-lfxrsbbxx/batchSave",t,!0)},e.checkDkLocation=function(t){return a.default.postDes(i.API_BASE_QXJ+"/qxj-padkglxx/jcqqwzsjsfndk",t,!0)},e.checkQxjTime=function(t){return a.default.postDes(i.API_BASE_QXJ+"/qxj-xsqjxx/checkQjsj",t,!0)},e.checkXjfw=function(t){return a.default.postDes(i.API_BA
+
+### views-workflow-pages-qxj-xszwzfsq-xszwzfydgd.c7c06d33.js :: getDqrRkTj @56103
+n a.default.postDes(i.API_BASE_QXJ+"/qxj-dktz/queryMyTzPage",t,!0)},e.getDqrBjLs=function(t){return a.default.postDes(i.API_BASE_QXJ+"/qxj-dqr/queryBjDkLs",t,!0)},e.getDqrBjMd=function(t){return a.default.postDes(i.API_BASE_QXJ+"/qxj-dqr/queryBjDkMd",t,!0)},e.getDqrRkTj=function(t){return a.default.postDes(i.API_BASE_QXJ+"/qxj-dqr/queryBjDkRkTj",t,!0)},e.getDqrXsXq=function(t){return a.default.postDes(i.API_BASE_QXJ+"/qxj-dqr/queryXsDkXq",t,!0)},e.getLdzbList=function(t){return a.default.postDes(i.API_BASE_SSGL+"/s
+
+### ywViews-leave-index.f5fea924.js :: studentDk @54998
+nction(t){return i.default.postDes(o.API_BASE_QXJ+"/qxj-dkcb/saveHt",t,!0)},e.saveLdzb=function(t){return i.default.postDes(o.API_BASE_SSGL+"/ss-ldxx/saveLdzbCj",t,!0)},e.sendDkcb=function(t){return i.default.postDes(o.API_BASE_QXJ+"/qxj-dkcb/sendCb",t,!0)},e.studentDk=function(t){return i.default.postDes(o.API_BASE_QXJ+"/qxj-padkglxx/xspadk",t,!0)},e.submitBpa=function(t){return i.default.postDes(o.API_BASE_QXJ+"/qxj-bpa/submitBpa",t,!0)},e.submitDqr=function(t){return i.default.postDes(o.API_BASE_QXJ+"/qxj-dqr/sa
+
+### ywViews-leave-index.f5fea924.js :: checkDkLocation @51315
+API_BASE_QXJ+"/qxj-lxxsfxxx/save",t,!0)},e.addStudentLxsbInfo=function(t){return i.default.postDes(o.API_BASE_QXJ+"/qxj-lxxslxxx/saveOrUpdate",t,!0)},e.batchReportLxsbInfo=function(t){return i.default.postDes(o.API_BASE_QXJ+"/qxj-lfxrsbbxx/batchSave",t,!0)},e.checkDkLocation=function(t){return i.default.postDes(o.API_BASE_QXJ+"/qxj-padkglxx/jcqqwzsjsfndk",t,!0)},e.checkQxjTime=function(t){return i.default.postDes(o.API_BASE_QXJ+"/qxj-xsqjxx/checkQjsj",t,!0)},e.checkXjfw=function(t){return i.default.postDes(o.API_BA
+
+### ywViews-leave-index.f5fea924.js :: getDqrRkTj @53276
+n i.default.postDes(o.API_BASE_QXJ+"/qxj-dktz/queryMyTzPage",t,!0)},e.getDqrBjLs=function(t){return i.default.postDes(o.API_BASE_QXJ+"/qxj-dqr/queryBjDkLs",t,!0)},e.getDqrBjMd=function(t){return i.default.postDes(o.API_BASE_QXJ+"/qxj-dqr/queryBjDkMd",t,!0)},e.getDqrRkTj=function(t){return i.default.postDes(o.API_BASE_QXJ+"/qxj-dqr/queryBjDkRkTj",t,!0)},e.getDqrXsXq=function(t){return i.default.postDes(o.API_BASE_QXJ+"/qxj-dqr/queryXsDkXq",t,!0)},e.getLdzbList=function(t){return i.default.postDes(o.API_BASE_SSGL+"/s
+
+### ywViews-qxjlfx-bpa-board.332dd4e6.js :: studentDk @4652
+nction(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-dkcb/saveHt",t,!0)},a.saveLdzb=function(t){return n.default.postDes(d.API_BASE_SSGL+"/ss-ldxx/saveLdzbCj",t,!0)},a.sendDkcb=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-dkcb/sendCb",t,!0)},a.studentDk=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-padkglxx/xspadk",t,!0)},a.submitBpa=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-bpa/submitBpa",t,!0)},a.submitDqr=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-dqr/sa
+
+### ywViews-qxjlfx-bpa-board.332dd4e6.js :: checkDkLocation @969
+API_BASE_QXJ+"/qxj-lxxsfxxx/save",t,!0)},a.addStudentLxsbInfo=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-lxxslxxx/saveOrUpdate",t,!0)},a.batchReportLxsbInfo=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-lfxrsbbxx/batchSave",t,!0)},a.checkDkLocation=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-padkglxx/jcqqwzsjsfndk",t,!0)},a.checkQxjTime=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-xsqjxx/checkQjsj",t,!0)},a.checkXjfw=function(t){return n.default.postDes(d.API_BA
+
+### ywViews-qxjlfx-bpa-board.332dd4e6.js :: getDqrRkTj @2930
+n n.default.postDes(d.API_BASE_QXJ+"/qxj-dktz/queryMyTzPage",t,!0)},a.getDqrBjLs=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-dqr/queryBjDkLs",t,!0)},a.getDqrBjMd=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-dqr/queryBjDkMd",t,!0)},a.getDqrRkTj=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-dqr/queryBjDkRkTj",t,!0)},a.getDqrXsXq=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-dqr/queryXsDkXq",t,!0)},a.getLdzbList=function(t){return n.default.postDes(d.API_BASE_SSGL+"/s
+
+### ywViews-qxjlfx-bpa-history.d6017f87.js :: studentDk @17031
+nction(t){return d.default.postDes(n.API_BASE_QXJ+"/qxj-dkcb/saveHt",t,!0)},a.saveLdzb=function(t){return d.default.postDes(n.API_BASE_SSGL+"/ss-ldxx/saveLdzbCj",t,!0)},a.sendDkcb=function(t){return d.default.postDes(n.API_BASE_QXJ+"/qxj-dkcb/sendCb",t,!0)},a.studentDk=function(t){return d.default.postDes(n.API_BASE_QXJ+"/qxj-padkglxx/xspadk",t,!0)},a.submitBpa=function(t){return d.default.postDes(n.API_BASE_QXJ+"/qxj-bpa/submitBpa",t,!0)},a.submitDqr=function(t){return d.default.postDes(n.API_BASE_QXJ+"/qxj-dqr/sa
+
+### ywViews-qxjlfx-bpa-history.d6017f87.js :: checkDkLocation @13348
+API_BASE_QXJ+"/qxj-lxxsfxxx/save",t,!0)},a.addStudentLxsbInfo=function(t){return d.default.postDes(n.API_BASE_QXJ+"/qxj-lxxslxxx/saveOrUpdate",t,!0)},a.batchReportLxsbInfo=function(t){return d.default.postDes(n.API_BASE_QXJ+"/qxj-lfxrsbbxx/batchSave",t,!0)},a.checkDkLocation=function(t){return d.default.postDes(n.API_BASE_QXJ+"/qxj-padkglxx/jcqqwzsjsfndk",t,!0)},a.checkQxjTime=function(t){return d.default.postDes(n.API_BASE_QXJ+"/qxj-xsqjxx/checkQjsj",t,!0)},a.checkXjfw=function(t){return d.default.postDes(n.API_BA
+
+### ywViews-qxjlfx-bpa-history.d6017f87.js :: getDqrRkTj @15309
+n d.default.postDes(n.API_BASE_QXJ+"/qxj-dktz/queryMyTzPage",t,!0)},a.getDqrBjLs=function(t){return d.default.postDes(n.API_BASE_QXJ+"/qxj-dqr/queryBjDkLs",t,!0)},a.getDqrBjMd=function(t){return d.default.postDes(n.API_BASE_QXJ+"/qxj-dqr/queryBjDkMd",t,!0)},a.getDqrRkTj=function(t){return d.default.postDes(n.API_BASE_QXJ+"/qxj-dqr/queryBjDkRkTj",t,!0)},a.getDqrXsXq=function(t){return d.default.postDes(n.API_BASE_QXJ+"/qxj-dqr/queryXsDkXq",t,!0)},a.getLdzbList=function(t){return d.default.postDes(n.API_BASE_SSGL+"/s
+
+### ywViews-qxjlfx-bpa-report.a109284a.js :: studentDk @27477
+nction(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-dkcb/saveHt",t,!0)},a.saveLdzb=function(t){return n.default.postDes(s.API_BASE_SSGL+"/ss-ldxx/saveLdzbCj",t,!0)},a.sendDkcb=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-dkcb/sendCb",t,!0)},a.studentDk=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-padkglxx/xspadk",t,!0)},a.submitBpa=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-bpa/submitBpa",t,!0)},a.submitDqr=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-dqr/sa
+
+### ywViews-qxjlfx-bpa-report.a109284a.js :: checkDkLocation @23794
+API_BASE_QXJ+"/qxj-lxxsfxxx/save",t,!0)},a.addStudentLxsbInfo=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-lxxslxxx/saveOrUpdate",t,!0)},a.batchReportLxsbInfo=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-lfxrsbbxx/batchSave",t,!0)},a.checkDkLocation=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-padkglxx/jcqqwzsjsfndk",t,!0)},a.checkQxjTime=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-xsqjxx/checkQjsj",t,!0)},a.checkXjfw=function(t){return n.default.postDes(s.API_BA
+
+### ywViews-qxjlfx-bpa-report.a109284a.js :: getDqrRkTj @25755
+n n.default.postDes(s.API_BASE_QXJ+"/qxj-dktz/queryMyTzPage",t,!0)},a.getDqrBjLs=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-dqr/queryBjDkLs",t,!0)},a.getDqrBjMd=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-dqr/queryBjDkMd",t,!0)},a.getDqrRkTj=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-dqr/queryBjDkRkTj",t,!0)},a.getDqrXsXq=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-dqr/queryXsDkXq",t,!0)},a.getLdzbList=function(t){return n.default.postDes(s.API_BASE_SSGL+"/s
+
+### ywViews-qxjlfx-bpa-urge.4cfe1c2c.js :: studentDk @7913
+nction(t){return d.default.postDes(n.API_BASE_QXJ+"/qxj-dkcb/saveHt",t,!0)},e.saveLdzb=function(t){return d.default.postDes(n.API_BASE_SSGL+"/ss-ldxx/saveLdzbCj",t,!0)},e.sendDkcb=function(t){return d.default.postDes(n.API_BASE_QXJ+"/qxj-dkcb/sendCb",t,!0)},e.studentDk=function(t){return d.default.postDes(n.API_BASE_QXJ+"/qxj-padkglxx/xspadk",t,!0)},e.submitBpa=function(t){return d.default.postDes(n.API_BASE_QXJ+"/qxj-bpa/submitBpa",t,!0)},e.submitDqr=function(t){return d.default.postDes(n.API_BASE_QXJ+"/qxj-dqr/sa
+
+### ywViews-qxjlfx-bpa-urge.4cfe1c2c.js :: checkDkLocation @4230
+API_BASE_QXJ+"/qxj-lxxsfxxx/save",t,!0)},e.addStudentLxsbInfo=function(t){return d.default.postDes(n.API_BASE_QXJ+"/qxj-lxxslxxx/saveOrUpdate",t,!0)},e.batchReportLxsbInfo=function(t){return d.default.postDes(n.API_BASE_QXJ+"/qxj-lfxrsbbxx/batchSave",t,!0)},e.checkDkLocation=function(t){return d.default.postDes(n.API_BASE_QXJ+"/qxj-padkglxx/jcqqwzsjsfndk",t,!0)},e.checkQxjTime=function(t){return d.default.postDes(n.API_BASE_QXJ+"/qxj-xsqjxx/checkQjsj",t,!0)},e.checkXjfw=function(t){return d.default.postDes(n.API_BA
+
+### ywViews-qxjlfx-bpa-urge.4cfe1c2c.js :: getDqrRkTj @6191
+n d.default.postDes(n.API_BASE_QXJ+"/qxj-dktz/queryMyTzPage",t,!0)},e.getDqrBjLs=function(t){return d.default.postDes(n.API_BASE_QXJ+"/qxj-dqr/queryBjDkLs",t,!0)},e.getDqrBjMd=function(t){return d.default.postDes(n.API_BASE_QXJ+"/qxj-dqr/queryBjDkMd",t,!0)},e.getDqrRkTj=function(t){return d.default.postDes(n.API_BASE_QXJ+"/qxj-dqr/queryBjDkRkTj",t,!0)},e.getDqrXsXq=function(t){return d.default.postDes(n.API_BASE_QXJ+"/qxj-dqr/queryXsDkXq",t,!0)},e.getLdzbList=function(t){return d.default.postDes(n.API_BASE_SSGL+"/s
+
+### ywViews-qxjlfx-dk-index.822cf527.js :: studentDk @27728
+nction(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-dkcb/saveHt",t,!0)},e.saveLdzb=function(t){return i.default.postDes(r.API_BASE_SSGL+"/ss-ldxx/saveLdzbCj",t,!0)},e.sendDkcb=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-dkcb/sendCb",t,!0)},e.studentDk=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-padkglxx/xspadk",t,!0)},e.submitBpa=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-bpa/submitBpa",t,!0)},e.submitDqr=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/sa
+
+### ywViews-qxjlfx-dk-index.822cf527.js :: studentDk @62576
+st({title:this.unavailable,icon:"none"}):this.isScope?this.doDk():uni.showToast({title:this.locationMsg||"不在考勤范围内",icon:"none"}))},doDk:function(){var t=arguments.length>0&&void 0!==arguments[0]?arguments[0]:{},e=this;this.submitting||(this.submitting=!0,(0,s.studentDk)((0,i.default)({jd:e.longitude,wd:e.latitude,dkbc:e.data.dkbc,dkdz:e.locationName||""},t)).then((function(a){200==a.code?(e.isPunched=!0,e.punchTime=e.formatNowDateTime(),e.isWcdkSuccess=1===t.sfwcdk,e.show=!0):uni.showToast({title:a.message||"打卡失败",
+
+### ywViews-qxjlfx-dk-index.822cf527.js :: checkDkLocation @24045
+API_BASE_QXJ+"/qxj-lxxsfxxx/save",t,!0)},e.addStudentLxsbInfo=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-lxxslxxx/saveOrUpdate",t,!0)},e.batchReportLxsbInfo=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-lfxrsbbxx/batchSave",t,!0)},e.checkDkLocation=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-padkglxx/jcqqwzsjsfndk",t,!0)},e.checkQxjTime=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-xsqjxx/checkQjsj",t,!0)},e.checkXjfw=function(t){return i.default.postDes(r.API_BA
+
+### ywViews-qxjlfx-dk-index.822cf527.js :: checkDkLocation @60690
+itude,a=this.longitude;null!=e&&""!==e&&null!=a&&""!==a&&l.BAIDU_AK&&(0,c.reverseGeocode)({lng:Number(a),lat:Number(e)}).then((function(e){var a=e&&(e.recommend||e.address)||"";t.locationName=a})).catch((function(t){}))},verifyRange:function(){var t=this;(0,s.checkDkLocation)({paramsData:{jd:t.longitude,wd:t.latitude,dklb:t.dklb}}).then((function(e){200==e.code&&e.data&&"object"===(0,r.default)(e.data)?(t.isScope=!!e.data.canDk,t.locationMsg=e.data.msg||"",t.pcMi=null!=e.data.pcMi?e.data.pcMi:null,t.fwMi=null!=e.da
+
+### ywViews-qxjlfx-dk-index.822cf527.js :: getDqrRkTj @26006
+n i.default.postDes(r.API_BASE_QXJ+"/qxj-dktz/queryMyTzPage",t,!0)},e.getDqrBjLs=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/queryBjDkLs",t,!0)},e.getDqrBjMd=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/queryBjDkMd",t,!0)},e.getDqrRkTj=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/queryBjDkRkTj",t,!0)},e.getDqrXsXq=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/queryXsDkXq",t,!0)},e.getLdzbList=function(t){return i.default.postDes(r.API_BASE_SSGL+"/s
+
+### ywViews-qxjlfx-dk-index.822cf527.js :: getDqrRkTj @61143
+msg||"",t.pcMi=null!=e.data.pcMi?e.data.pcMi:null,t.fwMi=null!=e.data.fwMi?e.data.fwMi:null,t.yxMc=e.data.yxMc||""):200==e.code&&(t.isScope=!!e.data,t.locationMsg="",t.pcMi=null,t.fwMi=null,t.yxMc="")}))},loadProxyEntry:function(){var t=this;this.isXnzs&&(0,s.getDqrRkTj)().then((function(e){200==e.code&&e.data&&(t.showProxyEntry=!!e.data.sfbz,t.proxyPendingCount=e.data.wdkrs||0)})).catch((function(){}))},handleProxyBoard:function(){uni.navigateTo({url:"/ywViews/qxjlfx/dqr/board"})},handleWcdk:function(){var t=this;
+
+### ywViews-qxjlfx-dk-rule.bb824f5b.js :: studentDk @7396
+nction(t){return s.default.postDes(r.API_BASE_QXJ+"/qxj-dkcb/saveHt",t,!0)},e.saveLdzb=function(t){return s.default.postDes(r.API_BASE_SSGL+"/ss-ldxx/saveLdzbCj",t,!0)},e.sendDkcb=function(t){return s.default.postDes(r.API_BASE_QXJ+"/qxj-dkcb/sendCb",t,!0)},e.studentDk=function(t){return s.default.postDes(r.API_BASE_QXJ+"/qxj-padkglxx/xspadk",t,!0)},e.submitBpa=function(t){return s.default.postDes(r.API_BASE_QXJ+"/qxj-bpa/submitBpa",t,!0)},e.submitDqr=function(t){return s.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/sa
+
+### ywViews-qxjlfx-dk-rule.bb824f5b.js :: checkDkLocation @3713
+API_BASE_QXJ+"/qxj-lxxsfxxx/save",t,!0)},e.addStudentLxsbInfo=function(t){return s.default.postDes(r.API_BASE_QXJ+"/qxj-lxxslxxx/saveOrUpdate",t,!0)},e.batchReportLxsbInfo=function(t){return s.default.postDes(r.API_BASE_QXJ+"/qxj-lfxrsbbxx/batchSave",t,!0)},e.checkDkLocation=function(t){return s.default.postDes(r.API_BASE_QXJ+"/qxj-padkglxx/jcqqwzsjsfndk",t,!0)},e.checkQxjTime=function(t){return s.default.postDes(r.API_BASE_QXJ+"/qxj-xsqjxx/checkQjsj",t,!0)},e.checkXjfw=function(t){return s.default.postDes(r.API_BA
+
+### ywViews-qxjlfx-dk-rule.bb824f5b.js :: getDqrRkTj @5674
+n s.default.postDes(r.API_BASE_QXJ+"/qxj-dktz/queryMyTzPage",t,!0)},e.getDqrBjLs=function(t){return s.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/queryBjDkLs",t,!0)},e.getDqrBjMd=function(t){return s.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/queryBjDkMd",t,!0)},e.getDqrRkTj=function(t){return s.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/queryBjDkRkTj",t,!0)},e.getDqrXsXq=function(t){return s.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/queryXsDkXq",t,!0)},e.getLdzbList=function(t){return s.default.postDes(r.API_BASE_SSGL+"/s
+
+### ywViews-qxjlfx-dkcb-assist.b4e390a1.js :: studentDk @13496
+nction(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-dkcb/saveHt",t,!0)},a.saveLdzb=function(t){return n.default.postDes(d.API_BASE_SSGL+"/ss-ldxx/saveLdzbCj",t,!0)},a.sendDkcb=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-dkcb/sendCb",t,!0)},a.studentDk=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-padkglxx/xspadk",t,!0)},a.submitBpa=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-bpa/submitBpa",t,!0)},a.submitDqr=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-dqr/sa
+
+### ywViews-qxjlfx-dkcb-assist.b4e390a1.js :: checkDkLocation @9813
+API_BASE_QXJ+"/qxj-lxxsfxxx/save",t,!0)},a.addStudentLxsbInfo=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-lxxslxxx/saveOrUpdate",t,!0)},a.batchReportLxsbInfo=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-lfxrsbbxx/batchSave",t,!0)},a.checkDkLocation=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-padkglxx/jcqqwzsjsfndk",t,!0)},a.checkQxjTime=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-xsqjxx/checkQjsj",t,!0)},a.checkXjfw=function(t){return n.default.postDes(d.API_BA
+
+### ywViews-qxjlfx-dkcb-assist.b4e390a1.js :: getDqrRkTj @11774
+n n.default.postDes(d.API_BASE_QXJ+"/qxj-dktz/queryMyTzPage",t,!0)},a.getDqrBjLs=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-dqr/queryBjDkLs",t,!0)},a.getDqrBjMd=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-dqr/queryBjDkMd",t,!0)},a.getDqrRkTj=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-dqr/queryBjDkRkTj",t,!0)},a.getDqrXsXq=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-dqr/queryXsDkXq",t,!0)},a.getLdzbList=function(t){return n.default.postDes(d.API_BASE_SSGL+"/s
+
+### ywViews-qxjlfx-dkcb-assistFeedback.70224e1d.js :: studentDk @7498
+nction(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-dkcb/saveHt",t,!0)},a.saveLdzb=function(t){return n.default.postDes(d.API_BASE_SSGL+"/ss-ldxx/saveLdzbCj",t,!0)},a.sendDkcb=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-dkcb/sendCb",t,!0)},a.studentDk=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-padkglxx/xspadk",t,!0)},a.submitBpa=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-bpa/submitBpa",t,!0)},a.submitDqr=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-dqr/sa
+
+### ywViews-qxjlfx-dkcb-assistFeedback.70224e1d.js :: checkDkLocation @3815
+API_BASE_QXJ+"/qxj-lxxsfxxx/save",t,!0)},a.addStudentLxsbInfo=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-lxxslxxx/saveOrUpdate",t,!0)},a.batchReportLxsbInfo=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-lfxrsbbxx/batchSave",t,!0)},a.checkDkLocation=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-padkglxx/jcqqwzsjsfndk",t,!0)},a.checkQxjTime=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-xsqjxx/checkQjsj",t,!0)},a.checkXjfw=function(t){return n.default.postDes(d.API_BA
+
+### ywViews-qxjlfx-dkcb-assistFeedback.70224e1d.js :: getDqrRkTj @5776
+n n.default.postDes(d.API_BASE_QXJ+"/qxj-dktz/queryMyTzPage",t,!0)},a.getDqrBjLs=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-dqr/queryBjDkLs",t,!0)},a.getDqrBjMd=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-dqr/queryBjDkMd",t,!0)},a.getDqrRkTj=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-dqr/queryBjDkRkTj",t,!0)},a.getDqrXsXq=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-dqr/queryXsDkXq",t,!0)},a.getLdzbList=function(t){return n.default.postDes(d.API_BASE_SSGL+"/s
+
+### ywViews-qxjlfx-dkcb-history.1f3f82e8.js :: studentDk @15661
+nction(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-dkcb/saveHt",t,!0)},a.saveLdzb=function(t){return n.default.postDes(s.API_BASE_SSGL+"/ss-ldxx/saveLdzbCj",t,!0)},a.sendDkcb=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-dkcb/sendCb",t,!0)},a.studentDk=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-padkglxx/xspadk",t,!0)},a.submitBpa=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-bpa/submitBpa",t,!0)},a.submitDqr=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-dqr/sa
+
+### ywViews-qxjlfx-dkcb-history.1f3f82e8.js :: checkDkLocation @11978
+API_BASE_QXJ+"/qxj-lxxsfxxx/save",t,!0)},a.addStudentLxsbInfo=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-lxxslxxx/saveOrUpdate",t,!0)},a.batchReportLxsbInfo=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-lfxrsbbxx/batchSave",t,!0)},a.checkDkLocation=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-padkglxx/jcqqwzsjsfndk",t,!0)},a.checkQxjTime=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-xsqjxx/checkQjsj",t,!0)},a.checkXjfw=function(t){return n.default.postDes(s.API_BA
+
+### ywViews-qxjlfx-dkcb-history.1f3f82e8.js :: getDqrRkTj @13939
+n n.default.postDes(s.API_BASE_QXJ+"/qxj-dktz/queryMyTzPage",t,!0)},a.getDqrBjLs=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-dqr/queryBjDkLs",t,!0)},a.getDqrBjMd=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-dqr/queryBjDkMd",t,!0)},a.getDqrRkTj=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-dqr/queryBjDkRkTj",t,!0)},a.getDqrXsXq=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-dqr/queryXsDkXq",t,!0)},a.getLdzbList=function(t){return n.default.postDes(s.API_BASE_SSGL+"/s
+
+### ywViews-qxjlfx-dkcb-message.1961672f.js :: studentDk @6255
+nction(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-dkcb/saveHt",t,!0)},a.saveLdzb=function(t){return n.default.postDes(d.API_BASE_SSGL+"/ss-ldxx/saveLdzbCj",t,!0)},a.sendDkcb=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-dkcb/sendCb",t,!0)},a.studentDk=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-padkglxx/xspadk",t,!0)},a.submitBpa=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-bpa/submitBpa",t,!0)},a.submitDqr=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-dqr/sa
+
+### ywViews-qxjlfx-dkcb-message.1961672f.js :: checkDkLocation @2572
+API_BASE_QXJ+"/qxj-lxxsfxxx/save",t,!0)},a.addStudentLxsbInfo=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-lxxslxxx/saveOrUpdate",t,!0)},a.batchReportLxsbInfo=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-lfxrsbbxx/batchSave",t,!0)},a.checkDkLocation=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-padkglxx/jcqqwzsjsfndk",t,!0)},a.checkQxjTime=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-xsqjxx/checkQjsj",t,!0)},a.checkXjfw=function(t){return n.default.postDes(d.API_BA
+
+### ywViews-qxjlfx-dkcb-message.1961672f.js :: getDqrRkTj @4533
+n n.default.postDes(d.API_BASE_QXJ+"/qxj-dktz/queryMyTzPage",t,!0)},a.getDqrBjLs=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-dqr/queryBjDkLs",t,!0)},a.getDqrBjMd=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-dqr/queryBjDkMd",t,!0)},a.getDqrRkTj=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-dqr/queryBjDkRkTj",t,!0)},a.getDqrXsXq=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-dqr/queryXsDkXq",t,!0)},a.getLdzbList=function(t){return n.default.postDes(d.API_BASE_SSGL+"/s
+
+### ywViews-qxjlfx-dkcb-messageDetail.2ec60443.js :: studentDk @18598
+nction(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-dkcb/saveHt",t,!0)},a.saveLdzb=function(t){return n.default.postDes(s.API_BASE_SSGL+"/ss-ldxx/saveLdzbCj",t,!0)},a.sendDkcb=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-dkcb/sendCb",t,!0)},a.studentDk=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-padkglxx/xspadk",t,!0)},a.submitBpa=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-bpa/submitBpa",t,!0)},a.submitDqr=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-dqr/sa
+
+### ywViews-qxjlfx-dkcb-messageDetail.2ec60443.js :: checkDkLocation @14915
+API_BASE_QXJ+"/qxj-lxxsfxxx/save",t,!0)},a.addStudentLxsbInfo=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-lxxslxxx/saveOrUpdate",t,!0)},a.batchReportLxsbInfo=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-lfxrsbbxx/batchSave",t,!0)},a.checkDkLocation=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-padkglxx/jcqqwzsjsfndk",t,!0)},a.checkQxjTime=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-xsqjxx/checkQjsj",t,!0)},a.checkXjfw=function(t){return n.default.postDes(s.API_BA
+
+### ywViews-qxjlfx-dkcb-messageDetail.2ec60443.js :: getDqrRkTj @16876
+n n.default.postDes(s.API_BASE_QXJ+"/qxj-dktz/queryMyTzPage",t,!0)},a.getDqrBjLs=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-dqr/queryBjDkLs",t,!0)},a.getDqrBjMd=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-dqr/queryBjDkMd",t,!0)},a.getDqrRkTj=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-dqr/queryBjDkRkTj",t,!0)},a.getDqrXsXq=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-dqr/queryXsDkXq",t,!0)},a.getLdzbList=function(t){return n.default.postDes(s.API_BASE_SSGL+"/s
+
+### ywViews-qxjlfx-dkcb-urgeConfirm.98da0cb7.js :: studentDk @4359
+nction(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-dkcb/saveHt",t,!0)},a.saveLdzb=function(t){return n.default.postDes(d.API_BASE_SSGL+"/ss-ldxx/saveLdzbCj",t,!0)},a.sendDkcb=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-dkcb/sendCb",t,!0)},a.studentDk=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-padkglxx/xspadk",t,!0)},a.submitBpa=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-bpa/submitBpa",t,!0)},a.submitDqr=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-dqr/sa
+
+### ywViews-qxjlfx-dkcb-urgeConfirm.98da0cb7.js :: checkDkLocation @676
+API_BASE_QXJ+"/qxj-lxxsfxxx/save",t,!0)},a.addStudentLxsbInfo=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-lxxslxxx/saveOrUpdate",t,!0)},a.batchReportLxsbInfo=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-lfxrsbbxx/batchSave",t,!0)},a.checkDkLocation=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-padkglxx/jcqqwzsjsfndk",t,!0)},a.checkQxjTime=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-xsqjxx/checkQjsj",t,!0)},a.checkXjfw=function(t){return n.default.postDes(d.API_BA
+
+### ywViews-qxjlfx-dkcb-urgeConfirm.98da0cb7.js :: getDqrRkTj @2637
+n n.default.postDes(d.API_BASE_QXJ+"/qxj-dktz/queryMyTzPage",t,!0)},a.getDqrBjLs=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-dqr/queryBjDkLs",t,!0)},a.getDqrBjMd=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-dqr/queryBjDkMd",t,!0)},a.getDqrRkTj=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-dqr/queryBjDkRkTj",t,!0)},a.getDqrXsXq=function(t){return n.default.postDes(d.API_BASE_QXJ+"/qxj-dqr/queryXsDkXq",t,!0)},a.getLdzbList=function(t){return n.default.postDes(d.API_BASE_SSGL+"/s
+
+### ywViews-qxjlfx-dkcb-urgeResult.6c84e293.js :: studentDk @8389
+nction(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-dkcb/saveHt",t,!0)},e.saveLdzb=function(t){return n.default.postDes(s.API_BASE_SSGL+"/ss-ldxx/saveLdzbCj",t,!0)},e.sendDkcb=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-dkcb/sendCb",t,!0)},e.studentDk=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-padkglxx/xspadk",t,!0)},e.submitBpa=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-bpa/submitBpa",t,!0)},e.submitDqr=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-dqr/sa
+
+### ywViews-qxjlfx-dkcb-urgeResult.6c84e293.js :: checkDkLocation @4706
+API_BASE_QXJ+"/qxj-lxxsfxxx/save",t,!0)},e.addStudentLxsbInfo=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-lxxslxxx/saveOrUpdate",t,!0)},e.batchReportLxsbInfo=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-lfxrsbbxx/batchSave",t,!0)},e.checkDkLocation=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-padkglxx/jcqqwzsjsfndk",t,!0)},e.checkQxjTime=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-xsqjxx/checkQjsj",t,!0)},e.checkXjfw=function(t){return n.default.postDes(s.API_BA
+
+### ywViews-qxjlfx-dkcb-urgeResult.6c84e293.js :: getDqrRkTj @6667
+n n.default.postDes(s.API_BASE_QXJ+"/qxj-dktz/queryMyTzPage",t,!0)},e.getDqrBjLs=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-dqr/queryBjDkLs",t,!0)},e.getDqrBjMd=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-dqr/queryBjDkMd",t,!0)},e.getDqrRkTj=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-dqr/queryBjDkRkTj",t,!0)},e.getDqrXsXq=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-dqr/queryXsDkXq",t,!0)},e.getLdzbList=function(t){return n.default.postDes(s.API_BASE_SSGL+"/s
+
+### ywViews-qxjlfx-dqr-board.f9164b7b.js :: studentDk @7717
+nction(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-dkcb/saveHt",t,!0)},a.saveLdzb=function(t){return n.default.postDes(s.API_BASE_SSGL+"/ss-ldxx/saveLdzbCj",t,!0)},a.sendDkcb=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-dkcb/sendCb",t,!0)},a.studentDk=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-padkglxx/xspadk",t,!0)},a.submitBpa=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-bpa/submitBpa",t,!0)},a.submitDqr=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-dqr/sa
+
+### ywViews-qxjlfx-dqr-board.f9164b7b.js :: checkDkLocation @4034
+API_BASE_QXJ+"/qxj-lxxsfxxx/save",t,!0)},a.addStudentLxsbInfo=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-lxxslxxx/saveOrUpdate",t,!0)},a.batchReportLxsbInfo=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-lfxrsbbxx/batchSave",t,!0)},a.checkDkLocation=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-padkglxx/jcqqwzsjsfndk",t,!0)},a.checkQxjTime=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-xsqjxx/checkQjsj",t,!0)},a.checkXjfw=function(t){return n.default.postDes(s.API_BA
+
+### ywViews-qxjlfx-dqr-board.f9164b7b.js :: getDqrRkTj @5995
+n n.default.postDes(s.API_BASE_QXJ+"/qxj-dktz/queryMyTzPage",t,!0)},a.getDqrBjLs=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-dqr/queryBjDkLs",t,!0)},a.getDqrBjMd=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-dqr/queryBjDkMd",t,!0)},a.getDqrRkTj=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-dqr/queryBjDkRkTj",t,!0)},a.getDqrXsXq=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-dqr/queryXsDkXq",t,!0)},a.getLdzbList=function(t){return n.default.postDes(s.API_BASE_SSGL+"/s
+
+### ywViews-qxjlfx-dqr-confirm.45343b12.js :: studentDk @33943
+nction(t){return n.default.postDes(o.API_BASE_QXJ+"/qxj-dkcb/saveHt",t,!0)},e.saveLdzb=function(t){return n.default.postDes(o.API_BASE_SSGL+"/ss-ldxx/saveLdzbCj",t,!0)},e.sendDkcb=function(t){return n.default.postDes(o.API_BASE_QXJ+"/qxj-dkcb/sendCb",t,!0)},e.studentDk=function(t){return n.default.postDes(o.API_BASE_QXJ+"/qxj-padkglxx/xspadk",t,!0)},e.submitBpa=function(t){return n.default.postDes(o.API_BASE_QXJ+"/qxj-bpa/submitBpa",t,!0)},e.submitDqr=function(t){return n.default.postDes(o.API_BASE_QXJ+"/qxj-dqr/sa
+
+### ywViews-qxjlfx-dqr-confirm.45343b12.js :: checkDkLocation @30260
+API_BASE_QXJ+"/qxj-lxxsfxxx/save",t,!0)},e.addStudentLxsbInfo=function(t){return n.default.postDes(o.API_BASE_QXJ+"/qxj-lxxslxxx/saveOrUpdate",t,!0)},e.batchReportLxsbInfo=function(t){return n.default.postDes(o.API_BASE_QXJ+"/qxj-lfxrsbbxx/batchSave",t,!0)},e.checkDkLocation=function(t){return n.default.postDes(o.API_BASE_QXJ+"/qxj-padkglxx/jcqqwzsjsfndk",t,!0)},e.checkQxjTime=function(t){return n.default.postDes(o.API_BASE_QXJ+"/qxj-xsqjxx/checkQjsj",t,!0)},e.checkXjfw=function(t){return n.default.postDes(o.API_BA
+
+### ywViews-qxjlfx-dqr-confirm.45343b12.js :: getDqrRkTj @32221
+n n.default.postDes(o.API_BASE_QXJ+"/qxj-dktz/queryMyTzPage",t,!0)},e.getDqrBjLs=function(t){return n.default.postDes(o.API_BASE_QXJ+"/qxj-dqr/queryBjDkLs",t,!0)},e.getDqrBjMd=function(t){return n.default.postDes(o.API_BASE_QXJ+"/qxj-dqr/queryBjDkMd",t,!0)},e.getDqrRkTj=function(t){return n.default.postDes(o.API_BASE_QXJ+"/qxj-dqr/queryBjDkRkTj",t,!0)},e.getDqrXsXq=function(t){return n.default.postDes(o.API_BASE_QXJ+"/qxj-dqr/queryXsDkXq",t,!0)},e.getLdzbList=function(t){return n.default.postDes(o.API_BASE_SSGL+"/s
+
+### ywViews-qxjlfx-dqr-history.43376496.js :: studentDk @6899
+nction(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-dkcb/saveHt",t,!0)},a.saveLdzb=function(t){return n.default.postDes(s.API_BASE_SSGL+"/ss-ldxx/saveLdzbCj",t,!0)},a.sendDkcb=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-dkcb/sendCb",t,!0)},a.studentDk=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-padkglxx/xspadk",t,!0)},a.submitBpa=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-bpa/submitBpa",t,!0)},a.submitDqr=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-dqr/sa
+
+### ywViews-qxjlfx-dqr-history.43376496.js :: checkDkLocation @3216
+API_BASE_QXJ+"/qxj-lxxsfxxx/save",t,!0)},a.addStudentLxsbInfo=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-lxxslxxx/saveOrUpdate",t,!0)},a.batchReportLxsbInfo=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-lfxrsbbxx/batchSave",t,!0)},a.checkDkLocation=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-padkglxx/jcqqwzsjsfndk",t,!0)},a.checkQxjTime=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-xsqjxx/checkQjsj",t,!0)},a.checkXjfw=function(t){return n.default.postDes(s.API_BA
+
+### ywViews-qxjlfx-dqr-history.43376496.js :: getDqrRkTj @5177
+n n.default.postDes(s.API_BASE_QXJ+"/qxj-dktz/queryMyTzPage",t,!0)},a.getDqrBjLs=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-dqr/queryBjDkLs",t,!0)},a.getDqrBjMd=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-dqr/queryBjDkMd",t,!0)},a.getDqrRkTj=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-dqr/queryBjDkRkTj",t,!0)},a.getDqrXsXq=function(t){return n.default.postDes(s.API_BASE_QXJ+"/qxj-dqr/queryXsDkXq",t,!0)},a.getLdzbList=function(t){return n.default.postDes(s.API_BASE_SSGL+"/s
+
+### ywViews-qxjlfx-dqr-student.aa801782.js :: studentDk @21063
+nction(t){return s.default.postDes(n.API_BASE_QXJ+"/qxj-dkcb/saveHt",t,!0)},a.saveLdzb=function(t){return s.default.postDes(n.API_BASE_SSGL+"/ss-ldxx/saveLdzbCj",t,!0)},a.sendDkcb=function(t){return s.default.postDes(n.API_BASE_QXJ+"/qxj-dkcb/sendCb",t,!0)},a.studentDk=function(t){return s.default.postDes(n.API_BASE_QXJ+"/qxj-padkglxx/xspadk",t,!0)},a.submitBpa=function(t){return s.default.postDes(n.API_BASE_QXJ+"/qxj-bpa/submitBpa",t,!0)},a.submitDqr=function(t){return s.default.postDes(n.API_BASE_QXJ+"/qxj-dqr/sa
+
+### ywViews-qxjlfx-dqr-student.aa801782.js :: checkDkLocation @17380
+API_BASE_QXJ+"/qxj-lxxsfxxx/save",t,!0)},a.addStudentLxsbInfo=function(t){return s.default.postDes(n.API_BASE_QXJ+"/qxj-lxxslxxx/saveOrUpdate",t,!0)},a.batchReportLxsbInfo=function(t){return s.default.postDes(n.API_BASE_QXJ+"/qxj-lfxrsbbxx/batchSave",t,!0)},a.checkDkLocation=function(t){return s.default.postDes(n.API_BASE_QXJ+"/qxj-padkglxx/jcqqwzsjsfndk",t,!0)},a.checkQxjTime=function(t){return s.default.postDes(n.API_BASE_QXJ+"/qxj-xsqjxx/checkQjsj",t,!0)},a.checkXjfw=function(t){return s.default.postDes(n.API_BA
+
+### ywViews-qxjlfx-dqr-student.aa801782.js :: getDqrRkTj @19341
+n s.default.postDes(n.API_BASE_QXJ+"/qxj-dktz/queryMyTzPage",t,!0)},a.getDqrBjLs=function(t){return s.default.postDes(n.API_BASE_QXJ+"/qxj-dqr/queryBjDkLs",t,!0)},a.getDqrBjMd=function(t){return s.default.postDes(n.API_BASE_QXJ+"/qxj-dqr/queryBjDkMd",t,!0)},a.getDqrRkTj=function(t){return s.default.postDes(n.API_BASE_QXJ+"/qxj-dqr/queryBjDkRkTj",t,!0)},a.getDqrXsXq=function(t){return s.default.postDes(n.API_BASE_QXJ+"/qxj-dqr/queryXsDkXq",t,!0)},a.getLdzbList=function(t){return s.default.postDes(n.API_BASE_SSGL+"/s
+
+### ywViews-qxjlfx-jjrlfx-fxdj.40398471.js :: studentDk @72206
+nction(t){return a.default.postDes(r.API_BASE_QXJ+"/qxj-dkcb/saveHt",t,!0)},e.saveLdzb=function(t){return a.default.postDes(r.API_BASE_SSGL+"/ss-ldxx/saveLdzbCj",t,!0)},e.sendDkcb=function(t){return a.default.postDes(r.API_BASE_QXJ+"/qxj-dkcb/sendCb",t,!0)},e.studentDk=function(t){return a.default.postDes(r.API_BASE_QXJ+"/qxj-padkglxx/xspadk",t,!0)},e.submitBpa=function(t){return a.default.postDes(r.API_BASE_QXJ+"/qxj-bpa/submitBpa",t,!0)},e.submitDqr=function(t){return a.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/sa
+
+### ywViews-qxjlfx-jjrlfx-fxdj.40398471.js :: checkDkLocation @68523
+API_BASE_QXJ+"/qxj-lxxsfxxx/save",t,!0)},e.addStudentLxsbInfo=function(t){return a.default.postDes(r.API_BASE_QXJ+"/qxj-lxxslxxx/saveOrUpdate",t,!0)},e.batchReportLxsbInfo=function(t){return a.default.postDes(r.API_BASE_QXJ+"/qxj-lfxrsbbxx/batchSave",t,!0)},e.checkDkLocation=function(t){return a.default.postDes(r.API_BASE_QXJ+"/qxj-padkglxx/jcqqwzsjsfndk",t,!0)},e.checkQxjTime=function(t){return a.default.postDes(r.API_BASE_QXJ+"/qxj-xsqjxx/checkQjsj",t,!0)},e.checkXjfw=function(t){return a.default.postDes(r.API_BA
+
+### ywViews-qxjlfx-jjrlfx-fxdj.40398471.js :: getDqrRkTj @70484
+n a.default.postDes(r.API_BASE_QXJ+"/qxj-dktz/queryMyTzPage",t,!0)},e.getDqrBjLs=function(t){return a.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/queryBjDkLs",t,!0)},e.getDqrBjMd=function(t){return a.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/queryBjDkMd",t,!0)},e.getDqrRkTj=function(t){return a.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/queryBjDkRkTj",t,!0)},e.getDqrXsXq=function(t){return a.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/queryXsDkXq",t,!0)},e.getLdzbList=function(t){return a.default.postDes(r.API_BASE_SSGL+"/s
+
+### ywViews-qxjlfx-jjrlfx-index.95950e44.js :: studentDk @14855
+nction(t){return n.default.postDes(o.API_BASE_QXJ+"/qxj-dkcb/saveHt",t,!0)},e.saveLdzb=function(t){return n.default.postDes(o.API_BASE_SSGL+"/ss-ldxx/saveLdzbCj",t,!0)},e.sendDkcb=function(t){return n.default.postDes(o.API_BASE_QXJ+"/qxj-dkcb/sendCb",t,!0)},e.studentDk=function(t){return n.default.postDes(o.API_BASE_QXJ+"/qxj-padkglxx/xspadk",t,!0)},e.submitBpa=function(t){return n.default.postDes(o.API_BASE_QXJ+"/qxj-bpa/submitBpa",t,!0)},e.submitDqr=function(t){return n.default.postDes(o.API_BASE_QXJ+"/qxj-dqr/sa
+
+### ywViews-qxjlfx-jjrlfx-index.95950e44.js :: checkDkLocation @11172
+API_BASE_QXJ+"/qxj-lxxsfxxx/save",t,!0)},e.addStudentLxsbInfo=function(t){return n.default.postDes(o.API_BASE_QXJ+"/qxj-lxxslxxx/saveOrUpdate",t,!0)},e.batchReportLxsbInfo=function(t){return n.default.postDes(o.API_BASE_QXJ+"/qxj-lfxrsbbxx/batchSave",t,!0)},e.checkDkLocation=function(t){return n.default.postDes(o.API_BASE_QXJ+"/qxj-padkglxx/jcqqwzsjsfndk",t,!0)},e.checkQxjTime=function(t){return n.default.postDes(o.API_BASE_QXJ+"/qxj-xsqjxx/checkQjsj",t,!0)},e.checkXjfw=function(t){return n.default.postDes(o.API_BA
+
+### ywViews-qxjlfx-jjrlfx-index.95950e44.js :: getDqrRkTj @13133
+n n.default.postDes(o.API_BASE_QXJ+"/qxj-dktz/queryMyTzPage",t,!0)},e.getDqrBjLs=function(t){return n.default.postDes(o.API_BASE_QXJ+"/qxj-dqr/queryBjDkLs",t,!0)},e.getDqrBjMd=function(t){return n.default.postDes(o.API_BASE_QXJ+"/qxj-dqr/queryBjDkMd",t,!0)},e.getDqrRkTj=function(t){return n.default.postDes(o.API_BASE_QXJ+"/qxj-dqr/queryBjDkRkTj",t,!0)},e.getDqrXsXq=function(t){return n.default.postDes(o.API_BASE_QXJ+"/qxj-dqr/queryXsDkXq",t,!0)},e.getLdzbList=function(t){return n.default.postDes(o.API_BASE_SSGL+"/s
+
+### ywViews-qxjlfx-jjrlfx-lxbb.02c1db21.js :: studentDk @99060
+nction(e){return n.default.postDes(r.API_BASE_QXJ+"/qxj-dkcb/saveHt",e,!0)},t.saveLdzb=function(e){return n.default.postDes(r.API_BASE_SSGL+"/ss-ldxx/saveLdzbCj",e,!0)},t.sendDkcb=function(e){return n.default.postDes(r.API_BASE_QXJ+"/qxj-dkcb/sendCb",e,!0)},t.studentDk=function(e){return n.default.postDes(r.API_BASE_QXJ+"/qxj-padkglxx/xspadk",e,!0)},t.submitBpa=function(e){return n.default.postDes(r.API_BASE_QXJ+"/qxj-bpa/submitBpa",e,!0)},t.submitDqr=function(e){return n.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/sa
+
+### ywViews-qxjlfx-jjrlfx-lxbb.02c1db21.js :: checkDkLocation @95377
+API_BASE_QXJ+"/qxj-lxxsfxxx/save",e,!0)},t.addStudentLxsbInfo=function(e){return n.default.postDes(r.API_BASE_QXJ+"/qxj-lxxslxxx/saveOrUpdate",e,!0)},t.batchReportLxsbInfo=function(e){return n.default.postDes(r.API_BASE_QXJ+"/qxj-lfxrsbbxx/batchSave",e,!0)},t.checkDkLocation=function(e){return n.default.postDes(r.API_BASE_QXJ+"/qxj-padkglxx/jcqqwzsjsfndk",e,!0)},t.checkQxjTime=function(e){return n.default.postDes(r.API_BASE_QXJ+"/qxj-xsqjxx/checkQjsj",e,!0)},t.checkXjfw=function(e){return n.default.postDes(r.API_BA
+
+### ywViews-qxjlfx-jjrlfx-lxbb.02c1db21.js :: getDqrRkTj @97338
+n n.default.postDes(r.API_BASE_QXJ+"/qxj-dktz/queryMyTzPage",e,!0)},t.getDqrBjLs=function(e){return n.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/queryBjDkLs",e,!0)},t.getDqrBjMd=function(e){return n.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/queryBjDkMd",e,!0)},t.getDqrRkTj=function(e){return n.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/queryBjDkRkTj",e,!0)},t.getDqrXsXq=function(e){return n.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/queryXsDkXq",e,!0)},t.getLdzbList=function(e){return n.default.postDes(r.API_BASE_SSGL+"/s
+
+### ywViews-qxjlfx-jjrlfx-yqfx.7635f89b.js :: studentDk @53640
+nction(t){return n.default.postDes(o.API_BASE_QXJ+"/qxj-dkcb/saveHt",t,!0)},e.saveLdzb=function(t){return n.default.postDes(o.API_BASE_SSGL+"/ss-ldxx/saveLdzbCj",t,!0)},e.sendDkcb=function(t){return n.default.postDes(o.API_BASE_QXJ+"/qxj-dkcb/sendCb",t,!0)},e.studentDk=function(t){return n.default.postDes(o.API_BASE_QXJ+"/qxj-padkglxx/xspadk",t,!0)},e.submitBpa=function(t){return n.default.postDes(o.API_BASE_QXJ+"/qxj-bpa/submitBpa",t,!0)},e.submitDqr=function(t){return n.default.postDes(o.API_BASE_QXJ+"/qxj-dqr/sa
+
+### ywViews-qxjlfx-jjrlfx-yqfx.7635f89b.js :: checkDkLocation @49957
+API_BASE_QXJ+"/qxj-lxxsfxxx/save",t,!0)},e.addStudentLxsbInfo=function(t){return n.default.postDes(o.API_BASE_QXJ+"/qxj-lxxslxxx/saveOrUpdate",t,!0)},e.batchReportLxsbInfo=function(t){return n.default.postDes(o.API_BASE_QXJ+"/qxj-lfxrsbbxx/batchSave",t,!0)},e.checkDkLocation=function(t){return n.default.postDes(o.API_BASE_QXJ+"/qxj-padkglxx/jcqqwzsjsfndk",t,!0)},e.checkQxjTime=function(t){return n.default.postDes(o.API_BASE_QXJ+"/qxj-xsqjxx/checkQjsj",t,!0)},e.checkXjfw=function(t){return n.default.postDes(o.API_BA
+
+### ywViews-qxjlfx-jjrlfx-yqfx.7635f89b.js :: getDqrRkTj @51918
+n n.default.postDes(o.API_BASE_QXJ+"/qxj-dktz/queryMyTzPage",t,!0)},e.getDqrBjLs=function(t){return n.default.postDes(o.API_BASE_QXJ+"/qxj-dqr/queryBjDkLs",t,!0)},e.getDqrBjMd=function(t){return n.default.postDes(o.API_BASE_QXJ+"/qxj-dqr/queryBjDkMd",t,!0)},e.getDqrRkTj=function(t){return n.default.postDes(o.API_BASE_QXJ+"/qxj-dqr/queryBjDkRkTj",t,!0)},e.getDqrXsXq=function(t){return n.default.postDes(o.API_BASE_QXJ+"/qxj-dqr/queryXsDkXq",t,!0)},e.getLdzbList=function(t){return n.default.postDes(o.API_BASE_SSGL+"/s
+
+### ywViews-qxjlfx-ldzb-collect.f3b910f4.js :: studentDk @18646
+nction(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-dkcb/saveHt",t,!0)},a.saveLdzb=function(t){return i.default.postDes(r.API_BASE_SSGL+"/ss-ldxx/saveLdzbCj",t,!0)},a.sendDkcb=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-dkcb/sendCb",t,!0)},a.studentDk=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-padkglxx/xspadk",t,!0)},a.submitBpa=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-bpa/submitBpa",t,!0)},a.submitDqr=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/sa
+
+### ywViews-qxjlfx-ldzb-collect.f3b910f4.js :: checkDkLocation @14963
+API_BASE_QXJ+"/qxj-lxxsfxxx/save",t,!0)},a.addStudentLxsbInfo=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-lxxslxxx/saveOrUpdate",t,!0)},a.batchReportLxsbInfo=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-lfxrsbbxx/batchSave",t,!0)},a.checkDkLocation=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-padkglxx/jcqqwzsjsfndk",t,!0)},a.checkQxjTime=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-xsqjxx/checkQjsj",t,!0)},a.checkXjfw=function(t){return i.default.postDes(r.API_BA
+
+### ywViews-qxjlfx-ldzb-collect.f3b910f4.js :: getDqrRkTj @16924
+n i.default.postDes(r.API_BASE_QXJ+"/qxj-dktz/queryMyTzPage",t,!0)},a.getDqrBjLs=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/queryBjDkLs",t,!0)},a.getDqrBjMd=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/queryBjDkMd",t,!0)},a.getDqrRkTj=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/queryBjDkRkTj",t,!0)},a.getDqrXsXq=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/queryXsDkXq",t,!0)},a.getLdzbList=function(t){return i.default.postDes(r.API_BASE_SSGL+"/s
+
+### ywViews-qxjlfx-ldzb-list.639309f5.js :: studentDk @9587
+nction(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-dkcb/saveHt",t,!0)},a.saveLdzb=function(t){return i.default.postDes(r.API_BASE_SSGL+"/ss-ldxx/saveLdzbCj",t,!0)},a.sendDkcb=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-dkcb/sendCb",t,!0)},a.studentDk=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-padkglxx/xspadk",t,!0)},a.submitBpa=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-bpa/submitBpa",t,!0)},a.submitDqr=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/sa
+
+### ywViews-qxjlfx-ldzb-list.639309f5.js :: checkDkLocation @5904
+API_BASE_QXJ+"/qxj-lxxsfxxx/save",t,!0)},a.addStudentLxsbInfo=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-lxxslxxx/saveOrUpdate",t,!0)},a.batchReportLxsbInfo=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-lfxrsbbxx/batchSave",t,!0)},a.checkDkLocation=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-padkglxx/jcqqwzsjsfndk",t,!0)},a.checkQxjTime=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-xsqjxx/checkQjsj",t,!0)},a.checkXjfw=function(t){return i.default.postDes(r.API_BA
+
+### ywViews-qxjlfx-ldzb-list.639309f5.js :: getDqrRkTj @7865
+n i.default.postDes(r.API_BASE_QXJ+"/qxj-dktz/queryMyTzPage",t,!0)},a.getDqrBjLs=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/queryBjDkLs",t,!0)},a.getDqrBjMd=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/queryBjDkMd",t,!0)},a.getDqrRkTj=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/queryBjDkRkTj",t,!0)},a.getDqrXsXq=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/queryXsDkXq",t,!0)},a.getLdzbList=function(t){return i.default.postDes(r.API_BASE_SSGL+"/s
+
+### ywViews-qxjlfx-lfxrsbb-rsbb.d5316e20.js :: studentDk @21958
+nction(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-dkcb/saveHt",t,!0)},e.saveLdzb=function(t){return i.default.postDes(r.API_BASE_SSGL+"/ss-ldxx/saveLdzbCj",t,!0)},e.sendDkcb=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-dkcb/sendCb",t,!0)},e.studentDk=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-padkglxx/xspadk",t,!0)},e.submitBpa=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-bpa/submitBpa",t,!0)},e.submitDqr=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/sa
+
+### ywViews-qxjlfx-lfxrsbb-rsbb.d5316e20.js :: checkDkLocation @18275
+API_BASE_QXJ+"/qxj-lxxsfxxx/save",t,!0)},e.addStudentLxsbInfo=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-lxxslxxx/saveOrUpdate",t,!0)},e.batchReportLxsbInfo=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-lfxrsbbxx/batchSave",t,!0)},e.checkDkLocation=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-padkglxx/jcqqwzsjsfndk",t,!0)},e.checkQxjTime=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-xsqjxx/checkQjsj",t,!0)},e.checkXjfw=function(t){return i.default.postDes(r.API_BA
+
+### ywViews-qxjlfx-lfxrsbb-rsbb.d5316e20.js :: getDqrRkTj @20236
+n i.default.postDes(r.API_BASE_QXJ+"/qxj-dktz/queryMyTzPage",t,!0)},e.getDqrBjLs=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/queryBjDkLs",t,!0)},e.getDqrBjMd=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/queryBjDkMd",t,!0)},e.getDqrRkTj=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/queryBjDkRkTj",t,!0)},e.getDqrXsXq=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/queryXsDkXq",t,!0)},e.getLdzbList=function(t){return i.default.postDes(r.API_BASE_SSGL+"/s
+
+### ywViews-qxjlfx-lfxrsbb-sbjl.ef0d278b.js :: studentDk @6618
+nction(t){return r.default.postDes(s.API_BASE_QXJ+"/qxj-dkcb/saveHt",t,!0)},e.saveLdzb=function(t){return r.default.postDes(s.API_BASE_SSGL+"/ss-ldxx/saveLdzbCj",t,!0)},e.sendDkcb=function(t){return r.default.postDes(s.API_BASE_QXJ+"/qxj-dkcb/sendCb",t,!0)},e.studentDk=function(t){return r.default.postDes(s.API_BASE_QXJ+"/qxj-padkglxx/xspadk",t,!0)},e.submitBpa=function(t){return r.default.postDes(s.API_BASE_QXJ+"/qxj-bpa/submitBpa",t,!0)},e.submitDqr=function(t){return r.default.postDes(s.API_BASE_QXJ+"/qxj-dqr/sa
+
+### ywViews-qxjlfx-lfxrsbb-sbjl.ef0d278b.js :: checkDkLocation @2935
+API_BASE_QXJ+"/qxj-lxxsfxxx/save",t,!0)},e.addStudentLxsbInfo=function(t){return r.default.postDes(s.API_BASE_QXJ+"/qxj-lxxslxxx/saveOrUpdate",t,!0)},e.batchReportLxsbInfo=function(t){return r.default.postDes(s.API_BASE_QXJ+"/qxj-lfxrsbbxx/batchSave",t,!0)},e.checkDkLocation=function(t){return r.default.postDes(s.API_BASE_QXJ+"/qxj-padkglxx/jcqqwzsjsfndk",t,!0)},e.checkQxjTime=function(t){return r.default.postDes(s.API_BASE_QXJ+"/qxj-xsqjxx/checkQjsj",t,!0)},e.checkXjfw=function(t){return r.default.postDes(s.API_BA
+
+### ywViews-qxjlfx-lfxrsbb-sbjl.ef0d278b.js :: getDqrRkTj @4896
+n r.default.postDes(s.API_BASE_QXJ+"/qxj-dktz/queryMyTzPage",t,!0)},e.getDqrBjLs=function(t){return r.default.postDes(s.API_BASE_QXJ+"/qxj-dqr/queryBjDkLs",t,!0)},e.getDqrBjMd=function(t){return r.default.postDes(s.API_BASE_QXJ+"/qxj-dqr/queryBjDkMd",t,!0)},e.getDqrRkTj=function(t){return r.default.postDes(s.API_BASE_QXJ+"/qxj-dqr/queryBjDkRkTj",t,!0)},e.getDqrXsXq=function(t){return r.default.postDes(s.API_BASE_QXJ+"/qxj-dqr/queryXsDkXq",t,!0)},e.getLdzbList=function(t){return r.default.postDes(s.API_BASE_SSGL+"/s
+
+### ywViews-qxjlfx-lxsq-index.820203d5.js :: studentDk @77825
+nction(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-dkcb/saveHt",t,!0)},e.saveLdzb=function(t){return i.default.postDes(r.API_BASE_SSGL+"/ss-ldxx/saveLdzbCj",t,!0)},e.sendDkcb=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-dkcb/sendCb",t,!0)},e.studentDk=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-padkglxx/xspadk",t,!0)},e.submitBpa=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-bpa/submitBpa",t,!0)},e.submitDqr=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/sa
+
+### ywViews-qxjlfx-lxsq-index.820203d5.js :: studentDk @135589
+st({title:this.unavailable,icon:"none"}):this.isScope?this.doDk():uni.showToast({title:this.locationMsg||"不在考勤范围内",icon:"none"}))},doDk:function(){var t=arguments.length>0&&void 0!==arguments[0]?arguments[0]:{},e=this;this.submitting||(this.submitting=!0,(0,s.studentDk)((0,i.default)({jd:e.longitude,wd:e.latitude,dkbc:e.data.dkbc,dkdz:e.locationName||""},t)).then((function(a){200==a.code?(e.isPunched=!0,e.punchTime=e.formatNowDateTime(),e.isWcdkSuccess=1===t.sfwcdk,e.show=!0):uni.showToast({title:a.message||"打卡失败",
+
+### ywViews-qxjlfx-lxsq-index.820203d5.js :: checkDkLocation @74142
+API_BASE_QXJ+"/qxj-lxxsfxxx/save",t,!0)},e.addStudentLxsbInfo=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-lxxslxxx/saveOrUpdate",t,!0)},e.batchReportLxsbInfo=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-lfxrsbbxx/batchSave",t,!0)},e.checkDkLocation=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-padkglxx/jcqqwzsjsfndk",t,!0)},e.checkQxjTime=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-xsqjxx/checkQjsj",t,!0)},e.checkXjfw=function(t){return i.default.postDes(r.API_BA
+
+### ywViews-qxjlfx-lxsq-index.820203d5.js :: checkDkLocation @133703
+itude,a=this.longitude;null!=e&&""!==e&&null!=a&&""!==a&&l.BAIDU_AK&&(0,u.reverseGeocode)({lng:Number(a),lat:Number(e)}).then((function(e){var a=e&&(e.recommend||e.address)||"";t.locationName=a})).catch((function(t){}))},verifyRange:function(){var t=this;(0,s.checkDkLocation)({paramsData:{jd:t.longitude,wd:t.latitude,dklb:t.dklb}}).then((function(e){200==e.code&&e.data&&"object"===(0,r.default)(e.data)?(t.isScope=!!e.data.canDk,t.locationMsg=e.data.msg||"",t.pcMi=null!=e.data.pcMi?e.data.pcMi:null,t.fwMi=null!=e.da
+
+### ywViews-qxjlfx-lxsq-index.820203d5.js :: getDqrRkTj @76103
+n i.default.postDes(r.API_BASE_QXJ+"/qxj-dktz/queryMyTzPage",t,!0)},e.getDqrBjLs=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/queryBjDkLs",t,!0)},e.getDqrBjMd=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/queryBjDkMd",t,!0)},e.getDqrRkTj=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/queryBjDkRkTj",t,!0)},e.getDqrXsXq=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/queryXsDkXq",t,!0)},e.getLdzbList=function(t){return i.default.postDes(r.API_BASE_SSGL+"/s
+
+### ywViews-qxjlfx-lxsq-index.820203d5.js :: getDqrRkTj @134156
+msg||"",t.pcMi=null!=e.data.pcMi?e.data.pcMi:null,t.fwMi=null!=e.data.fwMi?e.data.fwMi:null,t.yxMc=e.data.yxMc||""):200==e.code&&(t.isScope=!!e.data,t.locationMsg="",t.pcMi=null,t.fwMi=null,t.yxMc="")}))},loadProxyEntry:function(){var t=this;this.isXnzs&&(0,s.getDqrRkTj)().then((function(e){200==e.code&&e.data&&(t.showProxyEntry=!!e.data.sfbz,t.proxyPendingCount=e.data.wdkrs||0)})).catch((function(){}))},handleProxyBoard:function(){uni.navigateTo({url:"/ywViews/qxjlfx/dqr/board"})},handleWcdk:function(){var t=this;
+
+### ywViews-ywzs-tzgg-detail.6bbe60bc.js :: studentDk @16811
+nction(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-dkcb/saveHt",t,!0)},e.saveLdzb=function(t){return i.default.postDes(r.API_BASE_SSGL+"/ss-ldxx/saveLdzbCj",t,!0)},e.sendDkcb=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-dkcb/sendCb",t,!0)},e.studentDk=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-padkglxx/xspadk",t,!0)},e.submitBpa=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-bpa/submitBpa",t,!0)},e.submitDqr=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/sa
+
+### ywViews-ywzs-tzgg-detail.6bbe60bc.js :: checkDkLocation @13128
+API_BASE_QXJ+"/qxj-lxxsfxxx/save",t,!0)},e.addStudentLxsbInfo=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-lxxslxxx/saveOrUpdate",t,!0)},e.batchReportLxsbInfo=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-lfxrsbbxx/batchSave",t,!0)},e.checkDkLocation=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-padkglxx/jcqqwzsjsfndk",t,!0)},e.checkQxjTime=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-xsqjxx/checkQjsj",t,!0)},e.checkXjfw=function(t){return i.default.postDes(r.API_BA
+
+### ywViews-ywzs-tzgg-detail.6bbe60bc.js :: getDqrRkTj @15089
+n i.default.postDes(r.API_BASE_QXJ+"/qxj-dktz/queryMyTzPage",t,!0)},e.getDqrBjLs=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/queryBjDkLs",t,!0)},e.getDqrBjMd=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/queryBjDkMd",t,!0)},e.getDqrRkTj=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/queryBjDkRkTj",t,!0)},e.getDqrXsXq=function(t){return i.default.postDes(r.API_BASE_QXJ+"/qxj-dqr/queryXsDkXq",t,!0)},e.getLdzbList=function(t){return i.default.postDes(r.API_BASE_SSGL+"/s

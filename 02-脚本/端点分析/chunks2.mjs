@@ -1,0 +1,14 @@
+﻿import fs from "node:fs";
+const dir = process.argv[2];
+const s = fs.readFileSync(dir + "\\js\\index-CtIQ-390.js", "utf8");
+console.log("HAS_CJK=" + /[\u4e00-\u9fa5]/.test(s));
+console.log("HAS_MICROMESSENGER=" + s.includes("MicroMessenger"));
+console.log("HAS_UA_CHECK=" + /navigator\.userAgent/.test(s));
+const imports = new Set();
+for (const m of s.matchAll(/import\(\s*["']([^"']+)["']\s*\)/g)) imports.add(m[1]);
+console.log("DYN_IMPORTS=" + imports.size);
+console.log([...imports].slice(0, 40).join("\n"));
+const jsrefs = new Set();
+for (const m of s.matchAll(/["'][^"']*[\w-]+-[\w_-]{8}\.js["']/g)) jsrefs.add(m[0].slice(1,-1));
+console.log("\nJS_REFS=" + jsrefs.size);
+console.log([...jsrefs].filter(x=>/pk|py|da?ka|checkin|loc|ding/i.test(x)).join("\n"));

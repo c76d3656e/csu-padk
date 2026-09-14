@@ -1,0 +1,12 @@
+node_modules/
+dist/
+dist-inject/
+.tmp-core/
+
+# 会话文件含真实 token，绝不入库
+zhxg-session.json
+cas-session.json
+*.local
+
+.DS_Store
+*.log

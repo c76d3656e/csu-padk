@@ -1,0 +1,151 @@
+
+===== login.js :: encryptPassword @14040 =====
+f (checkSpecificKey($(LOGIN_USERNAME_ID).val())){
+            return;
+        }
+        if (needCaptcha && captchaSwitch == "1" && utils.requireInput($(LOGIN_CAPTCHA_ID), 0, 10, $("#captchaErrorTip"), inputCodeTip, $(LOGIN_CAPTCHA_ID))) {
+            return;
+        }
+        $("#saltPassword").val(encryptPassword($(LOGIN_PASSWORD_ID).val(), $("#pwdEncryptSalt").val()));
+        $(LOGIN_PASSWORD_ID).attr("disabled", "disabled");
+    } else if (cllt == 'dynamicLogin') {
+        if (utils.requireInput($(LOGIN_ACCOUNT_ID), 0, 100, $("#nameErrorTip"), inputMobileTip, $(LOGIN_ACCOUNT_ID))
+            || utils.requireInput($(LOGIN_DYNAMIC_ID), 0, 100, $("#dynamicErrorTip"), inputDynamicTip, $(LOGIN_DYNAMIC_ID))) {
+            return;
+        }
+        if (checkSpecificKey($(LOGIN_ACCOUNT_ID).val())){
+            return;
+        }
+    }
+    return true;
+}
+function checkUserCaptcha(){
+    checkSpecificKey($(LOGIN_USERNAME_ID).val());
+    checkNeedCaptcha();
+}
+
+//校验是否需要验证码
+function checkNeedCaptcha() {
+    //判断验证码是否一直显示
+    if(_badCredentialsCount && _badCredentialsCount==0){
+        reloadCaptcha(true);
+        return;
+    }
+    var username = $(LOGIN_USERNAME_ID).val().trim();
+    if (uti
+===== common-header.js :: encryptPassword NOT FOUND =====
+
+===== utils.js :: encryptPassword NOT FOUND =====
+
+===== login.js 行 330-440 =====
+    } else {
+        getDynamicCode();
+    }
+}
+
+
+function startLogin(that){
+    utils.disabledBtn(that, true);
+    $(".login-main .loginFromClass .item-error-tip").empty();
+    utils.cleanRequire($(".login-main .loginFromClass"), $("#showErrorTip"));
+    if (checkForm()) {
+        var cllt = $(".login-main #cllt").val();
+        if (needCaptcha && captchaSwitch == "2" && cllt == "userNameLogin") {
+            createSliderCaptcha();
+            utils.disabledBtn(that, false);
+        } else {
+            window.localStorage.removeItem("logintype");
+            // 记录本次登录方式 gorgeous
+            window.localStorage.setItem("lastlogintype", cllt);
+            $(".login-main .loginFromClass").submit();
+        }
+    }else{
+        utils.disabledBtn(that, false);
+    }
+}
+
+// 登录前校验
+function checkForm() {
+    var cllt = $(".login-main #cllt").val();
+    if (cllt == 'userNameLogin') {
+        if (utils.requireInput($(LOGIN_USERNAME_ID), 0, 100, $("#nameErrorTip"), inputUserNameTip, $(LOGIN_USERNAME_ID))
+            || utils.requireInput($(LOGIN_PASSWORD_ID), 0, 32, $("#pwdErrorTip"), inputPasswordTip, $(LOGIN_PASSWORD_ID))) {
+            return;
+        }
+        if (checkSpecificKey($(LOGIN_USERNAME_ID).val())){
+            return;
+        }
+        if (needCaptcha && captchaSwitch == "1" && utils.requireInput($(LOGIN_CAPTCHA_ID), 0, 10, $("#captchaErrorTip"), inputCodeTip, $(LOGIN_CAPTCHA_ID))) {
+            return;
+        }
+        $("#saltPassword").val(encryptPassword($(LOGIN_PASSWORD_ID).val(), $("#pwdEncryptSalt").val()));
+        $(LOGIN_PASSWORD_ID).attr("disabled", "disabled");
+    } else if (cllt == 'dynamicLogin') {
+        if (utils.requireInput($(LOGIN_ACCOUNT_ID), 0, 100, $("#nameErrorTip"), inputMobileTip, $(LOGIN_ACCOUNT_ID))
+            || utils.requireInput($(LOGIN_DYNAMIC_ID), 0, 100, $("#dynamicErrorTip"), inputDynamicTip, $(LOGIN_DYNAMIC_ID))) {
+            return;
+        }
+        if (checkSpecificKey($(LOGIN_ACCOUNT_ID).val())){
+            return;
+        }
+    }
+    return true;
+}
+function checkUserCaptcha(){
+    checkSpecificKey($(LOGIN_USERNAME_ID).val());
+    checkNeedCaptcha();
+}
+
+//校验是否需要验证码
+function checkNeedCaptcha() {
+    //判断验证码是否一直显示
+    if(_badCredentialsCount && _badCredentialsCount==0){
+        reloadCaptcha(true);
+        return;
+    }
+    var username = $(LOGIN_USERNAME_ID).val().trim();
+    if (utils.isEmptyStr(username)) {
+        reloadCaptcha(false)
+        return;
+    }
+    $.ajax(contextPath + "/checkNeedCaptcha.htl", {
+        data: {username: username},
+        cache: false,
+        dataType: "json",
+        success: function (data) {
+            if (data.isNeed) {
+                needCaptcha = true;
+            } else {
+                needCaptcha = false;
+            }
+            reloadCaptcha(needCaptcha);
+        }
+    });
+}
+
+//重新载入验证码
+function reloadCaptcha(isNeed) {
+    needCaptcha = isNeed;
+    if (isNeed && captchaSwitch == "1") {
+        $(".login-main #captchaDiv").show();
+        $(".login-main #captchaTitle").show();
+        $(".login-main #captchaImg").attr("src", contextPath + "/getCaptcha.htl?" + new Date().getTime());
+        $(".container-ge .ge-btn").css("margin-top", "2px");
+    } else {
+        // 如果不需要验证码，那么清空
+        $(".login-main #captcha").val("");
+        $(".login-main #captchaDiv").hide();
+        $(".login-main #captchaTitle").hide();
+        $(".container-ge .ge-btn").css("margin-top", "");
+    }
+}
+
+//发送动态码
+function getDynamicCode() {
+    if (utils.requireInput($(LOGIN_ACCOUNT_ID), 0, 100, $("#nameErrorTip"), inputMobileTip, $(LOGIN_ACCOUNT_ID))) {
+        return;
+    }
+    if (captchaSwitch == "1" && utils.requireInput($(LOGIN_DYNAMIC_CAPTCHA_ID), 0, 100, $("#captchaErrorTip"), inputCodeTip, $(LOGIN_DYNAMIC_CAPTCHA_ID))) {
+        return;
+    }
+    var mobile = encryptPassword($(LOGIN_ACCOUNT_ID).val(),DEFAULT_SALT);
