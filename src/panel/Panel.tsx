@@ -23,7 +23,7 @@ interface LogItem { t: string; kind: LogKind; msg: string }
 const hhmmss = () => new Date().toLocaleTimeString("zh-CN", { hour12: false });
 
 export interface PanelProps {
-  /** true = 整页形态（独立打卡页）；false = 浮动面板（书签注入） */
+  /** true = 整页形态（独立打卡页）；false = 紧凑浮动面板 */
   pageMode?: boolean;
   /** 凭据失效（203 / 2031）时回调，由宿主决定是否回到登录页 */
   onAuthError?: (message: string) => void;

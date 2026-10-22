@@ -69,10 +69,35 @@ async function handleLogin(request) {
   }
 }
 
+/**
+ * 净化上游响应头 —— 转发层唯一的坑就在这三行。
+ *
+ * Node 的 undici 与 Workers 的 fetch 都会把上游的压缩体自动解开，但两边
+ * 对响应头的处置**不一致**：workerd 会把 content-encoding 一并剥掉，undici
+ * 留着。留着的话下游就会拿明文去按 gzip 解压 —— curl 报 61
+ * （Unrecognized or bad HTTP Content or Transfer-Encoding），浏览器侧是
+ * "Failed to fetch"。所以不能依赖运行时的默认行为，本层自己决定。
+ *
+ * 长度同理：body 已是解码后的字节，上游的 content-length 不再成立。
+ * transfer-encoding 是逐跳头，按 RFC 7230 本就不该转发。
+ */
+export function sanitizeProxyHeaders(headers) {
+  const out = new Headers(headers);
+  out.delete("content-encoding");
+  out.delete("content-length");
+  out.delete("transfer-encoding");
+  out.set("Access-Control-Allow-Origin", "*");
+  return out;
+}
+
 async function handleProxy(request, pathname, search) {
   const target = new URL(pathname + search, ZHXG);
   const headers = new Headers(request.headers);
   headers.set("host", target.host);
+  // 不转发 accept-encoding：这是上面那个坑的触发条件。上游收到它就会压缩，
+  // 压了就得依赖运行时的解压行为，而两个运行时不一致。校园网内网带宽充裕，
+  // 这点压缩收益不值得换一个只在 exe 形态下才炸的 bug。
+  headers.delete("accept-encoding");
   // 先读成字节再转发：Node 侧流式转发需要 duplex 支持，统一缓冲更稳
   const payload =
     request.method === "GET" || request.method === "HEAD" ? undefined : await request.arrayBuffer();
@@ -84,9 +109,10 @@ async function handleProxy(request, pathname, search) {
     redirect: "manual",
   });
 
-  const out = new Headers(up.headers);
-  out.set("Access-Control-Allow-Origin", "*");
-  return new Response(up.body, { status: up.status, headers: out });
+  return new Response(up.body, {
+    status: up.status,
+    headers: sanitizeProxyHeaders(up.headers),
+  });
 }
 
 /**

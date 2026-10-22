@@ -6,9 +6,7 @@
   "description": "平安打卡面板 · 本机 exe / Cloudflare / Vercel 三种运行形态共用同一份源码",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && vite build --config vite.inject.config.ts && node scripts/merge.mjs",
-    "build:web": "vite build",
-    "build:inject": "vite build --config vite.inject.config.ts",
+    "build": "vite build",
     "build:exe": "node scripts/build-exe.mjs",
     "start": "node scripts/serve.mjs",
     "typecheck": "tsc --noEmit",

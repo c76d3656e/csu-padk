@@ -3,7 +3,7 @@
   "name": "csu-padk",
   "main": "src/edge/worker.js",
   "compatibility_date": "2025-01-01",
-  // 构建产物目录：vite build 输出静态站点，scripts/merge.mjs 把书签脚本合进 dist/
+  // 构建产物目录：vite build 直接输出静态站点
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS",

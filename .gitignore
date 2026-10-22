@@ -1,9 +1,5 @@
 node_modules/
 dist/
-dist-inject/
-
-# 构建产物：由 scripts/merge.mjs 每次构建重新生成，不入库以免与 src/ 分叉
-public/inject.js
 
 # 本机服务启动器的临时编译产物
 .build/

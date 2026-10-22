@@ -16,5 +16,5 @@
     "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "vite.config.ts", "vite.inject.config.ts", "vite.casAuth.ts"]
+  "include": ["src", "vite.config.ts", "vite.casAuth.ts"]
 }

@@ -2,8 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import Panel from "../panel/Panel";
 import { store } from "../core/store";
 import { readCred, writeCred, clearCred, setCredSource } from "../core/api";
-// 整页形态下 Panel 直接渲染在 document 中，需显式引入面板样式
-// （书签注入时则是把同一份 CSS 内联进 Shadow DOM）
+// Panel 直接渲染在 document 中，需显式引入面板样式
 import "../panel/panel.css";
 
 /** 只存学号，用于回填登录表单 */
@@ -90,8 +89,8 @@ export default function PadkPage() {
       setPhase("ready");
     } catch (e: any) {
       setErr(
-        "登录服务不可用。请确认当前页面由本工具的服务提供（exe 直接运行 / 已部署的边缘地址），" +
-          "或改用官方页面 + 书签注入。"
+        "登录服务不可用。请确认当前页面由本工具自己的服务提供：本机形态双击 padk.exe，" +
+          "云端形态用分配到的域名。直接打开静态文件（file://）时没有登录接口。"
       );
     } finally {
       setBusy(false);

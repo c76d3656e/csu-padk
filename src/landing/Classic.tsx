@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useState } from "react";
 
 const CAS_LOGIN =
   "https://ca.csu.edu.cn/authserver/login?service=" +
@@ -6,46 +6,7 @@ const CAS_LOGIN =
 const H5_HOME = "https://zhxg.csu.edu.cn/znzhxgpt_h5/";
 
 export default function Classic() {
-  const [injectUrl, setInjectUrl] = useState("");
-  const [copied, setCopied] = useState<string | null>(null);
   const [showTech, setShowTech] = useState(false);
-
-  useEffect(() => {
-    setInjectUrl(new URL("./inject.js", window.location.href).href);
-  }, []);
-
-  const bookmarklet = useMemo(() => {
-    if (!injectUrl) return "";
-    return (
-      "javascript:(function(){" +
-      "var s=document.createElement('script');" +
-      "s.src=" + JSON.stringify(injectUrl) + "+'?t='+Date.now();" +
-      "s.onerror=function(){alert('加载失败，请检查 inject.js 地址：'+" + JSON.stringify(injectUrl) + ")};" +
-      "document.documentElement.appendChild(s);" +
-      "})()"
-    );
-  }, [injectUrl]);
-
-  // React 会警告 javascript: 形式的 href，挂载后经 DOM 直接写入以保留拖拽能力
-  const bmRef = useRef<HTMLAnchorElement>(null);
-  useEffect(() => {
-    if (bmRef.current && bookmarklet) bmRef.current.setAttribute("href", bookmarklet);
-  }, [bookmarklet]);
-
-  const copy = async (text: string, tag: string) => {
-    try {
-      await navigator.clipboard.writeText(text);
-    } catch {
-      const ta = document.createElement("textarea");
-      ta.value = text;
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand("copy");
-      ta.remove();
-    }
-    setCopied(tag);
-    setTimeout(() => setCopied(null), 1800);
-  };
 
   return (
     <div className="classic-root">
@@ -66,7 +27,7 @@ export default function Classic() {
           <span className="sub">一键面板</span>
         </h1>
         <p className="lead">
-          在官方页面里长出一个打卡面板。自动生成合规落点、随机轮换位置、一键完成打卡。
+          在浏览器里跑起一块打卡面板。自动生成合规落点、随机轮换位置、一键完成打卡。
           <br />
           <b>纯前端，零后端</b>：不经过任何第三方服务器，token 与坐标只留在你自己的浏览器里。
         </p>
@@ -95,17 +56,20 @@ export default function Classic() {
         <section className="steps">
           <article className="step">
             <div className="num">01</div>
-            <h3>先登录官方系统</h3>
+            <h3>打开打卡台</h3>
             <p>
-              点下面的按钮走统一身份认证（<code>ca.csu.edu.cn</code>）。
-              <b>账号密码只在官方页面输入</b>，本页面全程接触不到。
+              本机形态双击 <code>padk.exe</code>，浏览器会自动打开；云端形态直接用分配到的域名。
+              打开后就是登录界面，不需要额外装任何东西。
             </p>
             <div className="tip">
               <b>PC 用户注意</b>：移动端页面会拦截桌面浏览器。请先按
               <code>F12</code> → <code>Ctrl+Shift+M</code> 打开设备模拟，选任意手机型号，再点登录。
             </div>
             <div className="row">
-              <a className="btn primary" href={CAS_LOGIN} target="_blank" rel="noreferrer">
+              <a className="btn primary" href="#/">
+                进入打卡台
+              </a>
+              <a className="btn ghost" href={CAS_LOGIN} target="_blank" rel="noreferrer">
                 前往官方登录
               </a>
               <a className="btn ghost" href={H5_HOME} target="_blank" rel="noreferrer">
@@ -116,39 +80,23 @@ export default function Classic() {
 
           <article className="step">
             <div className="num">02</div>
-            <h3>把书签拖进书签栏</h3>
+            <h3>用学号登录</h3>
             <p>
-              下面那个蓝色按钮就是书签本体。直接把它拖到浏览器书签栏；
-              也可以复制链接后手动新建一个书签，地址粘贴进去。
+              在打卡台的登录框里输入学号与密码，由本工具代为走统一身份认证
+              （<code>ca.csu.edu.cn</code>）。<b>密码只提交给官方页面</b>，本项目不打印、不落盘。
             </p>
-            <div className="drag-zone">
-              <a
-                ref={bmRef}
-                className="bookmarklet"
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  copy(bookmarklet, "bm");
-                }}
-                title="拖我到书签栏"
-              >
-                {copied === "bm" ? "已复制到剪贴板" : "平安打卡"}
-              </a>
-              <span className="drag-hint">← 拖我，或点我复制</span>
-            </div>
-            <div className="row">
-              <button className="btn ghost" onClick={() => copy(bookmarklet, "code")}>
-                {copied === "code" ? "已复制" : "复制书签代码"}
-              </button>
-            </div>
+            <ul className="bullets">
+              <li>凭据保存在浏览器 localStorage，清空浏览器数据即消失</li>
+              <li>遇到验证码要求时，去官方页面完成一次登录即可</li>
+            </ul>
           </article>
 
           <article className="step">
             <div className="num">03</div>
-            <h3>在官方页面点一下书签</h3>
+            <h3>选宿舍楼，点打卡</h3>
             <p>
-              登录后的页面（任一 <code>zhxg.csu.edu.cn</code> 页面都行）点一下书签，
-              右下角就会浮出打卡面板。首次需要选择你的宿舍楼，之后它会记住。
+              首次需要选择你的宿舍楼（或在地图上直接点），之后它会记住。
+              每次点打卡会自动生成一个合规落点。
             </p>
             <ul className="bullets">
               <li>「地图选点」可直观看到围栏范围与周边楼栋</li>
@@ -161,36 +109,18 @@ export default function Classic() {
         <section className="panel-block">
           <h2>部署你自己的副本</h2>
           <p className="muted">
-            本仓库提供了三种跑法：本机 exe、Cloudflare、Vercel。任选一种部署后，
-            把下面地址改成你的实际地址即可（本机形态就是 <code>http://你的IP:5173</code>）。
+            本项目提供两种跑法：本机 exe 与云端（Cloudflare / Vercel）。
+            详见仓库 README，两种形态共用同一份源码。
           </p>
-          <div className="field">
-            <label>inject.js 的公网地址</label>
-            <input
-              type="text"
-              value={injectUrl}
-              onChange={(e) => setInjectUrl(e.target.value)}
-              spellCheck={false}
-            />
-          </div>
-          <div className="row">
-            <button className="btn ghost" onClick={() => copy(injectUrl, "url")}>
-              {copied === "url" ? "已复制" : "复制地址"}
-            </button>
-            <button className="btn ghost" onClick={() => copy(bookmarklet, "code2")}>
-              {copied === "code2" ? "已复制" : "复制更新后的书签代码"}
-            </button>
-          </div>
         </section>
 
         <section className="privacy">
           <div className="lock">🔒</div>
           <div>
-            <h3>没有后端，也读不到你的密码</h3>
+            <h3>没有数据库，也读不到你的密码</h3>
             <p>
-              整个工具没有服务端。登录动作发生在官方 <code>ca.csu.edu.cn</code> 页面，
-              本工具只在你已经登录的页面里读取浏览器本地存储的会话凭据，并且
-              <b>只向 <code>zhxg.csu.edu.cn</code> 发起请求</b>。
+              整个工具没有数据库，也没有服务端存储。登录动作发生在官方{" "}
+              <code>ca.csu.edu.cn</code>，本工具只向 <code>zhxg.csu.edu.cn</code> 发起业务请求。
               落点历史、宿舍楼选择等配置都存在你自己的 <code>localStorage</code>，
               清空浏览器数据即彻底消失。
             </p>

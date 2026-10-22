@@ -114,6 +114,30 @@ const carried = await handler.handleApi(
 );
 ok("Vercel 重写路径可还原（__padk 参数）", carried.status === 400);
 
+/*
+ * B2. 转发响应头净化
+ *
+ * 这是一条防回归断言，对应一个真实踩过的坑：上游返回 gzip 实体时，Node 的
+ * undici 会把 body 自动解开，却把 content-encoding: gzip 留在响应头里。
+ * 原样转发出去，下游就拿明文去按 gzip 解 —— curl 报 61，浏览器报
+ * "Failed to fetch"。workerd 会自己剥掉这个头，所以只在 exe 形态下暴露，
+ * 极易漏测。这里直接对净化函数下断言，不依赖网络。
+ */
+const dirty = new Headers({
+  "content-type": "application/json;charset=UTF-8",
+  "content-encoding": "gzip",
+  "content-length": "196",
+  "transfer-encoding": "chunked",
+  vary: "Accept-Encoding",
+});
+const clean = handler.sanitizeProxyHeaders(dirty);
+ok("净化：剥掉 content-encoding", !clean.has("content-encoding"));
+ok("净化：剥掉过期的 content-length", !clean.has("content-length"));
+ok("净化：剥掉逐跳的 transfer-encoding", !clean.has("transfer-encoding"));
+ok("净化：保留 content-type 等业务头", clean.get("content-type") === "application/json;charset=UTF-8");
+ok("净化：补上 CORS 放行头", clean.get("access-control-allow-origin") === "*");
+ok("净化：不改动原对象", dirty.has("content-encoding"));
+
 /* ── C. 本机服务 ── */
 console.log("\nC. 本机服务");
 if (!fs.existsSync(path.join(ROOT, "dist", "index.html"))) {
@@ -147,8 +171,6 @@ if (!fs.existsSync(path.join(ROOT, "dist", "index.html"))) {
     // 前端靠 index.html 里这句把接口根置空，从而走同源转发；
     // 少了它，页面会直连学校域名，浏览器侧立刻产生跨域预检。
     ok("GET / → 200 且声明同源接口根", home.status === 200 && html.includes("__PADK_ORIGIN__"));
-    const inj = await fetch(base + "/inject.js");
-    ok("GET /inject.js → 200", inj.status === 200);
     ok("GET /__auth/login → 405", (await fetch(base + "/__auth/login")).status === 405);
     const r = await fetch(base + "/__auth/login", {
       method: "POST",
@@ -157,8 +179,27 @@ if (!fs.existsSync(path.join(ROOT, "dist", "index.html"))) {
     });
     ok("POST 空参 → 400", r.status === 400);
     ok("未知路径 → 404", (await fetch(base + "/no-such-file.txt")).status === 404);
-    // 书签 / 油猴形态的分发文件也要在产物里，否则「自行部署」那一步拿不到东西
-    ok("GET /padk.user.js → 200", (await fetch(base + "/padk.user.js")).status === 200);
+
+    // 端到端回归：带 Accept-Encoding 打一次真实转发，检查响应头与实体是否自洽。
+    // 这条断言要联网，断网时跳过 —— 它捕捉的是「两个运行时对压缩体的处置不一致」
+    // 这个只在真实上游返回 gzip 时才现形的缺陷。
+    try {
+      const up = await fetch(base + "/znzhxgpt/ssgl/ss-ldxx/findLdzbCjList", {
+        method: "POST",
+        headers: { "Content-Type": "application/json; charset=utf-8", "Accept-Encoding": "gzip, deflate, br" },
+        body: "{}",
+        signal: AbortSignal.timeout(15000),
+      });
+      const ce = up.headers.get("content-encoding");
+      const buf = Buffer.from(await up.arrayBuffer());
+      ok("转发：响应头不自称压缩（否则下游解压必炸）", !ce, ce ? "content-encoding=" + ce : "");
+      ok("转发：实体是可读 JSON", buf.length > 0 && buf[0] === 0x7b, "首字节 0x" + buf.subarray(0, 2).toString("hex"));
+      // 复现浏览器行为：头声明与实体自洽时，undici 才肯解码
+      const dec = await new Response(buf, { headers: up.headers }).json();
+      ok("转发：响应可被标准解码链路消费", typeof dec?.code === "string");
+    } catch (e) {
+      console.log("  · 跳过转发端到端断言（需要联网）：" + (e?.message || e));
+    }
   } catch (e) {
     fails.push("本机服务断言中断：" + (e?.message || e));
     console.log("  ✗ 本机服务断言中断 —— " + (e?.message || e));

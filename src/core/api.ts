@@ -28,8 +28,8 @@ export type { Credential, CredResult, CredFail } from "./cred";
  * ES 模块的 import 会先于模块体执行，若写成 `const ORIGIN = ...`，
  * 宿主还没机会设置 __PADK_ORIGIN__ 就已经算完了。
  *
- *   书签 / 油猴注入：页面本身就在 zhxg.csu.edu.cn，同源直连
- *   打卡页 / 本机 exe：置空 → 由同源服务转发，浏览器侧仍是同源
+ *   站点形态（index.html 里置空）：由同源服务转发，浏览器侧仍是同源
+ *   没有这个变量时（直接跑源码调试）：直连 zhxg.csu.edu.cn
  */
 export function getOrigin(): string {
   const w = typeof window !== "undefined" ? (window as any) : null;
@@ -119,18 +119,38 @@ export async function postDes<T = any>(
 ): Promise<ApiResult<T>> {
   const body = encryptPayload(payload, ctx.casual);
 
-  const res = await fetch(getOrigin() + path, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json; charset=utf-8",
-      deviceType: "4",
-      AppCode: "znzhxgpt",
-      Authorization: ctx.token,
-      token: ctx.token,
-      agentId: ctx.agentId ?? "",
-    },
-    body,
-  });
+  /*
+   * 网络层失败要翻译成人话。
+   *
+   * fetch 只在「响应无法被接受」时 reject，抛的是 TypeError: Failed to fetch
+   * —— 这个字符串对使用者毫无信息量，历史上让人误以为是接口挂了。它实际
+   * 覆盖的是：服务没起来、连接被中断、响应头与实体自相矛盾（如声称 gzip 却
+   * 回明文）等等。这里补上目标地址与常见成因，让它自己说明白。
+   */
+  const url = getOrigin() + path;
+  let res: Response;
+  try {
+    res = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        deviceType: "4",
+        AppCode: "znzhxgpt",
+        Authorization: ctx.token,
+        token: ctx.token,
+        agentId: ctx.agentId ?? "",
+      },
+      body,
+    });
+  } catch (e) {
+    const why = e instanceof Error ? e.message : String(e);
+    throw new ApiError(
+      `请求没能到达服务：${why}\n` +
+        `目标 ${url}。若本机服务已关掉就重新打开一次；` +
+        `若服务在跑，多半是响应被中间层改坏了（压缩头与实际实体不符）。`,
+      "network"
+    );
+  }
 
   if (res.status === 400)
     throw new ApiError(describe400(await res.text().catch(() => "")), "400");

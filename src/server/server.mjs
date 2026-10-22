@@ -111,7 +111,7 @@ const MIME = {
 
 function sendBuffer(buf, rel, res, status = 200) {
   const ext = path.extname(rel).toLowerCase();
-  // 带内容 hash 的产物可以长缓存；inject.js 是固定路径，必须每次回源校验
+  // 带内容 hash 的产物可以长缓存；index.html 这类固定路径必须每次回源校验
   const hashed = /-[A-Za-z0-9_-]{8,}\.(js|css)$/.test(path.basename(rel));
   res.writeHead(status, {
     "Content-Type": MIME[ext] || "application/octet-stream",
