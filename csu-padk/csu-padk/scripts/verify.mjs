@@ -157,6 +157,8 @@ if (!fs.existsSync(path.join(ROOT, "dist", "index.html"))) {
     });
     ok("POST 空参 → 400", r.status === 400);
     ok("未知路径 → 404", (await fetch(base + "/no-such-file.txt")).status === 404);
+    // 书签 / 油猴形态的分发文件也要在产物里，否则「自行部署」那一步拿不到东西
+    ok("GET /padk.user.js → 200", (await fetch(base + "/padk.user.js")).status === 200);
   } catch (e) {
     fails.push("本机服务断言中断：" + (e?.message || e));
     console.log("  ✗ 本机服务断言中断 —— " + (e?.message || e));

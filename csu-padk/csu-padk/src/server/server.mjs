@@ -24,9 +24,30 @@
 import http from "node:http";
 import fs from "node:fs";
 import path from "node:path";
+import { exec } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { isSea, getAsset } from "node:sea";
 import { handleApi } from "../edge/handler.js";
+
+/**
+ * 用系统默认浏览器打开地址。
+ *
+ * 只在交互式终端下调用（见文件末尾的判断）：verify.mjs 等脚本以管道方式
+ * spawn 本进程，stdout 不是 TTY，不会被这个动作干扰。少数启动器下 TTY
+ * 判定会失灵，可用 PADK_OPEN=1 强制打开、PADK_NO_OPEN=1 强制关闭。
+ * 打开失败就作罢 —— 地址已经打印在控制台里，手动复制一样能用。
+ */
+function openBrowser(url) {
+  const cmd =
+    process.platform === "win32"
+      ? `start "" "${url}"`
+      : process.platform === "darwin"
+        ? `open "${url}"`
+        : `xdg-open "${url}"`;
+  exec(cmd, { windowsHide: true }, (err) => {
+    if (err) console.log("  （没能自动打开浏览器，手动访问上面的地址即可）");
+  });
+}
 
 /**
  * 是否跑在打包好的单文件 exe 里。
@@ -208,4 +229,14 @@ server.listen(PORT, () => {
   console.log("  登录  POST /__auth/login");
   console.log("  转发  /znzhxgpt/**");
   console.log("");
+  console.log("  浏览器没自动打开就手动访问上面那个地址。");
+  console.log("  关掉这个窗口即停止服务。");
+  console.log("");
+
+  // 双击 exe 的场景：控制台是真实终端，顺手把页面打开。
+  // 脚本调用（stdout 走管道）不触发，避免干扰自检。
+  const wantOpen = process.env.PADK_NO_OPEN
+    ? false
+    : process.env.PADK_OPEN === "1" || !!process.stdout.isTTY;
+  if (wantOpen) openBrowser(`http://localhost:${PORT}/`);
 });
