@@ -1,0 +1,37 @@
+{
+  "name": "csu-padk",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "平安打卡面板 · 本机 exe / Cloudflare / Vercel 三种运行形态共用同一份源码",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && vite build --config vite.inject.config.ts && node scripts/merge.mjs",
+    "build:web": "vite build",
+    "build:inject": "vite build --config vite.inject.config.ts",
+    "build:exe": "node scripts/build-exe.mjs",
+    "start": "node scripts/serve.mjs",
+    "typecheck": "tsc --noEmit",
+    "verify": "node scripts/verify.mjs",
+    "deploy": "npm run build && wrangler deploy",
+    "preview": "vite preview --port 4173"
+  },
+  "dependencies": {
+    "crypto-js": "^4.2.0",
+    "leaflet": "^1.9.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/crypto-js": "^4.2.2",
+    "@types/leaflet": "^1.9.22",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "esbuild": "^0.21.5",
+    "postject": "^1.0.0-alpha.6",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.11",
+    "wrangler": "^4.0.0"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "vite",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "rewrites": [
+    { "source": "/__auth/login", "destination": "/api/edge?__padk=/__auth/login" },
+    { "source": "/znzhxgpt/:path*", "destination": "/api/edge?__padk=/znzhxgpt/:path*" }
+  ]
+}

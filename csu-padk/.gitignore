@@ -1,0 +1,29 @@
+node_modules/
+dist/
+dist-inject/
+
+# 构建产物：由 scripts/merge.mjs 每次构建重新生成，不入库以免与 src/ 分叉
+public/inject.js
+
+# 本机服务启动器的临时编译产物
+.build/
+
+# exe 构建中间产物
+padk.exe
+server.sea.cjs
+sea-config.json
+sea-prep.blob
+
+# 编辑器与系统
+.DS_Store
+Thumbs.db
+*.log
+*.tsbuildinfo
+
+# 编辑工具的临时锁文件
+.dsh-ops-update-*.lock
+
+# 本地环境变量
+.env
+.env.*
+!.env.example

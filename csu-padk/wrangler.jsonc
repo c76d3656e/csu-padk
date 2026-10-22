@@ -1,0 +1,18 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "csu-padk",
+  "main": "src/edge/worker.js",
+  "compatibility_date": "2025-01-01",
+  // 构建产物目录：vite build 输出静态站点，padk-worker 插件额外写出 dist/_worker.js
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    // 只有这两个路径需要先经过 Worker（登录协议 / 同源转发），
+    // 其余请求由静态资源直接返回，不消耗 Worker 调用
+    "run_worker_first": ["/__auth/login", "/znzhxgpt/*"]
+  },
+  "observability": {
+    "enabled": true
+  }
+}

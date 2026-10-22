@@ -1,0 +1,3 @@
+# 静态资源目录里不需要上传的文件（Cloudflare Workers 静态资源会读取本文件）
+# dist/_worker.js 是 Worker 本体，不是静态资源；上传只会白白暴露一份源码副本
+_worker.js
