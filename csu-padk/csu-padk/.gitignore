@@ -8,6 +8,9 @@ public/inject.js
 # 本机服务启动器的临时编译产物
 .build/
 
+# wrangler 的本地状态目录（wrangler dev / --dry-run 会生成）
+.wrangler/
+
 # exe 构建中间产物
 padk.exe
 server.sea.cjs

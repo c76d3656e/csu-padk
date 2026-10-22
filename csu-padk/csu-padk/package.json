@@ -13,7 +13,7 @@
     "start": "node scripts/serve.mjs",
     "typecheck": "tsc --noEmit",
     "verify": "node scripts/verify.mjs",
-    "deploy": "npm run build && wrangler deploy",
+    "deploy": "wrangler deploy",
     "preview": "vite preview --port 4173"
   },
   "dependencies": {

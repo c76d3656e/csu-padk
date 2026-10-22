@@ -144,7 +144,9 @@ if (!fs.existsSync(path.join(ROOT, "dist", "index.html"))) {
     if (!up) throw new Error("本机服务未在 20 秒内就绪，跳过后续断言");
     const home = await fetch(base + "/");
     const html = await home.text();
-    ok("GET / → 200 且注入自托管标记", home.status === 200 && html.includes("__PADK_SELF_HOSTED__"));
+    // 前端靠 index.html 里这句把接口根置空，从而走同源转发；
+    // 少了它，页面会直连学校域名，浏览器侧立刻产生跨域预检。
+    ok("GET / → 200 且声明同源接口根", home.status === 200 && html.includes("__PADK_ORIGIN__"));
     const inj = await fetch(base + "/inject.js");
     ok("GET /inject.js → 200", inj.status === 200);
     ok("GET /__auth/login → 405", (await fetch(base + "/__auth/login")).status === 405);

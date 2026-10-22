@@ -131,16 +131,8 @@ function serveStatic(req, res) {
     return res.end("404 Not Found");
   }
 
-  // index.html 要注入「本机托管」标记：前端据此把接口请求打到本服务上（同源）。
-  // 手机连同一 WiFi、用局域网 IP 打开时，这一步尤其重要。
-  // 标记必须排在页面自己的判断脚本之前，因此插在 <head> 的最前面。
-  if (path.basename(served) === "index.html") {
-    const html = buf
-      .toString("utf8")
-      .replace(/<head>/i, '<head>\n    <script>window.__PADK_SELF_HOSTED__=true</script>');
-    return sendBuffer(Buffer.from(html, "utf8"), served, res);
-  }
-
+  // index.html 自带 window.__PADK_ORIGIN__ = ""（见项目根的 index.html），
+  // 三种形态共用同一份前端产物，本服务不需要再往里注入任何东西。
   sendBuffer(buf, served, res);
 }
 

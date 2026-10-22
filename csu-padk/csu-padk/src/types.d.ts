@@ -10,6 +10,4 @@
 interface Window {
   /** 自托管形态（本机服务 / 边缘部署）把接口根置空，走同源转发 */
   __PADK_ORIGIN__?: string;
-  /** 本机服务注入的标记，仅用于界面提示 */
-  __PADK_SELF_HOSTED__?: boolean;
 }

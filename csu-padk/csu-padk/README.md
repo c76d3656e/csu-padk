@@ -43,10 +43,13 @@ npm run build:exe    # 产出 padk.exe
 
 ```bash
 npx wrangler login   # 首次需要
-npm run deploy       # = npm run build && wrangler deploy
+npm run build        # 先产出 dist/
+npm run deploy       # = wrangler deploy
 ```
 
 配置写在 `wrangler.jsonc`：Worker 入口是 `src/edge/worker.js`，静态资源目录是 `dist/`，只有 `/__auth/login` 和 `/znzhxgpt/*` 两个前缀会先进 Worker，其余请求由静态资源直接返回。
+
+用部署按钮时 Cloudflare 会把 `csu-padk/` 当作新仓库的根，自动跑 `npm run build` 再 `npx wrangler deploy`，不需要额外设置。
 
 **Vercel** —— 导入仓库时把 **Root Directory** 设成 `csu-padk`：
 
@@ -55,7 +58,7 @@ npm i -g vercel
 vercel --prod
 ```
 
-配置写在 `vercel.json`：静态输出目录 `dist/`，两个接口路径被重写到 Edge Function `api/edge.js`。Vercel 的项目设置里还需要把 Root Directory 指到 `csu-padk`（用上面的部署按钮则自动完成）。
+配置写在 `vercel.json`：静态输出目录 `dist/`，两个接口路径被重写到 Edge Function `api/edge.js`。部署按钮会把 Root Directory 一并带过去；手动导入仓库时要自己填 `csu-padk`。
 
 ## 本地开发
 

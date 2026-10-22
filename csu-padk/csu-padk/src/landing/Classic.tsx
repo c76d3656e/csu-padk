@@ -161,9 +161,8 @@ export default function Classic() {
         <section className="panel-block">
           <h2>部署你自己的副本</h2>
           <p className="muted">
-            这是一个纯静态站点。把 <code>dist/</code> 整个目录上传到任意静态托管
-            （GitHub Pages / Cloudflare Pages / Vercel / 对象存储均可），
-            再把下面地址改成你的实际地址即可。
+            本仓库提供了三种跑法：本机 exe、Cloudflare、Vercel。任选一种部署后，
+            把下面地址改成你的实际地址即可（本机形态就是 <code>http://你的IP:5173</code>）。
           </p>
           <div className="field">
             <label>inject.js 的公网地址</label>

@@ -1,9 +1,12 @@
 /**
  * Cloudflare Workers 入口
  *
- * 打包成 dist/_worker.js（见 vite.config.ts 的 padk-worker 插件），
- * 与静态资源一起部署：wrangler.jsonc 里 run_worker_first 只把
- * /__auth/login 与 /znzhxgpt/** 交给它，其余请求由静态资源直接返回。
+ * wrangler.jsonc 里 main 直接指向本文件，wrangler 自己会编译 TypeScript
+ * 与相对导入，不需要预先打包。assets.directory 指向 dist/，静态资源与
+ * Worker 一次性上传。
+ *
+ * run_worker_first 只把 /__auth/login 与 /znzhxgpt/* 交给它，其余请求
+ * 由静态资源直接返回，不消耗 Worker 调用。
  *
  * 业务逻辑全在 ./handler.js，本文件只做平台接线。
  */
