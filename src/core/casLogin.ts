@@ -16,6 +16,7 @@
  * 第 3 步是唯一有交互的一步：账号、密码、验证码由学校侧判定。失败时 CAS 有三种
  * 回应形态，必须分开识别，否则会把「登录没被接受」误报成「拿不到 uid」：
  *   302 → 登录页              登录没被受理，被退回（见第 3 步后的判断）
+ *   302 → reAuthCheck/…       密码已通过，学校侧要求二次认证（多因子），协议到此为止
  *   200 → 登录页正文          CAS 不接受这次登录（验证码未通过、密码错误等），不重定向
  *   302 → service?ticket=…    真正成功
  *
@@ -41,6 +42,12 @@ export interface LoginUser {
 export interface LoginResult {
   token: string;
   casual: string;
+  /**
+   * CAS 的长期会话凭据（rememberMe=true 时签发的 TGT，默认数天有效）。
+   * 有它就能免密换票，所以密码登录成功时一并带回，交给前端保存 ——
+   * 下一次登录不必再输密码，也不会撞二次认证。
+   */
+  castgc?: string;
   user: LoginUser;
 }
 
@@ -117,6 +124,28 @@ class Jar {
     hit.sort((a, b) => b.path.length - a.path.length);
     return hit.map((c) => `${c.name}=${c.value}`).join("; ");
   }
+  /**
+   * 把外部导入的 cookie 串挂到指定域上。
+   * 用户从浏览器复制的是什么就传什么（"CASTGC=…; JSESSIONID=…"），
+   * 多的项无害，缺的项由后续请求自己 Set-Cookie 补回来。
+   */
+  seed(raw: string, host: string): void {
+    for (const part of raw.split(";")) {
+      const i = part.indexOf("=");
+      if (i <= 0) continue;
+      const name = part.slice(0, i).trim();
+      const value = part.slice(i + 1).trim();
+      if (!name || !value) continue;
+      const at = this.m.findIndex((c) => c.name === name && c.domain === host && c.path === "/");
+      const next: Cookie = { name, value, domain: host, path: "/" };
+      if (at >= 0) this.m[at] = next;
+      else this.m.push(next);
+    }
+  }
+  /** 取某个 cookie 的值；只在确实需要回传给前端时用，不进任何日志 */
+  value(name: string): string {
+    return this.m.find((c) => c.name === name)?.value || "";
+  }
   /** 只报名字，值永远不外泄 —— 诊断文案要能贴进工单 */
   names(): string {
     return [...new Set(this.m.map((c) => c.name))].join(",") || "无";
@@ -152,6 +181,18 @@ class RetryableLoginError extends Error {
   constructor(message: string) {
     super(message);
     this.name = "RetryableLoginError";
+  }
+}
+
+/*
+ * 学校侧要求二次认证（多因子）。密码这一步已经通过，卡在短信 / OTP / 人脸 ——
+ * 协议客户端没有那条流程的会话，跟过去会被踢回登录页，重试也只会被再要求一次，
+ * 还多刷一次风控计数。所以单独归类、明确不重试。
+ */
+export class MfaRequiredError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "MfaRequiredError";
   }
 }
 
@@ -247,6 +288,15 @@ async function protocolLoginOnce(username: string, password: string): Promise<Lo
      * CAS 拒绝登录时不一定带错误提示元素，实测会直接回登录页正文（含这段脚本变量）。
      * 先认它，再判验证码 —— 顺序反过来会把「登录页被退回来」说成「需要验证码」。
      */
+    /*
+     * 新版登录页（2026-08 的 gorgeousCsu 主题）不再有 showErrorTip 元素，
+     * 被拒时只把 i18n key "accountLogin_account_pwd_error" 原样吐在页面上，
+     * 状态码同时从 200 变成 401。认出这两个就足以断言「密码不对」，
+     * 不必再让用户去猜是验证码还是 MFA。
+     */
+    if (/accountLogin_account_pwd_error/.test(body) || res.status === 401) {
+      throw new Error("统一认证判定用户名或密码不正确（status=" + res.status + "）。" + diag);
+    }
     if (/var\s+inputUserNameTip/.test(body)) {
       /*
        * 服务端把登录页原样退了回来，说明这次提交没被受理。这是「凭据层」的失败
@@ -261,7 +311,17 @@ async function protocolLoginOnce(username: string, password: string): Promise<Lo
     throw new Error((tip?.trim() || "账号或密码不正确") + "。" + diag);
   }
 
-  let ticketUrl = res.headers.get("location") || "";
+  return finishWithTicket(res.headers.get("location") || "", jar);
+}
+
+/**
+ * 从第 3 步的 302 落点继续走完：识别落点 → 取 ticket → 回调拿 uid/lzc → 换 token。
+ *
+ * 单独成函数是为了让「CASTGC 免密换票」复用同一份实现 —— 两条入口在这一步之后
+ * 完全一致，不该有第二份换票逻辑。
+ */
+async function finishWithTicket(location: string, jar: Jar): Promise<LoginResult> {
+  let ticketUrl = location;
   if (ticketUrl.startsWith("/")) ticketUrl = ZHXG + ticketUrl;
 
   /*
@@ -275,6 +335,21 @@ async function protocolLoginOnce(username: string, password: string): Promise<Lo
    * （会话、参数、账号状态）没有定论，所以这里只识别、不解释。遇到时改用官方
    * 页面登录一次即可绕过。
    */
+  /*
+   * 还有一种落点，容易被误读成「会话失配」：
+   *   302 → /authserver/reAuthCheck/reAuthLoginView.do?isMultifactor=true&service=…
+   * 这是统一认证的二次认证（多因子）页面 —— 密码已经验过，卡的是短信 / OTP /
+   * 人脸这一关，跟图形验证码是两回事。协议客户端没有那条流程的会话，跟过去只会
+   * 被踢回登录页；重试也照样被要求一次，只多刷一次风控计数。单独归一类，不重试。
+   */
+  if (/reAuthLoginView|reAuthCheck|\/reAuth/i.test(ticketUrl)) {
+    throw new MfaRequiredError(
+      "统一认证要求二次认证（多因子）：密码这一步已经通过，卡在短信 / 二次验证这一关，" +
+        "跟图形验证码无关。协议登录无法自动完成，请在官方页面登录一次（完成二次验证），" +
+        "再用「手动导入」把 token 与 casual 搬进来。"
+    );
+  }
+
   if (/\/authserver\/login\b/.test(ticketUrl)) {
     // flow execution 失效时 CAS 会带上 exception.message，把它透出来，省得靠猜
     const why = (() => {
@@ -438,11 +513,76 @@ async function protocolLoginOnce(username: string, password: string): Promise<Lo
     throw new Error("换取登录令牌失败" + (why ? "：" + why : "") + "（账号已识别，卡在会话绑定这一步）");
   }
 
+  const tgt = jar.value("CASTGC");
   return {
     token: j.data.token,
     casual,
+    ...(tgt ? { castgc: tgt } : {}),
     user: { xh: j.data.yhzh, xm: j.data.yhxm, bmid: j.data.bmid, bmmc: readBmmc(j.data.token) },
   };
+}
+
+/**
+ * 用 CASTGC 免密换票 —— 云端形态真正可用的自动登录入口。
+ *
+ * 密码登录成功时 CAS 会签发 CASTGC（rememberMe=true 的 TGT）。带着它直接 GET
+ * 登录页，CAS 认「这个客户端已经认证过」，立刻 302 回 service?ticket=：不经过
+ * 密码、不会进二次认证，第 4、5 步与密码登录完全一致。
+ *
+ * 所以云端只需要保存这一枚 cookie：
+ *   - 比存密码安全 —— 没有密码，随时可以在浏览器里「退出登录」把它作废；
+ *   - 比存 token 耐用 —— token 约 24 小时，CASTGC 有数天，且每次都能换出新 token;
+ *   - 出口无关 —— 换票是一次 GET，不发凭据，不触发密码风控。
+ *
+ * cookie 按原样接收（形如 "CASTGC=…; JSESSIONID=…"）：只有 CASTGC 必需，
+ * 其余项带上无碍，缺失的由回调过程自己补。
+ */
+export async function castgcLogin(cookie: string): Promise<LoginResult> {
+  const raw = String(cookie || "").trim();
+  if (!raw) throw new Error("没有拿到 CASTGC —— 请从浏览器复制一次再导入");
+
+  const jar = new Jar();
+  jar.seed(raw, "ca.csu.edu.cn");
+  const loginUrl = `${CAS}/authserver/login?service=${encodeURIComponent(SERVICE)}`;
+  const res = await fetch(loginUrl, {
+    redirect: "manual",
+    headers: { "User-Agent": UA_DESKTOP, Cookie: jar.header(loginUrl) },
+  });
+  jar.set(res, loginUrl);
+
+  if (res.status === 200) {
+    const html = await res.text();
+    if (isGatewayBlock(html)) {
+      throw new RetryableLoginError(
+        "统一认证这一次没返回跳转，而是学校网关的「仅限校园网访问」提示页 —— 这个出口 IP 不在校园网允许范围内。"
+      );
+    }
+    throw new Error(
+      "CASTGC 已经不被认可：统一认证没有换票，而是把登录页又发了一次（" +
+        html.length +
+        " 字节）。它通常只有几天有效期，过期或在浏览器里退出过登录就会这样 —— 重新导入一次即可。"
+    );
+  }
+
+  const loc = res.headers.get("location") || "";
+  if (!loc) {
+    throw new Error("CASTGC 换票没有落到任何地址（status=" + res.status + "），请重新导入一次");
+  }
+
+  try {
+    return await finishWithTicket(loc, jar);
+  } catch (e) {
+    /*
+     * 这一层要改写可重试类的文案：对密码登录来说「被退回登录页」是会话令牌的
+     * 瞬时错乱，重走一遍就好；对 CASTGC 来说它只意味着一件事 —— 这枚凭据不再被认。
+     */
+    if (e instanceof RetryableLoginError) {
+      throw new Error(
+        "CASTGC 没有换来票据：" + e.message + "导入的会话大概率已经过期或被注销，重新导入一次即可。"
+      );
+    }
+    throw e;
+  }
 }
 
 /**

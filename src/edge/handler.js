@@ -13,7 +13,7 @@
  */
 // 不带扩展名：Cloudflare 的 wrangler 与 Vercel 的 Edge 打包器都能解析到
 // src/core/casLogin.ts，换成带 .ts 的写法会限制它们的解析策略。
-import { protocolLogin, ZHXG } from "../core/casLogin";
+import { protocolLogin, castgcLogin, CAS, SERVICE, ZHXG } from "../core/casLogin";
 
 /** 登录接口路径 */
 export const LOGIN_PATH = "/__auth/login";
@@ -57,15 +57,40 @@ async function handleLogin(request) {
   } catch {
     return json({ ok: false, error: "请求体不是合法 JSON" }, 400);
   }
-  const { username, password } = body || {};
-  if (!username || !password) return json({ ok: false, error: "缺少账号或密码" }, 400);
+  const { username, password, castgc } = body || {};
+  /*
+   * 两条入口，覆盖两种完全不同的处境：
+   *   带 castgc   免密换票。云端形态的主路径 —— 一次 GET 换回 ticket，
+   *               不提交密码，也就不会被要求二次认证。
+   *   带账号密码  完整协议登录。成功后把 CAS 签发的 CASTGC 一并回传，
+   *               下一次就改走上面那条，不必再输密码。
+   */
+  if (!castgc && (!username || !password)) {
+    return json({ ok: false, error: "缺少账号或密码，也没有可复用的会话凭据" }, 400);
+  }
 
   try {
-    const out = await protocolLogin(String(username).trim(), String(password));
+    const out = castgc
+      ? await castgcLogin(String(castgc))
+      : await protocolLogin(String(username).trim(), String(password));
     return json({ ok: true, ...out });
   } catch (e) {
     // 业务失败也回 200，由 ok 字段区分 —— 前端按这个约定解析
-    return json({ ok: false, error: (e && e.message) || "登录失败" });
+    const error = (e && e.message) || "登录失败";
+    /*
+     * 二次认证（多因子）与「要验证码」是两种走不通的路，但用户下一步动作相同：
+     * 去官方页面完成一次登录，再把会话搬进来。所以把它标出来，由前端直接把
+     * 官方入口和手动导入面板摊开，而不是让用户对着一行报错自己猜。
+     */
+    if (e && e.name === "MfaRequiredError") {
+      return json({
+        ok: false,
+        error,
+        needMfa: true,
+        officialUrl: `${CAS}/authserver/login?service=${encodeURIComponent(SERVICE)}`,
+      });
+    }
+    return json({ ok: false, error });
   }
 }
 

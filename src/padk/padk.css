@@ -213,6 +213,13 @@ body:has(.padk-shell) {
   border-color: var(--pg-accent);
   color: var(--pg-t1);
 }
+/* 同一个外观也给链接用（打开官方登录页完成二次验证） */
+a.pl-alt {
+  display: block;
+  box-sizing: border-box;
+  text-align: center;
+  text-decoration: none;
+}
 
 .pl-manual {
   margin-top: 12px;
@@ -248,6 +255,25 @@ body:has(.padk-shell) {
   margin-top: 12px;
   padding: 10px;
   font-size: 13px;
+}
+/* 分节提示：先讲 CASTGC，再退到一次性的 token + casual */
+.pl-manual .pl-or {
+  margin: 14px 0 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--pg-line);
+}
+.pl-manual b {
+  color: var(--pg-t2);
+  font-weight: 600;
+}
+.pl-manual code {
+  font-family: var(--pg-mono);
+  font-size: 10.5px;
+  padding: 1px 4px;
+  border-radius: 4px;
+  color: var(--pg-t2);
+  background: rgba(0, 0, 0, 0.32);
+  border: 1px solid var(--pg-line);
 }
 
 .pl-foot {

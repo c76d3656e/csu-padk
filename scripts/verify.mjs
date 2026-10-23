@@ -106,7 +106,8 @@ const post = (p, body) =>
 ok("非接口路径返回 null（交给静态资源）", (await handler.handleApi(new Request(H + "/"))) === null);
 ok("GET 登录接口 → 405", (await handler.handleApi(new Request(H + "/__auth/login"))).status === 405);
 const empty = await handler.handleApi(post("/__auth/login", "{}"));
-ok("POST 空参 → 400 缺少账号或密码", empty.status === 400 && (await empty.json()).error === "缺少账号或密码");
+// 文案里可能追加「也没有可复用的会话凭据」（CASTGC 两条入口），用包含匹配，别锁死整句
+ok("POST 空参 → 400 缺少账号或密码", empty.status === 400 && (await empty.json()).error.includes("缺少账号或密码"));
 const bad = await handler.handleApi(post("/__auth/login", "not json"));
 ok("POST 非法 JSON → 400", bad.status === 400);
 const carried = await handler.handleApi(
@@ -238,7 +239,7 @@ if (fs.existsSync(eoLogin) && fs.existsSync(eoProxy)) {
   const ctx = (req) => ({ request: req, params: {}, env: {}, waitUntil() {} });
   ok("EdgeOne 登录入口：GET → 405", (await l.onRequest(ctx(new Request(H + "/__auth/login")))).status === 405);
   const eoEmpty = await l.onRequest(ctx(post("/__auth/login", "{}")));
-  ok("EdgeOne 登录入口：空参 → 400", eoEmpty.status === 400 && (await eoEmpty.json()).error === "缺少账号或密码");
+  ok("EdgeOne 登录入口：空参 → 400", eoEmpty.status === 400 && (await eoEmpty.json()).error.includes("缺少账号或密码"));
   ok("EdgeOne 转发入口：非转发路径 → 404", (await p.onRequest(ctx(new Request(H + "/nope")))).status === 404);
 }
 
@@ -688,6 +689,40 @@ const GATEWAY_PAGE =
   ok("302 无 ticket → 不再报「未取得登录凭据」", !/未取得登录凭据/.test(msg), msg.slice(0, 120));
 }
 
+// F8b：302 指向 reAuthCheck（二次认证）—— 密码已经过了，卡在 MFA。
+// 这不是会话失配：重试只会再被要求一次，还把风控计数刷高，所以必须不重试、
+// 并且在文案里说清「二次认证」，而不是含糊地报「没有带回票据」。
+{
+  const hits = [];
+  const mfaUrl =
+    casMod.CAS +
+    "/authserver/reAuthCheck/reAuthLoginView.do?isMultifactor=true&service=" +
+    encodeURIComponent(casMod.ZHXG);
+  globalThis.fetch = mockFetch(
+    [
+      [/authserver\/login\?/, (u, init) =>
+        init.method === "POST"
+          ? new Response("", { status: 302, headers: { location: mfaUrl } })
+          : new Response(LOGIN_HTML, { status: 200, headers: { "Set-Cookie": "JSESSIONID=mock-sid; Path=/" } })],
+      [/checkNeedCaptcha/, () => new Response('{"isNeed":false}', { status: 200 })],
+    ],
+    hits
+  );
+  let msg = "";
+  let isMfa = false;
+  try {
+    await casMod.protocolLogin("2020000000", "pw");
+  } catch (e) {
+    msg = e.message;
+    isMfa = e.name === "MfaRequiredError";
+  }
+  globalThis.fetch = realFetch;
+  const posts = hits.filter((u) => /^POST /.test(u) && /authserver\/login\?/.test(u)).length;
+  ok("302 → reAuthCheck → 归类为二次认证", isMfa && /二次认证/.test(msg), msg.slice(0, 120));
+  ok("二次认证不重试（只提交一次密码）", posts === 1, "POST 次数 " + posts);
+  ok("二次认证不冒充「没有带回票据」", !/没有带回票据/.test(msg), msg.slice(0, 120));
+}
+
 // F9：表单字段与参考实现对齐 —— rememberMe 必须在，它是 CAS 签发长期会话的依据
 {
   const hits = [];
@@ -724,6 +759,107 @@ const GATEWAY_PAGE =
       /(^|&)_eventId=submit(&|$)/.test(posted),
     posted.slice(0, 80)
   );
+}
+
+// F10：CASTGC 免密换票 —— 云端形态唯一能自动续期的入口。
+// 断言的关键是「一次密码都不提交」：只要漏了这一点，云端就又会撞二次认证，
+// 等于白做。换票成功后第 4、5 步必须与密码登录完全一致。
+{
+  const hits = [];
+  globalThis.fetch = mockFetch(
+    [
+      [/authserver\/login\?/, () =>
+        new Response("", { status: 302, headers: { location: casMod.SERVICE + "?ticket=ST-TGT-0001" } })],
+      [/caslogin_h5\.jsp/, () => new Response("var uid = '2020000000';", { status: 200 })],
+      [/login-other/, () =>
+        new Response(JSON.stringify({ data: { token: "p.q.r", yhzh: "2020000000", yhxm: "测试", bmid: "1" } }), {
+          status: 200,
+        })],
+    ],
+    hits
+  );
+  let out = null;
+  let msg = "";
+  try {
+    out = await casMod.castgcLogin("CASTGC=TGT-abc");
+  } catch (e) {
+    msg = e.message;
+  }
+  globalThis.fetch = realFetch;
+  const posts = hits.filter((u) => /^POST /.test(u) && /authserver\/login\?/.test(u)).length;
+  ok("CASTGC 换票拿到 token", !!out && out.token === "p.q.r", msg.slice(0, 140));
+  ok("CASTGC 换票全程不提交密码", posts === 0, "POST 次数 " + posts);
+}
+
+// F11：CASTGC 过期（CAS 把登录页又发回来）—— 必须直说是这枚凭据不被认，
+// 而不是含糊成「登录失败」，也不能重试（凭据过期重试一百次也没用）。
+{
+  const hits = [];
+  globalThis.fetch = mockFetch([[/authserver\/login\?/, () => new Response(LOGIN_HTML, { status: 200 })]], hits);
+  let msg = "";
+  try {
+    await casMod.castgcLogin("CASTGC=stale");
+  } catch (e) {
+    msg = e.message;
+  }
+  globalThis.fetch = realFetch;
+  ok("CASTGC 过期 → 明确指出这枚凭据不被认可", /CASTGC/.test(msg) && /登录页/.test(msg), msg.slice(0, 140));
+  ok("CASTGC 过期 → 只试一次，不重试", hits.length === 1, "请求次数 " + hits.length);
+}
+
+// F12：CASTGC 换票仍被要求二次认证 —— 说明连「已认证会话」都过不去，
+// 这条自动续期的路在云端真的走不通，必须让用户看到同一类提示。
+{
+  const mfa =
+    casMod.CAS +
+    "/authserver/reAuthCheck/reAuthLoginView.do?isMultifactor=true&service=" +
+    encodeURIComponent(casMod.ZHXG);
+  globalThis.fetch = mockFetch(
+    [[/authserver\/login\?/, () => new Response("", { status: 302, headers: { location: mfa } })]],
+    []
+  );
+  let isMfa = false;
+  try {
+    await casMod.castgcLogin("CASTGC=x");
+  } catch (e) {
+    isMfa = e.name === "MfaRequiredError";
+  }
+  globalThis.fetch = realFetch;
+  ok("CASTGC 也被要求二次认证 → 仍归类为 MFA", isMfa);
+}
+
+// F13：密码登录成功时必须把 CASTGC 一并带回。少了它，用户每次都得重新输密码，
+// 「一次登录、之后免密」的链路就断在第一步。
+{
+  globalThis.fetch = mockFetch(
+    [
+      [/authserver\/login\?/, (u, init) =>
+        init.method === "POST"
+          ? new Response("", {
+              status: 302,
+              headers: {
+                location: casMod.SERVICE + "?ticket=ST-OK-0006",
+                "Set-Cookie": "CASTGC=TGT-xyz; Path=/; HttpOnly",
+              },
+            })
+          : new Response(LOGIN_HTML, { status: 200, headers: { "Set-Cookie": "JSESSIONID=mock-sid; Path=/" } })],
+      [/checkNeedCaptcha/, () => new Response('{"isNeed":false}', { status: 200 })],
+      [/caslogin_h5\.jsp/, () => new Response("var uid = '2020000000';", { status: 200 })],
+      [/login-other/, () =>
+        new Response(JSON.stringify({ data: { token: "s.t.u", yhzh: "2020000000", yhxm: "测试", bmid: "1" } }), {
+          status: 200,
+        })],
+    ],
+    []
+  );
+  let out = null;
+  try {
+    out = await casMod.protocolLogin("2020000000", "pw");
+  } catch {
+    /* 断言只看回传字段 */
+  }
+  globalThis.fetch = realFetch;
+  ok("密码登录成功后回传 CASTGC（供下次免密）", out && out.castgc === "TGT-xyz", String(out && out.castgc).slice(0, 24));
 }
 
 /* ── G. 手动导入凭据 ── */
