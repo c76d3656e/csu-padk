@@ -242,6 +242,129 @@ if (fs.existsSync(eoLogin) && fs.existsSync(eoProxy)) {
   ok("EdgeOne 转发入口：非转发路径 → 404", (await p.onRequest(ctx(new Request(H + "/nope")))).status === 404);
 }
 
+/* ── F. 登录协议：出口被风控时的分支 ── */
+/*
+ * 这两条断言对应一个真实的线上故障：Cloudflare 边缘出口访问学校系统时，
+ * 出口 IP 被风控区别对待，CAS 会以 302 把请求**退回登录页**。旧实现只看
+ * 「状态码是不是 302」，于是把伪成功一路带到回调步骤，最后只报
+ * 「未取得登录凭据（uid）」—— 真正的原因（登录根本没被接受）被藏掉了。
+ *
+ * 这里用替换 globalThis.fetch 的方式驱动协议分支，不联网、不需要账号。
+ */
+console.log("\nF. 登录协议分支");
+const casMod = await import(asUrl(await bundle(path.join(ROOT, "src/core/casLogin.ts"), "casLogin.mjs")));
+const realFetch = globalThis.fetch;
+const LOGIN_HTML =
+  '<input id="pwdEncryptSalt" value="AbCdEfGhIjKlMnOp">' +
+  '<input id="execution" name="execution" value="e1s1">';
+
+/** 用路由表模拟学校侧；hits 记录实际请求过的 URL */
+function mockFetch(routes, hits = []) {
+  return async (url, init = {}) => {
+    const u = String(url);
+    hits.push(u);
+    for (const [re, make] of routes) if (re.test(u)) return make(u, init);
+    throw new Error("mock 未匹配：" + u);
+  };
+}
+
+// F1：CAS 把 302 指向登录页 → 必须报「被退回登录页」，而不是 uid 缺失
+{
+  const hits = [];
+  globalThis.fetch = mockFetch(
+    [
+      [/authserver\/login\?/, (u, init) =>
+        init.method === "POST"
+          ? new Response("", { status: 302, headers: { location: casMod.CAS + "/authserver/login?service=x" } })
+          : new Response(LOGIN_HTML, { status: 200 })],
+      [/checkNeedCaptcha/, () => new Response('{"isNeed":false}', { status: 200 })],
+    ],
+    hits
+  );
+  let msg = "";
+  try {
+    await casMod.protocolLogin("2020000000", "pw");
+  } catch (e) {
+    msg = e.message;
+  }
+  globalThis.fetch = realFetch;
+  ok("302 退回登录页 → 明确报「被退回登录页」", /被退回登录页/.test(msg), msg.slice(0, 90));
+  ok("退回登录页时不再走回调步骤", !hits.some((u) => /caslogin_h5\.jsp\?ticket=/.test(u)));
+}
+
+// F2：回调页拿不到 uid（边缘出口的形态）→ 用 serviceValidate 兜底换回账号
+{
+  const hits = [];
+  globalThis.fetch = mockFetch(
+    [
+      [/authserver\/login\?/, (u, init) =>
+        init.method === "POST"
+          ? new Response("", {
+              status: 302,
+              headers: { location: casMod.SERVICE + "?ticket=ST-OK-0001" },
+            })
+          : new Response(LOGIN_HTML, { status: 200 })],
+      [/checkNeedCaptcha/, () => new Response('{"isNeed":false}', { status: 200 })],
+      // 顺序要紧：serviceValidate 的 URL 里带着 service 参数（含 fdcwonsun 字样），
+      // 排在回调页规则之后就会被截获
+      [/serviceValidate/, () =>
+        new Response(
+          "<cas:serviceResponse><cas:authenticationSuccess><cas:user>2020000000</cas:user></cas:authenticationSuccess></cas:serviceResponse>",
+          { status: 200 }
+        )],
+      [/caslogin_h5\.jsp/, () => new Response("<html>登录成功</html>", { status: 200 })],
+      [/login-other/, () =>
+        new Response(JSON.stringify({ data: { token: "a.b.c", yhzh: "2020000000", yhxm: "测试", bmid: "1" } }), {
+          status: 200,
+        })],
+    ],
+    hits
+  );
+  let out = null;
+  let msg = "";
+  try {
+    out = await casMod.protocolLogin("2020000000", "pw");
+  } catch (e) {
+    msg = e.message;
+  }
+  globalThis.fetch = realFetch;
+  ok("回调页无 uid → serviceValidate 兜底成功", !!out && out.token === "a.b.c", msg.slice(0, 120));
+  ok("兜底路径确实调用了 serviceValidate", hits.some((u) => /serviceValidate/.test(u)));
+}
+
+// F3：回调页本身有 uid → 不应多余地再打 serviceValidate
+{
+  const hits = [];
+  globalThis.fetch = mockFetch(
+    [
+      [/authserver\/login\?/, (u, init) =>
+        init.method === "POST"
+          ? new Response("", {
+              status: 302,
+              headers: { location: casMod.SERVICE + "?ticket=ST-OK-0002" },
+            })
+          : new Response(LOGIN_HTML, { status: 200 })],
+      [/checkNeedCaptcha/, () => new Response('{"isNeed":false}', { status: 200 })],
+      [/caslogin_h5\.jsp/, () => new Response("var uid = '2020000000'; var lzc = 'LZC1';", { status: 200 })],
+      [/login-other/, () =>
+        new Response(JSON.stringify({ data: { token: "x.y.z", yhzh: "2020000000", yhxm: "测试", bmid: "1" } }), {
+          status: 200,
+        })],
+    ],
+    hits
+  );
+  let out = null;
+  let msg = "";
+  try {
+    out = await casMod.protocolLogin("2020000000", "pw");
+  } catch (e) {
+    msg = e.message;
+  }
+  globalThis.fetch = realFetch;
+  ok("回调页有 uid → 正常登录", !!out && out.token === "x.y.z", msg.slice(0, 120));
+  ok("有 uid 时不额外调用 serviceValidate", !hits.some((u) => /serviceValidate/.test(u)));
+}
+
 /* ── 汇总 ── */
 console.log("");
 if (fails.length) {

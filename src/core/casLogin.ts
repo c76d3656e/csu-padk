@@ -133,26 +133,81 @@ export async function protocolLogin(username: string, password: string): Promise
   let ticketUrl = res.headers.get("location") || "";
   if (ticketUrl.startsWith("/")) ticketUrl = ZHXG + ticketUrl;
 
+  /*
+   * 302 不等于登录成功。
+   *
+   * 实测：出口 IP 触发学校侧风控时，CAS 会以 302 把浏览器**退回登录页**，
+   * 而不是带 ticket 回到 service。只看状态码的实现会把这个「伪成功」一路
+   * 带到第 4 步，最后只报一句「未取得登录凭据（uid）」，把真正的原因（登录
+   * 根本没被接受）藏起来 —— Cloudflare 边缘出口上就是这样。
+   */
+  if (/\/authserver\/login\b/.test(ticketUrl)) {
+    throw new Error(
+      "统一认证没有接受这次登录：被退回登录页。出口 IP 触发学校侧风控时会出现这种情形，" +
+        "本机 exe 形态不受影响。"
+    );
+  }
+
+  const ticket = (() => {
+    try {
+      return new URL(ticketUrl, ZHXG).searchParams.get("ticket") || "";
+    } catch {
+      return "";
+    }
+  })();
+
   // 4. 跟随回调拿 uid / lzc
   const wxJar = new Jar();
   let cur = ticketUrl;
   let body = "";
+  const trace: string[] = [];
   for (let hop = 0; hop < 5 && cur; hop++) {
-    const r = await fetch(cur, {
-      redirect: "manual",
-      headers: { "User-Agent": UA_MOBILE, Cookie: wxJar.header() },
-    });
+    const h: Record<string, string> = { "User-Agent": UA_MOBILE };
+    // 首跳不塞空 Cookie 头：空头值在 Node 与边缘运行时处置不同，而首跳本来就无 cookie 可带
+    const ck = wxJar.header();
+    if (ck) h.Cookie = ck;
+    const r = await fetch(cur, { redirect: "manual", headers: h });
     wxJar.set(r);
     const t = await r.text();
-    if (t.includes("uid")) body = t;
+    const hasUid = t.includes("uid");
+    if (hasUid) body = t;
+    trace.push(
+      `#${hop} ${r.status} len=${t.length}${hasUid ? " uid" : ""} → ${(r.headers.get("location") || "-").slice(0, 80)}`
+    );
     const next = r.headers.get("location");
     if (!next) break;
     cur = next.startsWith("/") ? ZHXG + next : next;
   }
 
-  const uid = (body.match(/uid\s*=\s*['"]([^'"]+)['"]/) || [])[1] || "";
+  let uid = (body.match(/uid\s*=\s*['"]([^'"]+)['"]/) || [])[1] || "";
   const lzc = (body.match(/lzc\s*=\s*['"]([^'"]*)['"]/) || [])[1] || "";
-  if (!uid) throw new Error("未取得登录凭据（uid）");
+
+  /*
+   * 回调页在部分出口环境下拿不到 uid（页面形态与校内直连不同）。这时退回 CAS
+   * 标准协议 serviceValidate —— 按 ticket 直接换回 XML 形式的账号，不依赖
+   * HTML 结构与重定向链，是 CAS 里最稳的一条路。lzc 只有回调页里有，拿不到就
+   * 留空（第 5 步允许空值）。
+   */
+  if (!uid && ticket) {
+    try {
+      const v = await fetch(
+        `${CAS}/authserver/serviceValidate?service=${encodeURIComponent(SERVICE)}&ticket=${encodeURIComponent(ticket)}`,
+        { headers: { "User-Agent": UA_DESKTOP } }
+      );
+      const xml = await v.text();
+      uid = (xml.match(/<cas:user>([^<]+)<\/cas:user>/) || [])[1] || "";
+      trace.push(`serviceValidate ${v.status} len=${xml.length}${uid ? " uid" : ""}`);
+    } catch (e) {
+      trace.push(`serviceValidate ERR ${(e as Error).message}`);
+    }
+  }
+
+  if (!uid) {
+    const detail = trace.join(" | ");
+    // 边缘环境（Cloudflare）的 console 输出会进平台日志，便于线上排查
+    console.log("[padk] 未取得 uid，回调链：" + detail);
+    throw new Error("未取得登录凭据（uid）。回调链：" + detail);
+  }
 
   // 5. 换 token（casual 在此与这次会话绑定）
   const casual = generateCasual(16);
