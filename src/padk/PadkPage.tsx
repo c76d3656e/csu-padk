@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import Panel from "../panel/Panel";
 import { store } from "../core/store";
-import { readCred, writeCred, clearCred, setCredSource } from "../core/api";
+import { readCred, writeCred, clearCred, setCredSource, setManualCred } from "../core/api";
 // Panel 直接渲染在 document 中，需显式引入面板样式
 import "../panel/panel.css";
 
@@ -19,6 +19,10 @@ export default function PadkPage() {
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
   const [user, setUser] = useState<{ xh: string; xm: string; bmmc?: string } | null>(null);
+  /* 手动导入面板：学校要求验证码时，协议登录无解，只能把官方会话搬过来 */
+  const [manual, setManual] = useState(false);
+  const [mToken, setMToken] = useState("");
+  const [mCasual, setMCasual] = useState("");
 
   /* ── 检查现有会话 ── */
   useEffect(() => {
@@ -97,6 +101,26 @@ export default function PadkPage() {
     }
   }, [username, password, remember]);
 
+  /* ── 手动导入：token + casual 必须成对，缺一个就整体拒绝 ── */
+  const doManual = useCallback(() => {
+    const r = setManualCred(mToken, mCasual);
+    if (!r.ok) {
+      setErr(
+        r.reason === "token-invalid"
+          ? "token 看起来不完整（应从 eyJ 开头的长串整段复制）"
+          : r.reason === "casual-invalid"
+            ? "casual 应是 16 位字母数字，与 token 来自同一次会话"
+            : "凭据不可用：" + (r.detail || r.reason)
+      );
+      return;
+    }
+    setErr("");
+    setMToken("");
+    setMCasual("");
+    setManual(false);
+    setPhase("ready");
+  }, [mToken, mCasual]);
+
   const logout = useCallback(() => {
     clearCred();
     localStorage.removeItem(LS_PROFILE);
@@ -173,6 +197,43 @@ export default function PadkPage() {
           <button className="pl-btn" onClick={doLogin} disabled={busy}>
             {busy ? "登录中…" : "登录并进入打卡"}
           </button>
+
+          <button className="pl-alt" onClick={() => { setManual(!manual); setErr(""); }}>
+            {manual ? "收起" : "学校要求验证码？改用手动导入"}
+          </button>
+
+          {manual && (
+            <div className="pl-manual">
+              <p>
+                在官方页面登录一次，然后按 F12 打开控制台，粘贴执行：
+              </p>
+              <pre>{'copy(JSON.stringify({token:localStorage.token||sessionStorage.token,casual:localStorage.casual||sessionStorage.casual}))'}</pre>
+              <p>剪贴板里会得到一对 JSON，粘到下面即可。两者必须来自同一次会话，拆开用会失败。</p>
+              <label className="pl-field">
+                <span>token</span>
+                <input
+                  type="text"
+                  value={mToken}
+                  spellCheck={false}
+                  placeholder="eyJ…"
+                  onChange={(e) => setMToken(e.target.value)}
+                />
+              </label>
+              <label className="pl-field">
+                <span>casual</span>
+                <input
+                  type="text"
+                  value={mCasual}
+                  spellCheck={false}
+                  placeholder="16 位字母数字"
+                  onChange={(e) => setMCasual(e.target.value)}
+                />
+              </label>
+              <button className="pl-btn" onClick={doManual} disabled={!mToken || !mCasual}>
+                使用这对凭据
+              </button>
+            </div>
+          )}
 
           <p className="pl-foot">
             走的是学校统一身份认证（<code>ca.csu.edu.cn</code>），

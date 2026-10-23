@@ -14,6 +14,7 @@ export {
   writeCred,
   clearCred,
   setCredSource,
+  setManualCred,
   isToken,
   isCasual,
   getToken,

@@ -278,11 +278,18 @@ const CB_REDIRECT =
 function mockFetch(routes, hits = []) {
   return async (url, init = {}) => {
     const u = String(url);
-    hits.push(u);
+    hits.push((init.method || "GET") + " " + u);
     for (const [re, make] of routes) if (re.test(u)) return make(u, init);
     throw new Error("mock 未匹配：" + u);
   };
 }
+
+// 学校网关的「仅限校园网访问」提示页。状态码是 200，只能认正文 ——
+// 线上偶发出现，且重试一次就能过，所以它必须是可重试的
+const GATEWAY_PAGE =
+  "<!DOCTYPE html><html lang=\"zh-CN\"><head><title>系统访问提示</title></head><body>" +
+  "<h1>系统访问提示</h1><p>您访问的系统（网站）因工作需要仅限校园网访问，" +
+  "如需访问请先注册登录学校VPN。</p></body></html>";
 
 // F1：CAS 把 302 指向登录页 → 必须报「被退回登录页」，而不是 uid 缺失
 {
@@ -292,7 +299,7 @@ function mockFetch(routes, hits = []) {
       [/authserver\/login\?/, (u, init) =>
         init.method === "POST"
           ? new Response("", { status: 302, headers: { location: casMod.CAS + "/authserver/login?service=x" } })
-          : new Response(LOGIN_HTML, { status: 200 })],
+          : new Response(LOGIN_HTML, { status: 200, headers: { "Set-Cookie": "JSESSIONID=mock-sid; Path=/" } })],
       [/checkNeedCaptcha/, () => new Response('{"isNeed":false}', { status: 200 })],
     ],
     hits
@@ -304,8 +311,56 @@ function mockFetch(routes, hits = []) {
     msg = e.message;
   }
   globalThis.fetch = realFetch;
-  ok("302 退回登录页 → 明确报「被退回登录页」", /被退回登录页/.test(msg), msg.slice(0, 90));
+  ok(
+    "302 退回登录页 → 报「退回了登录页」并说明已重试",
+    /退回了登录页/.test(msg) && /重试过一次/.test(msg),
+    msg.slice(0, 110)
+  );
   ok("退回登录页时不再走回调步骤", !hits.some((u) => /caslogin_h5\.jsp\?ticket=/.test(u)));
+}
+
+// F1b：第 1 步没拿到登录页（既无加密盐也无会话 cookie）—— 会话层失败，
+// 必须在提交前就重来，绝不带着空 cookie 去 POST（只会被 CAS 退回，白白多一次失败计数）
+{
+  const hits = [];
+  globalThis.fetch = mockFetch(
+    [
+      [/authserver\/login\?/, () => new Response("<html><body>维护中</body></html>", { status: 200 })],
+    ],
+    hits
+  );
+  let msg = "";
+  try {
+    await casMod.protocolLogin("2020000000", "pw");
+  } catch (e) {
+    msg = e.message;
+  }
+  globalThis.fetch = realFetch;
+  ok("第 1 步没拿到登录页 → 报「没有返回登录页」", /没有返回登录页/.test(msg), msg.slice(0, 110));
+  ok(
+    "登录页没给 cookie 时不提交密码",
+    !hits.some((u) => /^POST /.test(u) && /authserver\/login\?/.test(u)),
+    "POST 次数 " + hits.filter((u) => /^POST /.test(u) && /authserver\/login\?/.test(u)).length
+  );
+}
+
+// F1c：网关拦截页（状态码 200）→ 必须重试一次；两次都被拦才报错
+{
+  const hits = [];
+  globalThis.fetch = mockFetch([[/authserver\/login\?/, () => new Response(GATEWAY_PAGE, { status: 200 })]], hits);
+  let msg = "";
+  try {
+    await casMod.protocolLogin("2020000000", "pw");
+  } catch (e) {
+    msg = e.message;
+  }
+  globalThis.fetch = realFetch;
+  ok("网关拦截页 → 报「仅限校园网访问」", /仅限校园网访问/.test(msg), msg.slice(0, 110));
+  ok(
+    "网关拦截页 → 确实重试了一次",
+    hits.filter((u) => /authserver\/login\?/.test(u)).length === 2,
+    "登录页请求次数 " + hits.filter((u) => /authserver\/login\?/.test(u)).length
+  );
 }
 
 // F2：回调页拿不到 uid（边缘出口的形态）→ 用 serviceValidate 兜底换回账号
@@ -319,7 +374,7 @@ function mockFetch(routes, hits = []) {
               status: 302,
               headers: { location: casMod.SERVICE + "?ticket=ST-OK-0001" },
             })
-          : new Response(LOGIN_HTML, { status: 200 })],
+          : new Response(LOGIN_HTML, { status: 200, headers: { "Set-Cookie": "JSESSIONID=mock-sid; Path=/" } })],
       [/checkNeedCaptcha/, () => new Response('{"isNeed":false}', { status: 200 })],
       // 顺序要紧：serviceValidate 的 URL 里带着 service 参数（含 fdcwonsun 字样），
       // 排在回调页规则之后就会被截获
@@ -366,7 +421,7 @@ function mockFetch(routes, hits = []) {
               status: 302,
               headers: { location: casMod.SERVICE + "?ticket=ST-OK-0002" },
             })
-          : new Response(LOGIN_HTML, { status: 200 })],
+          : new Response(LOGIN_HTML, { status: 200, headers: { "Set-Cookie": "JSESSIONID=mock-sid; Path=/" } })],
       [/checkNeedCaptcha/, () => new Response('{"isNeed":false}', { status: 200 })],
       [/caslogin_h5\.jsp/, () => new Response("var uid = '2020000000'; var lzc = 'LZC1';", { status: 200 })],
       [/login-other/, () =>
@@ -397,7 +452,7 @@ function mockFetch(routes, hits = []) {
       [/authserver\/login\?/, (u, init) =>
         init.method === "POST"
           ? new Response(LOGIN_PAGE_BODY, { status: 200 })
-          : new Response(LOGIN_HTML, { status: 200 })],
+          : new Response(LOGIN_HTML, { status: 200, headers: { "Set-Cookie": "JSESSIONID=mock-sid; Path=/" } })],
       // 故意说需要验证码：顺序错了就会报成验证码问题
       [/checkNeedCaptcha/, () => new Response('{"isNeed":true}', { status: 200 })],
     ],
@@ -431,7 +486,7 @@ function mockFetch(routes, hits = []) {
               status: 302,
               headers: { location: casMod.SERVICE + "?ticket=ST-OK-0003" },
             })
-          : new Response(LOGIN_HTML, { status: 200 })],
+          : new Response(LOGIN_HTML, { status: 200, headers: { "Set-Cookie": "JSESSIONID=mock-sid; Path=/" } })],
       [/checkNeedCaptcha/, () => new Response('{"isNeed":false}', { status: 200 })],
       // 同 F2：serviceValidate 的 URL 里含 caslogin_h5.jsp 字样，必须排在回调页规则之前
       [/serviceValidate/, () =>
@@ -464,6 +519,84 @@ function mockFetch(routes, hits = []) {
   globalThis.fetch = realFetch;
   ok("回调链回到 CAS 登录页时停止跟随", !hits.some((u) => /weixinQYLogin|open\.weixin/.test(u)), hits.length + " 次请求");
   ok("提前退出后仍能完成登录", !!out && out.token === "p.q.r", msg.slice(0, 140));
+}
+
+// F6：账号密码错误（200 + 登录页正文）绝不能重试 —— 重试只会把失败次数推高，
+// 反倒更容易触发学校的验证码策略
+{
+  const hits = [];
+  globalThis.fetch = mockFetch(
+    [
+      [/authserver\/login\?/, (u, init) =>
+        init.method === "POST"
+          ? new Response(LOGIN_PAGE_BODY, { status: 200 })
+          : new Response(LOGIN_HTML, { status: 200, headers: { "Set-Cookie": "JSESSIONID=mock-sid; Path=/" } })],
+      [/checkNeedCaptcha/, () => new Response('{"isNeed":false}', { status: 200 })],
+    ],
+    hits
+  );
+  let msg = "";
+  try {
+    await casMod.protocolLogin("2020000000", "pw");
+  } catch (e) {
+    msg = e.message;
+  }
+  globalThis.fetch = realFetch;
+  ok(
+    "账号密码错误不重试（只提交一次）",
+    hits.filter((u) => /^POST /.test(u) && /authserver\/login\?/.test(u)).length === 1,
+    "POST 次数 " + hits.filter((u) => /^POST /.test(u) && /authserver\/login\?/.test(u)).length
+  );
+  ok("账号密码错误 → 文案带诊断串", /诊断 status=200/.test(msg), msg.slice(0, 110));
+}
+
+/* ── G. 手动导入凭据 ── */
+/*
+ * 学校要求验证码时协议登录无解，手动导入是唯一出路。这里断言的是「成对校验」：
+ * token 与 casual 拆开配会 400，所以格式不对必须整体拒绝，绝不能写半截。
+ */
+console.log("\nG. 手动导入凭据");
+{
+  /*
+   * cred.ts 用 storage 存凭据；Node 里没有 window，它按约定回退到 globalThis 上的
+   * 同名对象。这里补一个最小的内存实现，让「写入 → 读回」这段真实逻辑被测到。
+   */
+  const mkStorage = () => {
+    const m = new Map();
+    return {
+      getItem: (k) => (m.has(k) ? m.get(k) : null),
+      setItem: (k, v) => m.set(k, String(v)),
+      removeItem: (k) => m.delete(k),
+      clear: () => m.clear(),
+      key: (i) => [...m.keys()][i] ?? null,
+      get length() {
+        return m.size;
+      },
+    };
+  };
+  globalThis.localStorage = mkStorage();
+  globalThis.sessionStorage = mkStorage();
+  const credMod = await import(asUrl(await bundle(path.join(ROOT, "src/core/cred.ts"), "cred.mjs")));
+  const TOK = "eyJhbGciOiJSUzI1NiJ9." + "a".repeat(60) + ".sig";
+
+  const bad = credMod.setManualCred(TOK, "短");
+  ok("casual 不合法 → 整体拒绝", !bad.ok && bad.reason === "casual-invalid", bad.reason);
+  const bad2 = credMod.setManualCred("eyJx", "AbCdEfGhIjKlMnOp");
+  ok("token 过短 → 整体拒绝", !bad2.ok && bad2.reason === "token-invalid", bad2.reason);
+  const bad3 = credMod.setManualCred(TOK + " 带中文", "AbCdEfGhIjKlMnOp");
+  ok("token 含非法字符 → 整体拒绝", !bad3.ok, bad3.reason);
+
+  // 合法一对：写入后必须能被 readCred 整对读回，且来源标记为 self
+  const okr = credMod.setManualCred("  " + TOK + "  ", "  AbCdEfGhIjKlMnOp  ");
+  ok("合法一对 → 写入成功（含首尾空白自动裁剪）", okr.ok, okr.reason || okr.detail);
+  const back = credMod.readCred();
+  ok(
+    "写入后整对读回且来源为 self",
+    back.ok && back.cred.token === TOK && back.cred.casual === "AbCdEfGhIjKlMnOp" && back.cred.src === "self",
+    back.ok ? back.cred.src : back.reason
+  );
+  credMod.clearCred();
+  ok("clearCred 后回到无凭据", credMod.readCred().ok === false);
 }
 
 /* ── 汇总 ── */

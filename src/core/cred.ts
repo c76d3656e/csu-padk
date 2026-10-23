@@ -278,6 +278,29 @@ export function clearCred(): void {
   }
 }
 
+/**
+ * 手动写入凭据 —— 从浏览器开发者工具里把官方前端的会话搬过来。
+ *
+ * 为什么需要：学校侧一旦要求验证码，协议登录就无解（CAS 的验证码是图形码，
+ * 程序化识别既不稳定也不合适）。但此时用户在官方页面上是登录着的，浏览器里
+ * 就有可用的 token 与 casual —— 把它们粘过来是唯一能走通的路。
+ *
+ * 只认**同时给出**的一对：token 与 casual 必须来自同一次会话，拆开配会 400。
+ * 写入的 src 标记为 self，与协议登录的产物同等对待（PadkPage 只认 self）。
+ */
+export function setManualCred(token: string, casual: string): CredResult {
+  const cred: Credential = {
+    token: String(token).trim(),
+    casual: String(casual).trim(),
+    agentId: "",
+    at: Date.now(),
+    src: "self",
+  };
+  const r = validate(cred, "self");
+  if (!r.ok) return r;
+  return writeCred({ token: cred.token, casual: cred.casual });
+}
+
 /* ── 兼容旧名字（e2e 脚本与部分调用点仍在用） ── */
 
 export function getToken(): string | null {

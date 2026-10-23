@@ -58,6 +58,10 @@ class Jar {
   header(): string {
     return [...this.m].map(([k, v]) => `${k}=${v}`).join("; ");
   }
+  /** 只报名字，值永远不外泄 —— 诊断文案要能贴进工单 */
+  names(): string {
+    return [...this.m.keys()].join(",") || "无";
+  }
 }
 
 /** base64url → UTF-8 字符串。Buffer 在边缘运行时不可用，用 atob 手工补 padding */
@@ -79,7 +83,25 @@ function readBmmc(token: string): string | undefined {
   }
 }
 
-export async function protocolLogin(username: string, password: string): Promise<LoginResult> {
+/*
+ * 两类失败是瞬时的，整体重试一次就能过，实测如此：
+ *   - 出口 IP 被学校网关拦下，第 1 步拿不到登录页（或拿到「仅限校园网访问」提示页，状态码仍是 200）
+ *   - 第 3 步提交后 CAS 以 302 把请求退回登录页，即 flow execution 与本次会话不匹配
+ * 用独立类型标记，避免把「密码真的错了」也拿去重试 —— 那种情况 CAS 回 200 + 登录页正文。
+ */
+class RetryableLoginError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "RetryableLoginError";
+  }
+}
+
+/** 学校网关的「仅限校园网访问」提示页。状态码是 200，只能认正文 */
+function isGatewayBlock(html: string): boolean {
+  return /仅限校园网访问|系统访问提示|仅限校内网络访问/.test(html);
+}
+
+async function protocolLoginOnce(username: string, password: string): Promise<LoginResult> {
   const jar = new Jar();
   const loginUrl = `${CAS}/authserver/login?service=${encodeURIComponent(SERVICE)}`;
 
@@ -93,10 +115,26 @@ export async function protocolLogin(username: string, password: string): Promise
   const salt = (html.match(/id="pwdEncryptSalt"\s+value="([^"]*)"/) || [])[1] || "";
   const exec = (html.match(/id="execution"\s+name="execution"\s+value="([^"]*)"/) || [])[1] || "e1s1";
 
+  if (!salt && isGatewayBlock(html)) {
+    throw new RetryableLoginError(
+      "统一认证这一次没返回登录页，而是学校网关的「仅限校园网访问」提示页 —— 这个出口 IP 不在校园网允许范围内。"
+    );
+  }
   if (!salt && (res.headers.get("location") || "").includes("weixinQYLogin")) {
     throw new Error("统一认证走了企业微信授权分支，请稍后重试");
   }
-  if (!salt) throw new Error("未能从登录页解析加密盐，页面结构可能已变更");
+  /*
+   * 没拿到登录页就到此为止，不再往下走。
+   * 实测的正常登录页一定同时带 salt 与会话 cookie（JSESSIONID）；两者都缺，
+   * 说明这次根本没拿到页面 —— 网关拦截页已在上一步识别，剩下的就是学校侧
+   * 的瞬时状态（限流、维护、会话分配失败）。这种情形提交密码只会被 CAS 退回，
+   * 白白多一次失败计数，所以标记为可重试，在这里就重来一遍。
+   */
+  if (!salt) {
+    throw new RetryableLoginError(
+      "统一认证这一次没有返回登录页（既没有加密盐，也没有会话 cookie）—— 出口 IP 被学校侧拒绝时就是这个样子。"
+    );
+  }
 
   // 2. 是否需要验证码
   res = await fetch(
@@ -133,17 +171,29 @@ export async function protocolLogin(username: string, password: string): Promise
     const body = await res.text();
     const tip = (body.match(/id="showErrorTip"[^>]*>([^<]*)</) || [])[1];
     /*
+     * 诊断串：线上（云端形态）出问题时看不到内部状态，这串是唯一的线索。
+     * 只报结构不报值 —— cookie 只列名字，salt 只说有无，密码永远不出现。
+     */
+    const diag =
+      `诊断 status=${res.status} len=${body.length} ` +
+      `salt=${/pwdEncryptSalt/.test(body) ? "有" : "无"} ` +
+      `cookie=[${jar.names()}] 验证码=${needCaptcha ? "是" : "否"}`;
+    /*
      * CAS 拒绝登录时不一定带错误提示元素，实测会直接回登录页正文（含这段脚本变量）。
      * 先认它，再判验证码 —— 顺序反过来会把「登录页被退回来」说成「需要验证码」。
      */
     if (/var\s+inputUserNameTip/.test(body)) {
+      /*
+       * 服务端把登录页原样退了回来，说明这次提交没被受理。这是「凭据层」的失败
+       * （账号密码、验证码），不是会话层 —— 重试只会多一次无效提交，还可能把
+       * 失败次数推高触发验证码，所以这里不重试。
+       */
       throw new Error(
-        "统一认证没有接受这次登录（账号或密码不正确，或该账号被要求验证码）。" +
-          "出现验证码时需要用官方页面登录一次。"
+        "统一认证没有接受这次登录（账号或密码不正确，或该账号被要求验证码）。" + diag
       );
     }
-    if (needCaptcha) throw new Error("该账号需要验证码，请改用官方页面登录");
-    throw new Error(tip?.trim() || "账号或密码不正确");
+    if (needCaptcha) throw new Error("该账号需要验证码，请改用官方页面登录。" + diag);
+    throw new Error((tip?.trim() || "账号或密码不正确") + "。" + diag);
   }
 
   let ticketUrl = res.headers.get("location") || "";
@@ -161,7 +211,7 @@ export async function protocolLogin(username: string, password: string): Promise
    * 页面登录一次即可绕过。
    */
   if (/\/authserver\/login\b/.test(ticketUrl)) {
-    throw new Error("统一认证没有接受这次登录：被退回登录页。请改用官方页面登录一次。");
+    throw new RetryableLoginError("统一认证把这次登录退回了登录页（会话与表单令牌对不上）。");
   }
 
   const ticket = (() => {
@@ -185,6 +235,9 @@ export async function protocolLogin(username: string, password: string): Promise
   let cur = ticketUrl;
   const hops: string[] = [];
   const trace: string[] = [];
+  // 票据本身是凭据，不进日志；只记长度。这一条能一眼区分两种失败：
+  // 没有 ticket（第 3 步其实没成功）与有 ticket 但换不回身份。
+  trace.push(ticket ? `ticket len=${ticket.length}` : "ticket 缺失");
   for (let hop = 0; hop < 5 && cur; hop++) {
     const h: Record<string, string> = { "User-Agent": UA_DESKTOP };
     // 首跳不塞空 Cookie 头：空头值在 Node 与边缘运行时处置不同，而首跳本来就无 cookie 可带
@@ -254,6 +307,9 @@ export async function protocolLogin(username: string, password: string): Promise
     throw new Error("未取得登录凭据（uid）。回调链：" + detail);
   }
 
+  // 第 4 步结束后的诊断：uid 拿到了但回调页没给 lzc 时，留个痕便于比对
+  if (uid && !lzc) trace.push("lzc 缺失（第 5 步允许）");
+
   // 5. 换 token（casual 在此与这次会话绑定）
   const casual = generateCasual(16);
   const r5 = await fetch(`${ZHXG}/znzhxgpt/basesys/rbac-yh/login-other`, {
@@ -289,4 +345,32 @@ export async function protocolLogin(username: string, password: string): Promise
     casual,
     user: { xh: j.data.yhzh, xm: j.data.yhxm, bmid: j.data.bmid, bmmc: readBmmc(j.data.token) },
   };
+}
+
+/**
+ * 对外入口：把瞬时失败吃掉，最多重试一次。
+ *
+ * 只重试 RetryableLoginError，即会话层的瞬时失败：
+ *   出口 IP 被学校网关拦下（拿不到登录页，或拿到「仅限校园网访问」提示页）/
+ *   提交后 CAS 以 302 退回登录页（表单令牌与本次会话对不上）。
+ * 出口 IP 被拦是持续性的，重试救不了 —— 所以第二次仍失败时会明确告诉用户改用官方页面。
+ * 账号密码与验证码走的是另一条路径（CAS 回 200 + 登录页正文），不重试 ——
+ * 免得把用户一次输错变成两次无效提交，也免得推高失败次数触发验证码。
+ */
+export async function protocolLogin(username: string, password: string): Promise<LoginResult> {
+  for (let attempt = 0; ; attempt++) {
+    try {
+      return await protocolLoginOnce(username, password);
+    } catch (e) {
+      if (!(e instanceof RetryableLoginError) || attempt >= 1) {
+        if (e instanceof RetryableLoginError) {
+          // 重试也没过，说明不是会话令牌的问题，而是这次登录本身不被接受
+          throw new Error(e.message + " 已经重试过一次仍未通过，请改用官方页面登录一次。");
+        }
+        throw e;
+      }
+      // 网关拦截与 flow execution 失效都是瞬时的，退一步再走一遍完整流程
+      await new Promise((r) => setTimeout(r, 400));
+    }
+  }
 }

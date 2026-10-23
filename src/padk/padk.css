@@ -195,6 +195,61 @@ body:has(.padk-shell) {
   cursor: not-allowed;
 }
 
+/* 次级按钮：手动导入入口。刻意做得比主按钮轻，不抢视线 */
+.pl-alt {
+  width: 100%;
+  margin-top: 10px;
+  padding: 9px;
+  border: 1px solid var(--pg-line);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--pg-t2);
+  font-family: inherit;
+  font-size: 12.5px;
+  cursor: pointer;
+  transition: border-color 0.2s ease-out, color 0.2s ease-out;
+}
+.pl-alt:hover {
+  border-color: var(--pg-accent);
+  color: var(--pg-t1);
+}
+
+.pl-manual {
+  margin-top: 12px;
+  padding: 14px;
+  border: 1px solid var(--pg-line);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  text-align: left;
+}
+.pl-manual p {
+  margin: 0 0 8px;
+  font-size: 11.5px;
+  line-height: 1.8;
+  color: var(--pg-t3);
+}
+.pl-manual pre {
+  margin: 0 0 8px;
+  padding: 9px 10px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.32);
+  border: 1px solid var(--pg-line);
+  font-family: var(--pg-mono);
+  font-size: 10.5px;
+  line-height: 1.6;
+  color: var(--pg-t2);
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+.pl-manual .pl-field {
+  margin-top: 8px;
+}
+.pl-manual .pl-btn {
+  margin-top: 12px;
+  padding: 10px;
+  font-size: 13px;
+}
+
 .pl-foot {
   margin-top: 20px;
   font-size: 11px;
