@@ -13,6 +13,7 @@ const REPO = "https://github.com/c76d3656e/csu-padk";
 const VERCEL_DEPLOY =
   "https://vercel.com/new/clone?repository-url=" + encodeURIComponent(REPO);
 const CF_DEPLOY = "https://deploy.workers.cloudflare.com/?url=" + REPO;
+const EO_DEPLOY = "https://edgeone.ai/pages/new?repository-url=" + encodeURIComponent(REPO);
 
 export default function Landing() {
   const [copied, setCopied] = useState<string | null>(null);
@@ -244,9 +245,9 @@ export default function Landing() {
 
             {tab === "deploy" && (
               <div className="prose">
-                <h3>两种运行形态，同一份源码</h3>
+                <h3>三种运行形态，同一份源码</h3>
                 <p>
-                  仓库根目录是一个自包含的项目，两个入口共用 <code>src/core</code> 里的同一份实现：
+                  仓库根目录是一个自包含的项目，三个入口共用 <code>src/core</code> 里的同一份实现：
                 </p>
                 <ul>
                   <li>
@@ -259,6 +260,10 @@ export default function Landing() {
                   </li>
                   <li>
                     <b>Vercel</b>：静态站点 + 一个 Edge Function，<code>vercel.json</code> 已配置好。
+                  </li>
+                  <li>
+                    <b>EdgeOne Makers</b>：静态站点 + 两个 Edge Function，<code>edgeone.json</code> 与{" "}
+                    <code>edge-functions/</code> 已配置好。
                   </li>
                 </ul>
 
@@ -274,6 +279,13 @@ export default function Landing() {
                     <img
                       src="https://deploy.workers.cloudflare.com/button"
                       alt="Deploy to Cloudflare"
+                      height={32}
+                    />
+                  </a>
+                  <a href={EO_DEPLOY} target="_blank" rel="noreferrer">
+                    <img
+                      src="https://cdnstatic.tencentcs.com/edgeone/pages/deploy.svg"
+                      alt="Deploy with EdgeOne Makers"
                       height={32}
                     />
                   </a>

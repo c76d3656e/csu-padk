@@ -7,6 +7,9 @@ dist/
 # wrangler 的本地状态目录（wrangler dev / --dry-run 会生成）
 .wrangler/
 
+# edgeone CLI 的本地编译产物（edgeone makers dev 会生成）
+.edgeone/
+
 # exe 构建中间产物
 padk.exe
 server.sea.cjs

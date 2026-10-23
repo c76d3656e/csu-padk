@@ -1,13 +1,14 @@
 # csu-padk
 
-智慧学工平安打卡的辅助面板。一份源码，两种跑法：
+智慧学工平安打卡的辅助面板。一份源码，三种跑法：
 
 | 形态 | 适合谁 | 需要什么 |
 | --- | --- | --- |
 | **本机 exe** | 只在自己电脑上用，不想装 Node | 双击即用，目标机器零依赖 |
 | **Cloudflare / Vercel** | 想要一个随时能打开的网址 | 一个免费账号即可 |
+| **EdgeOne Makers** | 同上，但想用腾讯云的线路 | 一个腾讯云账号 |
 
-两种形态共用 `src/core` 里的同一份实现，区别只在最外层的接线文件。
+三种形态共用 `src/core` 里的同一份实现，区别只在最外层的接线文件。
 
 ## 快速部署
 
@@ -16,6 +17,8 @@
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/c76d3656e/csu-padk)
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fc76d3656e%2Fcsu-padk)
+
+[![使用 EdgeOne Makers 部署](https://cdnstatic.tencentcs.com/edgeone/pages/deploy.svg)](https://edgeone.ai/pages/new?repository-url=https%3A%2F%2Fgithub.com%2Fc76d3656e%2Fcsu-padk)
 
 部署完成后打开分配到的域名即可使用。也可以先 Fork 本仓库再点按钮，这样后续改动会自动重新部署。
 
@@ -57,6 +60,16 @@ vercel --prod
 
 配置写在 `vercel.json`：静态输出目录 `dist/`，两个接口路径被重写到 Edge Function `api/edge.js`。
 
+**EdgeOne Makers**：
+
+```bash
+npm i -g edgeone
+edgeone login        # 首次需要
+edgeone makers deploy
+```
+
+配置写在 `edgeone.json`：构建命令 `npm run build`，输出目录 `dist/`。接口由 `edge-functions/` 下的两个文件承担 —— 目录即路由，`__auth/login.js` 对应 `/__auth/login`，`znzhxgpt/[[default]].js` 兜住 `/znzhxgpt/` 下的所有层级。
+
 ## 本地开发
 
 ```bash
@@ -80,6 +93,10 @@ npm start            # 不打包 exe，直接跑本机服务（先跑一次 npm 
 ├─ vite.casAuth.ts         开发服务器的登录中间件
 ├─ wrangler.jsonc          Cloudflare 配置
 ├─ vercel.json             Vercel 配置
+├─ edgeone.json            EdgeOne Makers 配置
+├─ edge-functions/         EdgeOne Makers 接口（目录即路由）
+│  ├─ __auth/login.js      登录入口
+│  └─ znzhxgpt/[[default]].js  转发兜底
 │
 ├─ src/
 │  ├─ core/                共享实现，两种形态都用它
@@ -110,17 +127,20 @@ npm start            # 不打包 exe，直接跑本机服务（先跑一次 npm 
    └─ verify.mjs           自检
 ```
 
-## 两种形态是怎么共存的
+## 三种形态是怎么共存的
 
 业务逻辑只有一份，放在 `src/core`。运行环境各有一个极薄的接线文件：
 
 ```
-浏览器 ──┬─→ 本机服务   src/server/server.mjs   ─┐
-         ├─→ Cloudflare src/edge/worker.js      ─┼─→ src/edge/handler.js ─→ src/core/casLogin.ts
-         └─→ Vercel     api/edge.js             ─┘                          src/core/kcipher.ts
+浏览器 ──┬─→ 本机服务   src/server/server.mjs           ─┐
+         ├─→ Cloudflare src/edge/worker.js              ─┤
+         ├─→ Vercel     api/edge.js                     ─┼─→ src/edge/handler.js ─→ src/core/casLogin.ts
+         └─→ EdgeOne    edge-functions/**/*.js          ─┘                          src/core/kcipher.ts
 ```
 
-`handler.js` 不认识任何平台 API —— 入参是标准 `Request`，出参是标准 `Response`，平台差异（静态资源从哪取、请求怎么进来）全部由外层文件吸收。本机服务把 Node 的 `http` 对象转成 `Request`，边缘平台本来就以 `Request` 为入口。
+`handler.js` 不认识任何平台 API —— 入参是标准 `Request`，出参是标准 `Response`，平台差异（静态资源从哪取、请求怎么进来）全部由外层文件吸收。本机服务把 Node 的 `http` 对象转成 `Request`，三个边缘平台本来就以 `Request` 为入口，EdgeOne 的 `onRequest(context)` 与 Cloudflare 的 `onRequest(context)` 是同一套签名。
+
+EdgeOne 的 `edge-functions/` 会被平台自己编译，所以那两个文件直接 `import` 项目里的 `.ts` 共享模块，不需要预先打包。
 
 登录密码的加密只用 Web 标准 API（`crypto.subtle` + `TextEncoder` + `btoa`）。Node 20.12+ 的 `globalThis.crypto` 就是 WebCrypto，与边缘运行时同源，所以同一份代码在两边产出的密文逐字节相同 —— 这一点由 `npm run verify` 断言。
 
@@ -133,6 +153,8 @@ npm start            # 不打包 exe，直接跑本机服务（先跑一次 npm 
 | `/znzhxgpt/**` | 转发到学校服务端，浏览器侧始终同源 |
 
 前两条之外的请求都不进业务代码。`/znzhxgpt/**` 走同源转发而不是让浏览器直连，是为了避免跨域预检 —— 学校网关不放行 `OPTIONS`，直连会全军覆没。
+
+前端是纯 hash 路由（`#/guide`、`#/classic`），所以任何平台都不需要配 SPA 回落规则。
 
 ## 数据与隐私
 

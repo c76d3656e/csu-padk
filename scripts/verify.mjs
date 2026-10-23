@@ -208,6 +208,40 @@ if (!fs.existsSync(path.join(ROOT, "dist", "index.html"))) {
   }
 }
 
+/* ── D. EdgeOne 适配层 ── */
+console.log("\nD. EdgeOne 适配层");
+const eoLogin = path.join(ROOT, "edge-functions", "__auth", "login.js");
+const eoProxy = path.join(ROOT, "edge-functions", "znzhxgpt", "[[default]].js");
+ok("EdgeOne 登录入口存在", fs.existsSync(eoLogin));
+ok("EdgeOne 转发入口存在", fs.existsSync(eoProxy));
+ok(
+  "edgeone.json 指向 dist/ 且声明构建命令",
+  await (async () => {
+    try {
+      const cfg = JSON.parse(fs.readFileSync(path.join(ROOT, "edgeone.json"), "utf8"));
+      return cfg.outputDirectory === "./dist" && !!cfg.buildCommand;
+    } catch {
+      return false;
+    }
+  })()
+);
+
+/*
+ * EdgeOne 的 edge-functions/ 是「目录即路由」，平台自己编译，所以这两个文件
+ * 直接 import 了 src/edge/handler.js。它们最容易在改名或挪目录时静默失效 ——
+ * 平台侧要等真部署才报错。这里用 esbuild 把它们打成临时 ESM 直接调用，
+ * 在本地就把接线错误挡下来。
+ */
+if (fs.existsSync(eoLogin) && fs.existsSync(eoProxy)) {
+  const l = await import(asUrl(await bundle(eoLogin, "eo-login.mjs")));
+  const p = await import(asUrl(await bundle(eoProxy, "eo-proxy.mjs")));
+  const ctx = (req) => ({ request: req, params: {}, env: {}, waitUntil() {} });
+  ok("EdgeOne 登录入口：GET → 405", (await l.onRequest(ctx(new Request(H + "/__auth/login")))).status === 405);
+  const eoEmpty = await l.onRequest(ctx(post("/__auth/login", "{}")));
+  ok("EdgeOne 登录入口：空参 → 400", eoEmpty.status === 400 && (await eoEmpty.json()).error === "缺少账号或密码");
+  ok("EdgeOne 转发入口：非转发路径 → 404", (await p.onRequest(ctx(new Request(H + "/nope")))).status === 404);
+}
+
 /* ── 汇总 ── */
 console.log("");
 if (fails.length) {

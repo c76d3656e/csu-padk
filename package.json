@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "平安打卡面板 · 本机 exe / Cloudflare / Vercel 三种运行形态共用同一份源码",
+  "description": "平安打卡面板 · 本机 exe / Cloudflare / Vercel / EdgeOne 四种运行形态共用同一份源码",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -12,6 +12,7 @@
     "typecheck": "tsc --noEmit",
     "verify": "node scripts/verify.mjs",
     "deploy": "wrangler deploy",
+    "deploy:eo": "npx edgeone makers deploy",
     "preview": "vite preview --port 4173"
   },
   "dependencies": {

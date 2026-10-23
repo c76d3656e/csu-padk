@@ -109,8 +109,8 @@ export default function Classic() {
         <section className="panel-block">
           <h2>部署你自己的副本</h2>
           <p className="muted">
-            本项目提供两种跑法：本机 exe 与云端（Cloudflare / Vercel）。
-            详见仓库 README，两种形态共用同一份源码。
+            本项目提供三种跑法：本机 exe 与云端（Cloudflare / Vercel / EdgeOne Makers）。
+            详见仓库 README，三种形态共用同一份源码。
           </p>
         </section>
 
