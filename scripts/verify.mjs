@@ -258,6 +258,22 @@ const LOGIN_HTML =
   '<input id="pwdEncryptSalt" value="AbCdEfGhIjKlMnOp">' +
   '<input id="execution" name="execution" value="e1s1">';
 
+// CAS 拒绝登录时回的登录页正文（实测 35560 字节，这里只留特征变量）
+const LOGIN_PAGE_BODY =
+  "<html><head><title>统一身份认证平台</title></head><body><script>" +
+  'var inputUserNameTip = "请输入用户名";' +
+  'var inputPasswordTip = "请输入密码";' +
+  'var inputCodeTip = "请输入验证码";' +
+  "</script></body></html>";
+
+// 回调页拿不到 uid 时回的那段跳转脚本（实测 167 字节），它把客户端送回 CAS 登录页
+const CB_REDIRECT =
+  "<script languge='javascript'>window.location.href='" +
+  casMod.CAS +
+  "/authserver/login?service=" +
+  encodeURIComponent(casMod.SERVICE) +
+  "'</script>";
+
 /** 用路由表模拟学校侧；hits 记录实际请求过的 URL */
 function mockFetch(routes, hits = []) {
   return async (url, init = {}) => {
@@ -312,7 +328,8 @@ function mockFetch(routes, hits = []) {
           "<cas:serviceResponse><cas:authenticationSuccess><cas:user>2020000000</cas:user></cas:authenticationSuccess></cas:serviceResponse>",
           { status: 200 }
         )],
-      [/caslogin_h5\.jsp/, () => new Response("<html>登录成功</html>", { status: 200 })],
+      // 回调页的真实形态：无 CAS 会话时回 403 空体（三种 UA 实测都是如此）
+      [/caslogin_h5\.jsp/, () => new Response("", { status: 403 })],
       [/login-other/, () =>
         new Response(JSON.stringify({ data: { token: "a.b.c", yhzh: "2020000000", yhxm: "测试", bmid: "1" } }), {
           status: 200,
@@ -328,8 +345,14 @@ function mockFetch(routes, hits = []) {
     msg = e.message;
   }
   globalThis.fetch = realFetch;
-  ok("回调页无 uid → serviceValidate 兜底成功", !!out && out.token === "a.b.c", msg.slice(0, 120));
+  ok("回调页 403 空体 → serviceValidate 兜底成功", !!out && out.token === "a.b.c", msg.slice(0, 120));
   ok("兜底路径确实调用了 serviceValidate", hits.some((u) => /serviceValidate/.test(u)));
+  ok(
+    "403 空体后立即停止跟随（回调页只被请求一次）",
+    hits.filter((u) => /caslogin_h5\.jsp\?ticket=/.test(u)).length === 1,
+    "次数 " + hits.filter((u) => /caslogin_h5\.jsp\?ticket=/.test(u)).length
+  );
+  ok("回调页 403 时不误判为登录失败", !/没有接受这次登录/.test(msg));
 }
 
 // F3：回调页本身有 uid → 不应多余地再打 serviceValidate
@@ -363,6 +386,84 @@ function mockFetch(routes, hits = []) {
   globalThis.fetch = realFetch;
   ok("回调页有 uid → 正常登录", !!out && out.token === "x.y.z", msg.slice(0, 120));
   ok("有 uid 时不额外调用 serviceValidate", !hits.some((u) => /serviceValidate/.test(u)));
+}
+
+// F4：CAS 拒绝登录 —— 200 + 登录页正文，不重定向。必须报「没有接受这次登录」，
+// 且不能被 checkNeedCaptcha 的结果带偏成「需要验证码」（这才是线上那条错误文案的来源）
+{
+  const hits = [];
+  globalThis.fetch = mockFetch(
+    [
+      [/authserver\/login\?/, (u, init) =>
+        init.method === "POST"
+          ? new Response(LOGIN_PAGE_BODY, { status: 200 })
+          : new Response(LOGIN_HTML, { status: 200 })],
+      // 故意说需要验证码：顺序错了就会报成验证码问题
+      [/checkNeedCaptcha/, () => new Response('{"isNeed":true}', { status: 200 })],
+    ],
+    hits
+  );
+  let msg = "";
+  try {
+    await casMod.protocolLogin("2020000000", "pw");
+  } catch (e) {
+    msg = e.message;
+  }
+  globalThis.fetch = realFetch;
+  ok("CAS 拒绝登录 → 报「没有接受这次登录」", /没有接受这次登录/.test(msg), msg.slice(0, 100));
+  ok("拒绝登录时不误报成「需要验证码」", !/需要验证码/.test(msg), msg.slice(0, 100));
+  // 注意：第 1 步的登录页 URL 里就带着 percent-encoded 的 service（含 caslogin_h5.jsp 字样），
+  // 所以要按「带 ticket 的回调请求」判断，不能按文件名判断
+  ok("拒绝登录时不再走回调步骤", !hits.some((u) => /caslogin_h5\.jsp\?ticket=/.test(u)));
+}
+
+// F5：回调链被送回 CAS 登录页 → 提前退出，绝不跟进企业微信授权
+// 真实线上形态：回调页 302 到 /authserver/login?service=…，CAS 又按 UA 跳到
+// weixinQYLogin.do，最后落到 open.weixin.qq.com —— 这条链越走越远，且永远
+// 拿不到 uid。提前退出后由 serviceValidate 收尾。
+{
+  const hits = [];
+  globalThis.fetch = mockFetch(
+    [
+      [/authserver\/login\?/, (u, init) =>
+        init.method === "POST"
+          ? new Response("", {
+              status: 302,
+              headers: { location: casMod.SERVICE + "?ticket=ST-OK-0003" },
+            })
+          : new Response(LOGIN_HTML, { status: 200 })],
+      [/checkNeedCaptcha/, () => new Response('{"isNeed":false}', { status: 200 })],
+      // 同 F2：serviceValidate 的 URL 里含 caslogin_h5.jsp 字样，必须排在回调页规则之前
+      [/serviceValidate/, () =>
+        new Response(
+          "<cas:serviceResponse><cas:authenticationSuccess><cas:user>2020000000</cas:user></cas:authenticationSuccess></cas:serviceResponse>",
+          { status: 200 }
+        )],
+      [/caslogin_h5\.jsp/, () =>
+        new Response("", {
+          status: 302,
+          headers: {
+            location: casMod.CAS + "/authserver/login?service=" + encodeURIComponent(casMod.SERVICE),
+          },
+        })],
+      // 没有为 weixinQYLogin / open.weixin.qq.com 准备路由：一旦代码继续跟随，mock 会抛未匹配
+      [/login-other/, () =>
+        new Response(JSON.stringify({ data: { token: "p.q.r", yhzh: "2020000000", yhxm: "测试", bmid: "1" } }), {
+          status: 200,
+        })],
+    ],
+    hits
+  );
+  let out = null;
+  let msg = "";
+  try {
+    out = await casMod.protocolLogin("2020000000", "pw");
+  } catch (e) {
+    msg = e.message;
+  }
+  globalThis.fetch = realFetch;
+  ok("回调链回到 CAS 登录页时停止跟随", !hits.some((u) => /weixinQYLogin|open\.weixin/.test(u)), hits.length + " 次请求");
+  ok("提前退出后仍能完成登录", !!out && out.token === "p.q.r", msg.slice(0, 140));
 }
 
 /* ── 汇总 ── */

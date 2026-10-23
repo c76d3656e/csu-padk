@@ -14,6 +14,9 @@ const VERCEL_DEPLOY =
   "https://vercel.com/new/clone?repository-url=" + encodeURIComponent(REPO);
 const CF_DEPLOY = "https://deploy.workers.cloudflare.com/?url=" + REPO;
 const EO_DEPLOY = "https://edgeone.ai/pages/new?repository-url=" + encodeURIComponent(REPO);
+// 国内版是另一套产品：入口在腾讯云控制台，账号、域名、控制台都不与国际版通用
+const EO_CN_DEPLOY =
+  "https://console.cloud.tencent.com/edgeone/makers/new?repository-url=" + encodeURIComponent(REPO);
 
 export default function Landing() {
   const [copied, setCopied] = useState<string | null>(null);
@@ -245,9 +248,9 @@ export default function Landing() {
 
             {tab === "deploy" && (
               <div className="prose">
-                <h3>三种运行形态，同一份源码</h3>
+                <h3>四种运行形态，同一份源码</h3>
                 <p>
-                  仓库根目录是一个自包含的项目，三个入口共用 <code>src/core</code> 里的同一份实现：
+                  仓库根目录是一个自包含的项目，四个入口共用 <code>src/core</code> 里的同一份实现：
                 </p>
                 <ul>
                   <li>
@@ -262,8 +265,12 @@ export default function Landing() {
                     <b>Vercel</b>：静态站点 + 一个 Edge Function，<code>vercel.json</code> 已配置好。
                   </li>
                   <li>
-                    <b>EdgeOne Makers</b>：静态站点 + 两个 Edge Function，<code>edgeone.json</code> 与{" "}
-                    <code>edge-functions/</code> 已配置好。
+                    <b>EdgeOne Makers（国内版）</b>：静态站点 + 两个 Edge Function，{" "}
+                    <code>edgeone.json</code> 与 <code>edge-functions/</code> 已配置好，入口在腾讯云控制台。
+                  </li>
+                  <li>
+                    <b>EdgeOne Pages（国际版）</b>：同样的代码，入口在 <code>edgeone.ai</code>，
+                    邮箱注册即可，不需要实名。
                   </li>
                 </ul>
 
@@ -282,10 +289,17 @@ export default function Landing() {
                       height={32}
                     />
                   </a>
-                  <a href={EO_DEPLOY} target="_blank" rel="noreferrer">
+                  <a href={EO_CN_DEPLOY} target="_blank" rel="noreferrer">
                     <img
                       src="https://cdnstatic.tencentcs.com/edgeone/pages/deploy.svg"
                       alt="Deploy with EdgeOne Makers"
+                      height={32}
+                    />
+                  </a>
+                  <a href={EO_DEPLOY} target="_blank" rel="noreferrer">
+                    <img
+                      src="https://cdnstatic.tencentcs.com/edgeone/pages/deploy.svg"
+                      alt="Deploy with EdgeOne Pages"
                       height={32}
                     />
                   </a>

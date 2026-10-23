@@ -6,7 +6,8 @@
 | --- | --- | --- |
 | **本机 exe** | 只在自己电脑上用，不想装 Node | 双击即用，目标机器零依赖 |
 | **Cloudflare / Vercel** | 想要一个随时能打开的网址 | 一个免费账号即可 |
-| **EdgeOne Makers** | 同上，但想用腾讯云的线路 | 一个腾讯云账号 |
+| **EdgeOne Makers（国内版）** | 同上，但想用腾讯云的国内线路 | 一个腾讯云账号 |
+| **EdgeOne Pages（国际版）** | 同上，但人在境外或不想实名 | 一个邮箱 |
 
 四种形态共用 `src/core` 里的同一份实现，区别只在最外层的接线文件。
 
@@ -19,6 +20,17 @@
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fc76d3656e%2Fcsu-padk)
 
 [![使用 EdgeOne Makers 部署](https://cdnstatic.tencentcs.com/edgeone/pages/deploy.svg)](https://edgeone.ai/pages/new?repository-url=https%3A%2F%2Fgithub.com%2Fc76d3656e%2Fcsu-padk)
+
+EdgeOne 有两套独立的产品，域名、控制台、账号都不通用，两个按钮都给了：
+
+| 版本 | 入口 | 账号 | 适合 |
+| --- | --- | --- | --- |
+| 国际版 EdgeOne Pages | `edgeone.ai` | 邮箱即可，无需实名 | 人在境外，或不想走实名 |
+| 国内版 EdgeOne Makers | `console.cloud.tencent.com/edgeone` | 腾讯云账号，需实名 | 想要国内节点、访问更快 |
+
+国内版的一键部署地址是 `https://console.cloud.tencent.com/edgeone/makers/new?repository-url=<仓库地址>`，参数与国际版一致，本仓库的按钮已按国内版入口给出。两者的配置文件名都是 `edgeone.json`，`edge-functions/` 目录约定也相同，同一份源码两边都能部署。
+
+注意：国内版绑定自定义域名时，加速区域含中国大陆就必须完成工信部备案；不改域名、直接用平台分配的地址则不受影响。另外国内版对「项目域名」的访问有限制 —— 中国大陆网络环境下须用控制台生成的预览链接（3 小时有效），非中国大陆网络环境可直接访问。**这也是本项目仍保留国际版按钮的原因：本项目多半是从校园网外访问。**
 
 部署完成后打开分配到的域名即可使用。也可以先 Fork 本仓库再点按钮，这样后续改动会自动重新部署。
 
@@ -64,9 +76,11 @@ vercel --prod
 
 ```bash
 npm i -g edgeone
-edgeone login        # 首次需要
+edgeone login        # 首次需要，登录的是国际版 edgeone.ai
 edgeone makers deploy
 ```
+
+国内版没有等价的 CLI 一键命令（`edgeone` 这个包连的是 `edgeone.ai`），走控制台：导入 Git 仓库 → 构建命令 `npm run build`、输出目录 `dist` → 创建。
 
 配置写在 `edgeone.json`：构建命令 `npm run build`，输出目录 `dist/`。接口由 `edge-functions/` 下的两个文件承担 —— 目录即路由，`__auth/login.js` 对应 `/__auth/login`，`znzhxgpt/[[default]].js` 兜住 `/znzhxgpt/` 下的所有层级。
 
@@ -175,20 +189,28 @@ GitHub Pages 只适合放一个跳转页：一个只有几行的 `index.html`，
 
 本机 exe 从你自己的网络发出请求，和浏览器直接访问学校系统没有区别。Cloudflare / Vercel / EdgeOne 的请求则从机房出口发出 —— 这一点决定了云端形态能不能用。
 
-学校网关对校内网与机房网区别对待（实测）：
+**出口本身没有被限制。** 实测本机出口与 Cloudflare 出口各打四次，对学校系统的结果完全一致：业务接口、CAS 登录页、回调页都可达，没有出现「仅限校园网访问」的拦截页。业务接口在云端形态下返回的就是真实 JSON。
 
-| 出口 | 业务系统 `zhxg.csu.edu.cn` | 统一认证 `ca.csu.edu.cn` |
-| --- | --- | --- |
-| 校园网 / 校内 VPN | 正常 | 正常 |
-| 家宽等普通公网 | 正常 | 正常 |
-| 云机房（各家边缘平台） | 仅放行 `/znzhxgpt/**` | 仅放行 `/authserver/**` |
+**真正的限制在浏览器侧。** 学校网关放行跨域读取、但拒绝预检：
 
-被挡住的路径返回的是一页「系统访问提示」（*部分业务系统因存在安全隐患未能按时整改到位，仅限校内网络访问*），**状态码是 200 而不是 403** —— 只看状态码会以为一切正常。
+| 请求形态 | 结果 |
+| --- | --- |
+| POST + 自定义头（`token` / `AppCode` / `deviceType`） | 浏览器先发 `OPTIONS` 预检 → **403** → `Failed to fetch` |
+| POST + `Content-Type: application/json`，无自定义头 | 200，响应体可读 |
+| GET（任意路径） | 200，响应体可读 |
 
-于是云端形态的实际能力是：
+`ca.csu.edu.cn` 则一个 CORS 头都不返回。所以「让浏览器直连学校系统」这条路走不通 —— 这正是本项目必须有服务端转发的原因：浏览器只跟同源的站点说话，跨域那一段由站点的边缘函数承担。
 
-- **打卡本身可用**：`/znzhxgpt/**` 在放行范围内，凭据存在时查询班次、楼栋、提交打卡都正常。
-- **登录不可用**：CAS 回调页 `/fdcwonsun/caslogin_h5.jsp` 不在放行范围内，机房出口拿不到它，走不完「票据 → uid」这一步。
+另外，CAS 的登录页只对白名单内的 `service` 参数给出，白名单外会直接回一页「不允许的请求」。本项目用的 `service` 是学校自己的 `zhxg.csu.edu.cn/fdcwonsun/caslogin_h5.jsp`，属于白名单内，所以换域名部署不影响登录页这一步。
+
+### 登录为什么在云端容易失败
+
+CAS 登录成功后要把票据回调到 `zhxg.csu.edu.cn/fdcwonsun/caslogin_h5.jsp`，而这个回调页依赖浏览器在 CAS 域下建立的会话：
+
+- 协议客户端（不带 CAS 会话）直接请求它，三种 UA 实测都回 **403 空体**。
+- 某些出口环境下 CAS 会把请求 302 到 `weixinQYLogin.do`，再跳到 `open.weixin.qq.com` 的企业微信授权 —— 协议客户端没有那条路径的会话，跟下去只会越走越远。
+
+所以登录走的是 **CAS 标准协议兜底**：拿到票据后直接请求 `/authserver/serviceValidate`（3.0 端点 `/authserver/p3/serviceValidate` 也一并尝试），从 XML 里取回账号，不依赖 HTML 结构与重定向链。这条路实测可用 —— 无 cookie 直连，无效票据会明确回 `INVALID_TICKET`，说明接口是通的。
 
 部署后可以自己确认一遍，在站点页面的控制台里执行：
 
@@ -202,7 +224,8 @@ const t = await r.text();
 console.log(t.startsWith('{"') ? "业务接口可达" : "业务接口被出口限制");
 ```
 
-所以：**要在校园网之外使用，用本机 exe**（它从你自己的网络出去）；云端形态适合「人在校园网内，想让手机直接打开一个网址」这类场景。这是学校网关的策略，不是本项目的限制，将来网关放开就会自动生效。
+**已知的硬限制是验证码。** 学校侧判定需要验证码时，程序化登录无解，只能先在官方页面登录一次；登录成功后的凭据会存在浏览器里，后续打卡不需要再登录。
+
 
 ## 数据与隐私
 
