@@ -265,12 +265,9 @@ export default function Landing() {
                     <b>Vercel</b>：静态站点 + 一个 Edge Function，<code>vercel.json</code> 已配置好。
                   </li>
                   <li>
-                    <b>EdgeOne Makers（国内版）</b>：静态站点 + 两个 Edge Function，{" "}
-                    <code>edgeone.json</code> 与 <code>edge-functions/</code> 已配置好，入口在腾讯云控制台。
-                  </li>
-                  <li>
-                    <b>EdgeOne Pages（国际版）</b>：同样的代码，入口在 <code>edgeone.ai</code>，
-                    邮箱注册即可，不需要实名。
+                    <b>EdgeOne</b>：静态站点 + 两个 Edge Function，<code>edgeone.json</code> 与{" "}
+                    <code>edge-functions/</code> 已配置好。两套产品同一份源码都能部署 ——
+                    国内版 Makers 用腾讯云账号（需实名，国内节点），国际版 Pages 用邮箱即可。
                   </li>
                 </ul>
 
@@ -292,18 +289,25 @@ export default function Landing() {
                   <a href={EO_CN_DEPLOY} target="_blank" rel="noreferrer">
                     <img
                       src="https://cdnstatic.tencentcs.com/edgeone/pages/deploy.svg"
-                      alt="Deploy with EdgeOne Makers"
+                      alt="使用 EdgeOne Makers 部署（国内版）"
                       height={32}
                     />
                   </a>
                   <a href={EO_DEPLOY} target="_blank" rel="noreferrer">
                     <img
                       src="https://cdnstatic.tencentcs.com/edgeone/pages/deploy.svg"
-                      alt="Deploy with EdgeOne Pages"
+                      alt="Deploy with EdgeOne Pages（国际版）"
                       height={32}
                     />
                   </a>
                 </div>
+
+                <p className="dim">
+                  上面两个 EdgeOne 按钮是两套独立的产品：左边是国内版 Makers（腾讯云账号，需实名，国内节点），
+                  右边是国际版 Pages（邮箱即可）。参数、<code>edgeone.json</code>、
+                  <code>edge-functions/</code> 约定完全一致。国内版点进去会先跳腾讯云登录 ——
+                  控制台产品都要登录，这一步省不掉；不绑自定义域名、从校园网外访问，则不受备案与预览链接的限制。
+                </p>
 
                 <p>
                   部署完成后打开站点根地址即可使用，无需配置任何环境变量、数据库或存储。

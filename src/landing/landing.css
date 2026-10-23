@@ -637,6 +637,12 @@ h1 {
 .prose b {
   color: var(--paper);
 }
+/* 补充说明：比正文小一号、压暗，不抢主叙述 */
+.prose .dim {
+  font-size: 13px;
+  line-height: 1.75;
+  color: var(--moss-2);
+}
 .tech-h {
   font-family: var(--mono);
   font-size: 12px !important;

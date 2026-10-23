@@ -19,18 +19,24 @@
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fc76d3656e%2Fcsu-padk)
 
-[![使用 EdgeOne Makers 部署](https://cdnstatic.tencentcs.com/edgeone/pages/deploy.svg)](https://edgeone.ai/pages/new?repository-url=https%3A%2F%2Fgithub.com%2Fc76d3656e%2Fcsu-padk)
+[![使用 EdgeOne Makers 部署](https://cdnstatic.tencentcs.com/edgeone/pages/deploy.svg)](https://console.cloud.tencent.com/edgeone/makers/new?repository-url=https%3A%2F%2Fgithub.com%2Fc76d3656e%2Fcsu-padk)
 
-EdgeOne 有两套独立的产品，域名、控制台、账号都不通用，两个按钮都给了：
+[![Deploy with EdgeOne Pages](https://cdnstatic.tencentcs.com/edgeone/pages/deploy.svg)](https://edgeone.ai/pages/new?repository-url=https%3A%2F%2Fgithub.com%2Fc76d3656e%2Fcsu-padk)
 
-| 版本 | 入口 | 账号 | 适合 |
+EdgeOne 是两套独立的产品，域名、控制台、账号都不通用。**上面第一个按钮是国内版（EdgeOne Makers），第二个是国际版（EdgeOne Pages）**，同一份源码两边都能部署，参数、`edgeone.json`、`edge-functions/` 目录约定完全一致。
+
+| 版本 | 一键部署地址 | 账号 | 适合 |
 | --- | --- | --- | --- |
-| 国际版 EdgeOne Pages | `edgeone.ai` | 邮箱即可，无需实名 | 人在境外，或不想走实名 |
-| 国内版 EdgeOne Makers | `console.cloud.tencent.com/edgeone` | 腾讯云账号，需实名 | 想要国内节点、访问更快 |
+| 国内版 EdgeOne Makers | `console.cloud.tencent.com/edgeone/makers/new` | 腾讯云账号，需实名 | 想要国内节点、访问更快 |
+| 国际版 EdgeOne Pages | `edgeone.ai/pages/new` | 邮箱即可，无需实名 | 人在境外，或不想走实名 |
 
-国内版的一键部署地址是 `https://console.cloud.tencent.com/edgeone/makers/new?repository-url=<仓库地址>`，参数与国际版一致，本仓库的按钮已按国内版入口给出。两者的配置文件名都是 `edgeone.json`，`edge-functions/` 目录约定也相同，同一份源码两边都能部署。
+两者的差别不在按钮能力上，而在账号与访问策略：
 
-注意：国内版绑定自定义域名时，加速区域含中国大陆就必须完成工信部备案；不改域名、直接用平台分配的地址则不受影响。另外国内版对「项目域名」的访问有限制 —— 中国大陆网络环境下须用控制台生成的预览链接（3 小时有效），非中国大陆网络环境可直接访问。**这也是本项目仍保留国际版按钮的原因：本项目多半是从校园网外访问。**
+- **国内版必须先登录腾讯云**。点按钮会 302 到 `cloud.tencent.com/login`，登录后自动带上仓库地址回到创建页 —— 控制台产品都必须登录才能进，这一步无法省掉。国际版的落地页不需要登录就能打开，但真正部署时同样要账号。
+- **国内版绑定自定义域名、且加速区域含中国大陆时，必须先完成工信部备案**。不改域名、直接用平台分配的地址则不受影响。
+- **国内版的项目域名有访问限制**：中国大陆网络环境下须用控制台生成的预览链接（3 小时有效），非中国大陆网络环境可直接访问。想要一个长期稳定的网址就得绑自定义域名，也就是要备案。
+
+三条里只有第一条是「必须登录」，后两条在「不改域名、从校园网外访问」的前提下都不构成阻碍 —— 国际版更适合当默认入口，只是因为省了实名这一步。
 
 部署完成后打开分配到的域名即可使用。也可以先 Fork 本仓库再点按钮，这样后续改动会自动重新部署。
 
