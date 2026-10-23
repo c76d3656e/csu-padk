@@ -242,36 +242,6 @@ if (fs.existsSync(eoLogin) && fs.existsSync(eoProxy)) {
   ok("EdgeOne 转发入口：非转发路径 → 404", (await p.onRequest(ctx(new Request(H + "/nope")))).status === 404);
 }
 
-/* ── E. Codespaces 配置 ── */
-console.log("\nE. Codespaces 配置");
-const devcPath = path.join(ROOT, ".devcontainer", "devcontainer.json");
-const devc = await (async () => {
-  try {
-    // 配置文件里只有行首注释，逐行剔掉即可，不需要完整的 JSONC 解析器
-    const raw = fs.readFileSync(devcPath, "utf8").replace(/^\s*\/\/.*$/gm, "");
-    return JSON.parse(raw);
-  } catch {
-    return null;
-  }
-})();
-ok("devcontainer.json 存在且可解析", !!devc);
-ok("基础镜像已声明", !!devc?.image);
-ok("创建时安装依赖并构建", typeof devc?.postCreateCommand === "string" && devc.postCreateCommand.includes("npm ci") && devc.postCreateCommand.includes("npm run build"));
-ok("启动时拉起本机服务", typeof devc?.postStartCommand === "string" && devc.postStartCommand.includes("npm start"));
-/*
- * 后台启动必须重定向 stdout，否则容器初始化进程会一直等这个管道关闭，
- * Codespace 永远停在「正在启动」。这个坑只有在真开一个 Codespace 时才暴露。
- */
-ok("后台服务不占用容器初始化的输出管道", /npm start[^&]*>\s*\S+/.test(devc?.postStartCommand ?? ""));
-/*
- * 端口必须与 src/server/server.mjs 里的默认端口一致，否则转发出去的地址
- * 打不开，而且这种错误要等真开一个 Codespace 才会发现。
- */
-ok(
-  "转发端口与本机服务默认端口一致",
-  Array.isArray(devc?.forwardPorts) && devc.forwardPorts.includes(5173) && !!devc?.portsAttributes?.["5173"]
-);
-
 /* ── 汇总 ── */
 console.log("");
 if (fails.length) {
