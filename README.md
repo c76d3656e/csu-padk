@@ -1,14 +1,15 @@
 # csu-padk
 
-智慧学工平安打卡的辅助面板。一份源码，三种跑法：
+智慧学工平安打卡的辅助面板。一份源码，五种跑法：
 
 | 形态 | 适合谁 | 需要什么 |
 | --- | --- | --- |
 | **本机 exe** | 只在自己电脑上用，不想装 Node | 双击即用，目标机器零依赖 |
 | **Cloudflare / Vercel** | 想要一个随时能打开的网址 | 一个免费账号即可 |
 | **EdgeOne Makers** | 同上，但想用腾讯云的线路 | 一个腾讯云账号 |
+| **GitHub Codespaces** | 手边没有 Windows，只想先跑起来看看 | 一个 GitHub 账号，有免费额度 |
 
-三种形态共用 `src/core` 里的同一份实现，区别只在最外层的接线文件。
+五种形态共用 `src/core` 里的同一份实现，区别只在最外层的接线文件。前四种是长期在线的形态，Codespaces 是临时的 —— 额度按小时计，闲置 30 分钟会自动停。
 
 ## 快速部署
 
@@ -21,6 +22,10 @@
 [![使用 EdgeOne Makers 部署](https://cdnstatic.tencentcs.com/edgeone/pages/deploy.svg)](https://edgeone.ai/pages/new?repository-url=https%3A%2F%2Fgithub.com%2Fc76d3656e%2Fcsu-padk)
 
 部署完成后打开分配到的域名即可使用。也可以先 Fork 本仓库再点按钮，这样后续改动会自动重新部署。
+
+[![Open in GitHub Codespaces](https://img.shields.io/badge/Open_in-GitHub_Codespaces-black?logo=github)](https://codespaces.new/c76d3656e/csu-padk)
+
+最后一个按钮和前面三个不一样：它不部署站点，而是在云端开一个已经装好依赖、构建完、并把本机服务跑起来的开发环境，转发出来的地址点开就是打卡台。**GitHub Pages 做不到这件事**，原因见下文。
 
 ## 本机 exe
 
@@ -70,6 +75,23 @@ edgeone makers deploy
 
 配置写在 `edgeone.json`：构建命令 `npm run build`，输出目录 `dist/`。接口由 `edge-functions/` 下的两个文件承担 —— 目录即路由，`__auth/login.js` 对应 `/__auth/login`，`znzhxgpt/[[default]].js` 兜住 `/znzhxgpt/` 下的所有层级。
 
+## 在 GitHub Codespaces 里跑
+
+点上面的 Codespaces 按钮，或者在仓库页点 Code → Codespaces → 新建。容器起来后自动做三件事：`npm ci && npm run build` 装好依赖并构建，然后 `npm start` 把本机服务跑在 5173，端口转发出来就是一个 HTTPS 地址，打开即用。
+
+配置在 `.devcontainer/devcontainer.json`，核心就四行：
+
+```jsonc
+"postCreateCommand": "npm ci && npm run build",
+"postStartCommand": "nohup npm start > /tmp/padk.log 2>&1 &",
+"forwardPorts": [5173],
+"portsAttributes": { "5173": { "label": "csu-padk", "onAutoForward": "openPreview" } }
+```
+
+**为什么 GitHub Pages 不行、Codespaces 行**：Pages 只发静态文件，没有服务端执行环境，而这个项目必须有地方跑 `/__auth/login` 与 `/znzhxgpt/**` 的同源转发。Codespaces 给的是一个真容器，`npm start` 在里面监听端口 —— 本质还是本机形态，只是搬到了云端。
+
+免费额度按个人账号算（每月 120 核时 / 15 GB 存储，2 核机型约 60 小时）。闲置 30 分钟容器会停，服务跟着停；重新打开 Codespace 会自动重启服务。要一个长期在线的网址，用上面三种云端形态。
+
 ## 本地开发
 
 ```bash
@@ -97,9 +119,11 @@ npm start            # 不打包 exe，直接跑本机服务（先跑一次 npm 
 ├─ edge-functions/         EdgeOne Makers 接口（目录即路由）
 │  ├─ __auth/login.js      登录入口
 │  └─ znzhxgpt/[[default]].js  转发兜底
+├─ .devcontainer/          Codespaces 配置
+│  └─ devcontainer.json    装依赖、构建、起服务、转发 5173
 │
 ├─ src/
-│  ├─ core/                共享实现，两种形态都用它
+│  ├─ core/                共享实现，五种形态都用它
 │  │  ├─ casLogin.ts       统一身份认证登录编排（唯一实现）
 │  │  ├─ kcipher.ts        登录密码加密（唯一实现）
 │  │  ├─ crypto.ts         业务请求体的加解密
@@ -127,7 +151,7 @@ npm start            # 不打包 exe，直接跑本机服务（先跑一次 npm 
    └─ verify.mjs           自检
 ```
 
-## 三种形态是怎么共存的
+## 五种形态是怎么共存的
 
 业务逻辑只有一份，放在 `src/core`。运行环境各有一个极薄的接线文件：
 
@@ -135,8 +159,11 @@ npm start            # 不打包 exe，直接跑本机服务（先跑一次 npm 
 浏览器 ──┬─→ 本机服务   src/server/server.mjs           ─┐
          ├─→ Cloudflare src/edge/worker.js              ─┤
          ├─→ Vercel     api/edge.js                     ─┼─→ src/edge/handler.js ─→ src/core/casLogin.ts
-         └─→ EdgeOne    edge-functions/**/*.js          ─┘                          src/core/kcipher.ts
+         ├─→ EdgeOne    edge-functions/**/*.js          ─┤                          src/core/kcipher.ts
+         └─→ Codespaces 容器里跑 npm start              ─┘
 ```
+
+Codespaces 没有自己的接线文件 —— 它在容器里跑的就是本机服务那一份，和 exe 走同一条路径。
 
 `handler.js` 不认识任何平台 API —— 入参是标准 `Request`，出参是标准 `Response`，平台差异（静态资源从哪取、请求怎么进来）全部由外层文件吸收。本机服务把 Node 的 `http` 对象转成 `Request`，三个边缘平台本来就以 `Request` 为入口，EdgeOne 的 `onRequest(context)` 与 Cloudflare 的 `onRequest(context)` 是同一套签名。
 
@@ -169,7 +196,7 @@ EdgeOne 的 `edge-functions/` 会被平台自己编译，所以那两个文件�
 
 把请求降级成「简单请求」理论上能打通业务接口，但代价是把 token 从请求头挪到 URL（进日志、进 Referer），且登录流程仍无解 —— 为了一个免费静态空间不值得。所以本项目的三种云端形态都自带服务端执行环境（Cloudflare Workers / Vercel Edge Function / EdgeOne Edge Function），接口路径一律同源转发。
 
-GitHub Pages 只适合放一个跳转页：一个只有几行的 `index.html`，打开后跳到你自己的云端域名。
+Codespaces 之所以能跑，是因为它给的是一个真容器，`npm start` 在容器里监听端口 —— 它不属于静态托管，本质是「本机形态搬到云端」。GitHub Pages 只适合放一个跳转页：一个只有几行的 `index.html`，打开后跳到你自己的云端域名。
 
 ## 数据与隐私
 

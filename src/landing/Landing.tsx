@@ -14,6 +14,7 @@ const VERCEL_DEPLOY =
   "https://vercel.com/new/clone?repository-url=" + encodeURIComponent(REPO);
 const CF_DEPLOY = "https://deploy.workers.cloudflare.com/?url=" + REPO;
 const EO_DEPLOY = "https://edgeone.ai/pages/new?repository-url=" + encodeURIComponent(REPO);
+const CODESPACE = "https://codespaces.new/c76d3656e/csu-padk";
 
 export default function Landing() {
   const [copied, setCopied] = useState<string | null>(null);
@@ -245,9 +246,9 @@ export default function Landing() {
 
             {tab === "deploy" && (
               <div className="prose">
-                <h3>三种运行形态，同一份源码</h3>
+                <h3>五种运行形态，同一份源码</h3>
                 <p>
-                  仓库根目录是一个自包含的项目，三个入口共用 <code>src/core</code> 里的同一份实现：
+                  仓库根目录是一个自包含的项目，五个入口共用 <code>src/core</code> 里的同一份实现：
                 </p>
                 <ul>
                   <li>
@@ -264,6 +265,11 @@ export default function Landing() {
                   <li>
                     <b>EdgeOne Makers</b>：静态站点 + 两个 Edge Function，<code>edgeone.json</code> 与{" "}
                     <code>edge-functions/</code> 已配置好。
+                  </li>
+                  <li>
+                    <b>GitHub Codespaces</b>：仓库根有 <code>.devcontainer/</code>，一键开一个云端
+                    开发环境，容器装好依赖、构建好并直接启动本机服务，转发的地址打开就是打卡台。
+                    用的是 GitHub 账号自带的免费额度（个人账号每月 120 核时 / 15 GB 存储）。
                   </li>
                 </ul>
 
@@ -286,6 +292,13 @@ export default function Landing() {
                     <img
                       src="https://cdnstatic.tencentcs.com/edgeone/pages/deploy.svg"
                       alt="Deploy with EdgeOne Makers"
+                      height={32}
+                    />
+                  </a>
+                  <a href={CODESPACE} target="_blank" rel="noreferrer">
+                    <img
+                      src="https://img.shields.io/badge/Open_in-GitHub_Codespaces-black?logo=github"
+                      alt="Open in GitHub Codespaces"
                       height={32}
                     />
                   </a>
