@@ -44,23 +44,82 @@ export interface LoginResult {
   user: LoginUser;
 }
 
-/** 极简 cookie jar。Node 的 getSetCookie 与边缘运行时的同名方法行为一致 */
+/** 一条 cookie。域与路径都要记，否则会把 ca 域的会话发到 zhxg 域去 */
+interface Cookie {
+  name: string;
+  value: string;
+  domain: string;
+  path: string;
+}
+
+/**
+ * 域感知 cookie jar。Node 的 getSetCookie 与边缘运行时的同名方法行为一致。
+ *
+ * 必须按域分发：统一认证的会话 cookie（CASTGC）属于 ca.csu.edu.cn，而第 4 步
+ * 的回调页在 zhxg.csu.edu.cn。把两个域的 cookie 混着发，回调页拿不到自己的会话，
+ * 就会 302 退回登录页。参考实现（Python requests.Session）是按域自动管理的，
+ * 这里手工补上同一件事。
+ */
 class Jar {
-  private m = new Map<string, string>();
-  set(res: Response): void {
+  private m: Cookie[] = [];
+  /** 记下响应里的 Set-Cookie；url 用于推断没写 Domain 属性时的默认域 */
+  set(res: Response, url: string): void {
     const raw = (res.headers as any).getSetCookie?.() ?? [];
+    let host = "";
+    try {
+      host = new URL(url).hostname.toLowerCase();
+    } catch {
+      host = "";
+    }
     for (const line of raw) {
-      const pair = String(line).split(";")[0];
+      const parts = String(line).split(";");
+      const pair = parts[0];
       const i = pair.indexOf("=");
-      if (i > 0) this.m.set(pair.slice(0, i).trim(), pair.slice(i + 1).trim());
+      if (i <= 0) continue;
+      const name = pair.slice(0, i).trim();
+      const value = pair.slice(i + 1).trim();
+      let domain = host;
+      let path = "/";
+      for (const attr of parts.slice(1)) {
+        const j = attr.indexOf("=");
+        const k = (j < 0 ? attr : attr.slice(0, j)).trim().toLowerCase();
+        const v = j < 0 ? "" : attr.slice(j + 1).trim();
+        if (k === "domain" && v) domain = v.replace(/^\./, "").toLowerCase();
+        else if (k === "path" && v) path = v;
+      }
+      if (!domain) continue;
+      const at = this.m.findIndex(
+        (c) => c.name === name && c.domain === domain && c.path === path
+      );
+      const next: Cookie = { name, value, domain, path };
+      if (at >= 0) this.m[at] = next;
+      else this.m.push(next);
     }
   }
-  header(): string {
-    return [...this.m].map(([k, v]) => `${k}=${v}`).join("; ");
+  /** 该 URL 该带的 cookie：域后缀匹配 + 路径前缀匹配，长路径优先 */
+  header(url: string): string {
+    let host = "";
+    let path = "/";
+    try {
+      const u = new URL(url);
+      host = u.hostname.toLowerCase();
+      path = u.pathname || "/";
+    } catch {
+      return "";
+    }
+    const hit = this.m.filter((c) => {
+      const d = c.domain.startsWith(".") ? c.domain.slice(1) : c.domain;
+      const domainOk = host === d || host.endsWith("." + d);
+      const pathOk =
+        c.path === "/" || path === c.path || path.startsWith(c.path.endsWith("/") ? c.path : c.path + "/");
+      return domainOk && pathOk;
+    });
+    hit.sort((a, b) => b.path.length - a.path.length);
+    return hit.map((c) => `${c.name}=${c.value}`).join("; ");
   }
   /** 只报名字，值永远不外泄 —— 诊断文案要能贴进工单 */
   names(): string {
-    return [...this.m.keys()].join(",") || "无";
+    return [...new Set(this.m.map((c) => c.name))].join(",") || "无";
   }
 }
 
@@ -110,7 +169,7 @@ async function protocolLoginOnce(username: string, password: string): Promise<Lo
     redirect: "manual",
     headers: { "User-Agent": UA_DESKTOP },
   });
-  jar.set(res);
+  jar.set(res, loginUrl);
   const html = await res.text();
   const salt = (html.match(/id="pwdEncryptSalt"\s+value="([^"]*)"/) || [])[1] || "";
   const exec = (html.match(/id="execution"\s+name="execution"\s+value="([^"]*)"/) || [])[1] || "e1s1";
@@ -137,11 +196,11 @@ async function protocolLoginOnce(username: string, password: string): Promise<Lo
   }
 
   // 2. 是否需要验证码
-  res = await fetch(
-    `${CAS}/authserver/checkNeedCaptcha.htl?username=${encodeURIComponent(username)}&_=${Date.now()}`,
-    { headers: { "User-Agent": UA_DESKTOP, Cookie: jar.header() } }
-  );
-  jar.set(res);
+  const captchaUrl = `${CAS}/authserver/checkNeedCaptcha.htl?username=${encodeURIComponent(username)}&_=${Date.now()}`;
+  res = await fetch(captchaUrl, {
+    headers: { "User-Agent": UA_DESKTOP, Cookie: jar.header(captchaUrl) },
+  });
+  jar.set(res, captchaUrl);
   const needCaptcha = (await res.json().catch(() => ({}))).isNeed === true;
 
   // 3. 提交登录
@@ -151,8 +210,13 @@ async function protocolLoginOnce(username: string, password: string): Promise<Lo
     headers: {
       "User-Agent": UA_DESKTOP,
       "Content-Type": "application/x-www-form-urlencoded",
-      Cookie: jar.header(),
+      Cookie: jar.header(loginUrl),
     },
+    /*
+     * 字段与参考实现（csu_dk-main 的 cas_login）逐一对齐。
+     * rememberMe 是其中关键的一项：它让 CAS 在这次登录成功时签发长期 CASTGC，
+     * 回调页那一跳要靠这个会话换票据 —— 少了它，回调页只会把请求退回登录页。
+     */
     body: new URLSearchParams({
       username,
       password: await encryptPassword(password, salt),
@@ -163,9 +227,10 @@ async function protocolLoginOnce(username: string, password: string): Promise<Lo
       dllt: "generalLogin",
       captcha: "",
       rmShown: "1",
+      rememberMe: "true",
     }).toString(),
   });
-  jar.set(res);
+  jar.set(res, loginUrl);
 
   if (res.status !== 302) {
     const body = await res.text();
@@ -211,7 +276,17 @@ async function protocolLoginOnce(username: string, password: string): Promise<Lo
    * 页面登录一次即可绕过。
    */
   if (/\/authserver\/login\b/.test(ticketUrl)) {
-    throw new RetryableLoginError("统一认证把这次登录退回了登录页（会话与表单令牌对不上）。");
+    // flow execution 失效时 CAS 会带上 exception.message，把它透出来，省得靠猜
+    const why = (() => {
+      try {
+        return new URL(ticketUrl, ZHXG).searchParams.get("exception.message") || "";
+      } catch {
+        return "";
+      }
+    })();
+    throw new RetryableLoginError(
+      "统一认证把这次登录退回了登录页（会话与表单令牌对不上）。" + (why ? ` CAS 原话：${why}` : "")
+    );
   }
 
   const ticket = (() => {
@@ -222,6 +297,23 @@ async function protocolLoginOnce(username: string, password: string): Promise<Lo
     }
   })();
 
+  /*
+   * 302 还必须真的带回 ticket。实测 CAS 用 302 回应时，location 有三种落点：
+   *   service?ticket=…        成功
+   *   /authserver/login?…     被退回登录页（上面已拦）
+   *   service（无 ticket）     登录没被受理，但 CAS 仍用 302 回应
+   * 第三种是真实线上观察到的形态，而它恰好也是 flow execution 失配的症状 ——
+   * 实测同一会话连续提交两次，第二次必得这种回应。归到可重试一类，重走一遍
+   * 完整流程（换新会话与新令牌）通常就过了。
+   */
+  if (!ticket) {
+    throw new RetryableLoginError(
+      "统一认证回了 302，但没有带回票据 —— 这次登录没有被受理（location=" +
+        ticketUrl.slice(0, 120) +
+        "）。"
+    );
+  }
+
   // 4. 跟随回调拿 uid / lzc
   /*
    * 回调页依赖 CAS 会话。协议客户端没有那个会话，所以这一环在多数环境下拿不到
@@ -231,20 +323,24 @@ async function protocolLoginOnce(username: string, password: string): Promise<Lo
    *   403 空体            服务端明确拒绝无会话请求，后面几跳只会更远。
    *   下一跳回到 CAS 登录页 链路已经离开 service，继续跟会走进企业微信授权。
    */
-  const wxJar = new Jar();
   let cur = ticketUrl;
   const hops: string[] = [];
   const trace: string[] = [];
   // 票据本身是凭据，不进日志；只记长度。这一条能一眼区分两种失败：
   // 没有 ticket（第 3 步其实没成功）与有 ticket 但换不回身份。
-  trace.push(ticket ? `ticket len=${ticket.length}` : "ticket 缺失");
+  trace.push(`ticket len=${ticket.length}`);
   for (let hop = 0; hop < 5 && cur; hop++) {
     const h: Record<string, string> = { "User-Agent": UA_DESKTOP };
-    // 首跳不塞空 Cookie 头：空头值在 Node 与边缘运行时处置不同，而首跳本来就无 cookie 可带
-    const ck = wxJar.header();
+    /*
+     * 必须复用第 1~3 步的 jar：登录成功后 CAS 把 CASTGC 挂在 ca 域上，
+     * 回调页要靠它确认「这个人刚登录过」。用空 jar 请求回调页，服务端只会
+     * 回那段 167 字节的跳转脚本（把你送回登录页），于是整条链白跑。
+     * jar 是域感知的，发给 zhxg 的请求不会带上 ca 域的会话。
+     */
+    const ck = jar.header(cur);
     if (ck) h.Cookie = ck;
     const r = await fetch(cur, { redirect: "manual", headers: h });
-    wxJar.set(r);
+    jar.set(r, cur);
     const t = await r.text();
     hops.push(t);
     const next = r.headers.get("location") || "";
@@ -312,7 +408,8 @@ async function protocolLoginOnce(username: string, password: string): Promise<Lo
 
   // 5. 换 token（casual 在此与这次会话绑定）
   const casual = generateCasual(16);
-  const r5 = await fetch(`${ZHXG}/znzhxgpt/basesys/rbac-yh/login-other`, {
+  const loginOther = `${ZHXG}/znzhxgpt/basesys/rbac-yh/login-other`;
+  const r5 = await fetch(loginOther, {
     method: "POST",
     headers: {
       "Content-Type": "application/json;charset=UTF-8",
@@ -321,7 +418,8 @@ async function protocolLoginOnce(username: string, password: string): Promise<Lo
       "User-Agent": UA_MOBILE,
       Origin: ZHXG,
       Referer: ZHXG + "/znzhxgpt_h5/",
-      Cookie: wxJar.header(),
+      // 这一跳同样要带上会话：login-other 会用服务端会话核对 uid 是否刚通过认证
+      Cookie: jar.header(loginOther),
     },
     body: JSON.stringify({
       tyrzpt: "1",

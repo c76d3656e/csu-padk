@@ -550,6 +550,182 @@ const GATEWAY_PAGE =
   ok("账号密码错误 → 文案带诊断串", /诊断 status=200/.test(msg), msg.slice(0, 110));
 }
 
+// F7：cookie 必须按域分发 —— 统一认证的会话（CASTGC）属于 ca 域，
+// 回调页与业务接口在 zhxg 域。把 ca 域的会话发给 zhxg 是无意义的越界发送，
+// 而把 zhxg 的 cookie 漏掉则会让业务接口认不出会话。
+{
+  const hits = [];
+  let cbCookie = "";
+  let loginOtherCookie = "";
+  globalThis.fetch = mockFetch(
+    [
+      [/authserver\/login\?/, (u, init) =>
+        init.method === "POST"
+          ? new Response("", {
+              status: 302,
+              headers: { location: casMod.SERVICE + "?ticket=ST-OK-0004" },
+            })
+          : new Response(LOGIN_HTML, {
+              status: 200,
+              headers: { "Set-Cookie": "JSESSIONID=mock-sid; Path=/authserver" },
+            })],
+      [/checkNeedCaptcha/, () => new Response('{"isNeed":false}', { status: 200 })],
+      // 回调页在 zhxg 域：只应收到 zhxg 域自己的 cookie，绝不该收到 ca 域的会话
+      [/caslogin_h5\.jsp/, (u, init) => {
+        cbCookie = (init.headers || {}).Cookie || "";
+        return new Response("var uid = '2020000000'; var lzc = 'LZC1';", {
+          status: 200,
+          headers: { "Set-Cookie": "SERVERID=zhxg-sid; Path=/" },
+        });
+      }],
+      [/login-other/, (u, init) => {
+        loginOtherCookie = (init.headers || {}).Cookie || "";
+        return new Response(JSON.stringify({ data: { token: "s.t.u", yhzh: "2020000000", yhxm: "测试", bmid: "1" } }), {
+          status: 200,
+        });
+      }],
+    ],
+    hits
+  );
+  let out = null;
+  let msg = "";
+  try {
+    out = await casMod.protocolLogin("2020000000", "pw");
+  } catch (e) {
+    msg = e.message;
+  }
+  globalThis.fetch = realFetch;
+  ok("回调页不带 ca 域的会话（跨域越界发送）", !/JSESSIONID/.test(cbCookie), String(cbCookie).slice(0, 80) || "(无 cookie)");
+  ok("回调页建立了 zhxg 域会话后，换 token 会带上它", /SERVERID=zhxg-sid/.test(loginOtherCookie), String(loginOtherCookie).slice(0, 80) || "(无 cookie)");
+  ok("会话连续时登录一次走通", !!out && out.token === "s.t.u", msg.slice(0, 140));
+}
+
+// F7b：反向的域隔离 —— 回调页在 zhxg 域建立的会话，绝不能跟着跑到 ca 域去。
+// 两个方向的越界发送都要挡住，否则「按域分发」只是单向的。
+{
+  const hits = [];
+  let svCookie = "";
+  globalThis.fetch = mockFetch(
+    [
+      [/authserver\/login\?/, (u, init) =>
+        init.method === "POST"
+          ? new Response("", {
+              status: 302,
+              headers: {
+                location: casMod.SERVICE + "?ticket=ST-OK-0006",
+                "Set-Cookie": "CASTGC=TGT-1-mock-session; Path=/authserver",
+              },
+            })
+          : new Response(LOGIN_HTML, {
+              status: 200,
+              headers: { "Set-Cookie": "JSESSIONID=mock-sid; Path=/authserver" },
+            })],
+      [/checkNeedCaptcha/, () => new Response('{"isNeed":false}', { status: 200 })],
+      // 顺序要紧：serviceValidate 的 URL 里带着 service 参数（含 fdcwonsun 字样），
+      // 排在回调页规则之后就会被截获
+      [/serviceValidate/, (u, init) => {
+        svCookie = (init.headers || {}).Cookie || "";
+        return new Response(
+          "<cas:serviceResponse><cas:authenticationSuccess><cas:user>2020000000</cas:user></cas:authenticationSuccess></cas:serviceResponse>",
+          { status: 200 }
+        );
+      }],
+      // 回调页就地换票失败，但顺手在 zhxg 域种了一个会话 cookie
+      [/caslogin_h5\.jsp/, () =>
+        new Response("", {
+          status: 302,
+          headers: {
+            location: casMod.CAS + "/authserver/login?service=" + encodeURIComponent(casMod.SERVICE),
+            "Set-Cookie": "SERVERID=zhxg-sid; Path=/",
+          },
+        })],
+      [/login-other/, () =>
+        new Response(JSON.stringify({ data: { token: "u.v.w", yhzh: "2020000000", yhxm: "测试", bmid: "1" } }), {
+          status: 200,
+        })],
+    ],
+    hits
+  );
+  let out = null;
+  let msg = "";
+  try {
+    out = await casMod.protocolLogin("2020000000", "pw");
+  } catch (e) {
+    msg = e.message;
+  }
+  globalThis.fetch = realFetch;
+  ok("serviceValidate（ca 域）不带 zhxg 域的会话", !/SERVERID/.test(svCookie), String(svCookie).slice(0, 60) || "(无 cookie)");
+  ok("回调链提前退出后由 serviceValidate 收尾", !!out && out.token === "u.v.w", msg.slice(0, 140));
+}
+
+// F8：302 没带 ticket → 必须归入可重试一类，重走完整流程，而不是把
+// 伪成功带到第 4 步再报「未取得 uid」。这是线上「ticket 缺失」那条报错的源头。
+{
+  const hits = [];
+  globalThis.fetch = mockFetch(
+    [
+      [/authserver\/login\?/, (u, init) =>
+        init.method === "POST"
+          ? new Response("", { status: 302, headers: { location: casMod.SERVICE } })
+          : new Response(LOGIN_HTML, { status: 200, headers: { "Set-Cookie": "JSESSIONID=mock-sid; Path=/" } })],
+      [/checkNeedCaptcha/, () => new Response('{"isNeed":false}', { status: 200 })],
+    ],
+    hits
+  );
+  let msg = "";
+  try {
+    await casMod.protocolLogin("2020000000", "pw");
+  } catch (e) {
+    msg = e.message;
+  }
+  globalThis.fetch = realFetch;
+  ok("302 无 ticket → 报「没有带回票据」并说明已重试", /没有带回票据/.test(msg) && /重试过一次/.test(msg), msg.slice(0, 120));
+  ok(
+    "302 无 ticket → 确实重走了一遍完整流程",
+    hits.filter((u) => /^POST /.test(u) && /authserver\/login\?/.test(u)).length === 2,
+    "POST 次数 " + hits.filter((u) => /^POST /.test(u) && /authserver\/login\?/.test(u)).length
+  );
+  ok("302 无 ticket → 不再报「未取得登录凭据」", !/未取得登录凭据/.test(msg), msg.slice(0, 120));
+}
+
+// F9：表单字段与参考实现对齐 —— rememberMe 必须在，它是 CAS 签发长期会话的依据
+{
+  const hits = [];
+  let posted = "";
+  globalThis.fetch = mockFetch(
+    [
+      [/authserver\/login\?/, (u, init) => {
+        if (init.method === "POST") {
+          posted = String(init.body || "");
+          return new Response("", { status: 302, headers: { location: casMod.SERVICE + "?ticket=ST-OK-0005" } });
+        }
+        return new Response(LOGIN_HTML, { status: 200, headers: { "Set-Cookie": "JSESSIONID=mock-sid; Path=/" } });
+      }],
+      [/checkNeedCaptcha/, () => new Response('{"isNeed":false}', { status: 200 })],
+      [/caslogin_h5\.jsp/, () => new Response("var uid = '2020000000';", { status: 200 })],
+      [/login-other/, () =>
+        new Response(JSON.stringify({ data: { token: "m.n.o", yhzh: "2020000000", yhxm: "测试", bmid: "1" } }), {
+          status: 200,
+        })],
+    ],
+    hits
+  );
+  try {
+    await casMod.protocolLogin("2020000000", "pw");
+  } catch {
+    /* 断言只看提交内容 */
+  }
+  globalThis.fetch = realFetch;
+  ok("提交字段含 rememberMe（CAS 据此签发长期会话）", /(^|&)rememberMe=true(&|$)/.test(posted), posted.slice(0, 60));
+  ok(
+    "提交字段与参考实现一致",
+    /(^|&)cllt=userNameLogin(&|$)/.test(posted) &&
+      /(^|&)dllt=generalLogin(&|$)/.test(posted) &&
+      /(^|&)_eventId=submit(&|$)/.test(posted),
+    posted.slice(0, 80)
+  );
+}
+
 /* ── G. 手动导入凭据 ── */
 /*
  * 学校要求验证码时协议登录无解，手动导入是唯一出路。这里断言的是「成对校验」：
