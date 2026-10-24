@@ -10,8 +10,13 @@ dist/
 # edgeone CLI 的本地编译产物（edgeone makers dev 会生成）
 .edgeone/
 
+# edgeone makers deploy 用的打包目录（由源码复制而来，随时可重建）
+.deploy-upload/
+
 # exe 构建中间产物
 padk.exe
+padk-rs.exe
+rust/target/
 server.sea.cjs
 sea-config.json
 sea-prep.blob
@@ -21,6 +26,9 @@ sea-prep.blob
 Thumbs.db
 *.log
 *.tsbuildinfo
+
+# 诊断输出：含真实学号与登录上下文，只在本机排查用
+diag-*.json
 
 # 编辑工具的临时锁文件
 .dsh-ops-update-*.lock

@@ -119,6 +119,65 @@ fs.rmSync(blobPath, { force: true });
 fs.rmSync(cfgPath, { force: true });
 fs.rmSync(entryCjs, { force: true });
 
+/*
+ * ── 5) 压缩体积 ──
+ * SEA 产物 = node.exe 原样 + 注入的 blob，90 MB 里几乎全是 Node 运行时本身。
+ * 我们的代码连同前端资源只有几百 KB，靠打包手段再怎么优化也动不了这个量级，
+ * 唯一有效的办法是对最终 PE 做压缩。
+ *
+ * UPX 用 LZMA 把 90 MB 压到 ~23 MB（实测 25%），代价是冷启动多约 0.6 秒
+ * （启动时要把映像解到内存）。SEA 的 fuse 与 blob 在解压后的映像里仍然可见，
+ * 实测首页与 /__auth/login 都正常。
+ *
+ * 已知代价：UPX 是恶意软件常用壳，部分杀软会因此误报。不需要压缩时设
+ * PADK_NO_UPX=1 跳过。
+ */
+const UPX = path.join(ROOT, ".build/upx/upx.exe");
+const UPX_VER = "4.2.4";
+
+/** 首次构建时把 UPX 取到 .build/upx/（.build 已在 .gitignore 里） */
+async function ensureUpx() {
+  if (fs.existsSync(UPX)) return;
+  const dir = path.join(ROOT, ".build/upx");
+  fs.mkdirSync(dir, { recursive: true });
+  const zip = path.join(dir, `upx-${UPX_VER}-win64.zip`);
+  const url = `https://github.com/upx/upx/releases/download/v${UPX_VER}/upx-${UPX_VER}-win64.zip`;
+  console.log(`\n下载 UPX ${UPX_VER}…`);
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  fs.writeFileSync(zip, Buffer.from(await res.arrayBuffer()));
+  execFileSync(
+    "powershell",
+    ["-NoProfile", "-Command", `Expand-Archive -Force -LiteralPath '${zip}' -DestinationPath '${dir}'`],
+    { stdio: "inherit" }
+  );
+  const hit = fs
+    .readdirSync(dir, { recursive: true })
+    .map((p) => path.join(dir, String(p)))
+    .find((p) => path.basename(p).toLowerCase() === "upx.exe" && fs.statSync(p).isFile());
+  if (!hit) throw new Error("压缩包里没有 upx.exe");
+  fs.copyFileSync(hit, UPX);
+  fs.rmSync(zip, { force: true });
+}
+
+if (process.env.PADK_NO_UPX === "1") {
+  console.log("\nPADK_NO_UPX=1 —— 跳过压缩，保留原始体积。");
+} else {
+  const before = fs.statSync(OUT).size;
+  try {
+    await ensureUpx();
+    console.log("\nUPX 压缩中（LZMA，约 30 秒）…");
+    execFileSync(UPX, ["--lzma", "-9", "--force", "--quiet", OUT], { stdio: "inherit" });
+    const after = fs.statSync(OUT).size;
+    console.log(
+      `  ${(before / 1048576).toFixed(1)} MB → ${(after / 1048576).toFixed(1)} MB` +
+        `（小了 ${((1 - after / before) * 100).toFixed(0)}%，冷启动多约 0.6 秒）`
+    );
+  } catch (e) {
+    console.warn(`  UPX 未生效（${e.message}），产物保持原始体积。`);
+  }
+}
+
 const mb = (fs.statSync(OUT).size / 1024 / 1024).toFixed(1);
 console.log(`\n完成 → ${OUT}  (${mb} MB)`);
 console.log("双击即可运行，目标机器无需安装 Node。");

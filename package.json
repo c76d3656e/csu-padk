@@ -8,6 +8,7 @@
     "dev": "vite",
     "build": "vite build",
     "build:exe": "node scripts/build-exe.mjs",
+    "build:rust": "node scripts/build-rust.mjs",
     "start": "node scripts/serve.mjs",
     "typecheck": "tsc --noEmit",
     "verify": "node scripts/verify.mjs",

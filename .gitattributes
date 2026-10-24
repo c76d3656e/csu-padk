@@ -1,0 +1,9 @@
+# 入库一律 LF：Windows 上 core.autocrlf=true 时，shell 脚本被检出成 CRLF
+# 会让 Linux 报 "bad interpreter: /usr/bin/env sh^M"，release 附件同理。
+*.sh text eol=lf
+*.yml text eol=lf
+
+*.png binary
+*.jpg binary
+*.ico binary
+*.exe binary

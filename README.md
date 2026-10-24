@@ -57,6 +57,28 @@ npm run build:exe    # 产出 padk.exe
 - SEA 产物与构建平台的架构绑定。在 Windows x64 上构建出来的 exe 只能在 Windows x64 上运行；换平台需要重新构建。
 - 手机想连同一个 WiFi 使用，用电脑的局域网 IP 访问即可（`http://192.168.x.x:5173/`），服务默认监听所有网卡。
 
+## Rust 版 exe（2.2 MB，多线程）
+
+```bash
+npm run build        # 先产出 dist/
+npm run build:rust   # 产出 padk-rs.exe
+```
+
+同一套服务端逻辑的 Rust 重写（`rust/` 子工程）。前端资源不是运行时读盘，而是 `rust/build.rs` 扫 `dist/` 后 `include_bytes!` 编进二进制 —— 换了 dist 必须重新 `cargo build`，脚本已挂 `rerun-if-changed`。
+
+| | Node SEA | Rust |
+| --- | --- | --- |
+| 产物 | `padk.exe` 22.6 MB（UPX 后） | `padk-rs.exe` 2.18 MB |
+| 运行依赖 | 无需 Node | 无 |
+| 并发 | 单线程事件循环 | tokio 多线程（本机 32 worker） |
+| 启动 | ~200 ms | ~10 ms |
+
+默认监听 `0.0.0.0:5173`，`PORT` / `HOST` 可覆盖。启动时用系统接口表枚举本机 IPv4（跳过回环、APIPA、198.18/19 fake-ip 与 VMware / Hyper-V / WSL 虚拟网卡），只打印真实可访问的地址。
+
+与 TS 实现的行为等价性有断言兜底：`padk-rs.exe --aes-selftest` 输出固定向量密文，与 `src/core/kcipher.ts` 的 `encryptPasswordFixed` 同参结果逐字节相同；登录失败的四种回应形态（凭据错 / 需二次认证 / 无票据 / 成功）走与 `casLogin.ts` 同一套分支。
+
+Rust 版是「拉起来就对外服务」的形态：绑 `0.0.0.0` 且没有鉴权，任何人调 `/__auth/login` 都在用这台机器的出口登录统一认证。放公网前要在前面套反向代理做访问控制，或者只在内网 / 本机用。
+
 ## 命令行部署
 
 不想点按钮也可以手动来。
